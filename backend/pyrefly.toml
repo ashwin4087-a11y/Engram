@@ -1,0 +1,11 @@
+# Pyrefly configuration for Engram backend (sub-project)
+# Docs: https://pyrefly.org/en/docs/configuration/
+
+python-interpreter-path = ".venv/Scripts/python.exe"
+
+search-path = ["."]
+
+site-package-path = [".venv/Lib/site-packages"]
+
+project-includes = ["**/*.py"]
+project-excludes = [".venv/**", "migrations/**"]

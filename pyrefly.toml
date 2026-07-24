@@ -1,0 +1,21 @@
+# Pyrefly configuration for Engram backend
+# Docs: https://pyrefly.org/en/docs/configuration/
+
+# Python version
+python-version = "3.11"
+
+# Point to the backend venv interpreter
+python-interpreter-path = "backend/.venv/Scripts/python.exe"
+
+# Import roots
+search-path = ["backend"]
+
+# Explicit site-package path to avoid junction resolution issues
+site-package-path = ["backend/.venv/Lib/site-packages"]
+
+# Only check backend source files
+project-includes = ["backend/**/*.py"]
+project-excludes = [
+    "backend/.venv/**",
+    "backend/migrations/**",
+]

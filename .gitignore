@@ -1,0 +1,113 @@
+# =====================================
+# Python
+# =====================================
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+backend/.venv/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# =====================================
+# Environment variables
+# =====================================
+
+.env
+.env.*
+!.env.example
+
+# =====================================
+# Node / Next.js
+# =====================================
+
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.turbo/
+
+# npm / pnpm / yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =====================================
+# IDEs
+# =====================================
+
+.vscode/
+.idea/
+
+# =====================================
+# Operating System
+# =====================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =====================================
+# Logs
+# =====================================
+
+*.log
+logs/
+backend/error.txt
+
+# =====================================
+# SQLite
+# =====================================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# =====================================
+# Misc
+# =====================================
+
+.cache/
+tmp/
+temp/

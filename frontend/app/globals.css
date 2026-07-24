@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-bg text-text-primary font-sans;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #F8F8F6, 0 0 0 4px #2563EB;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: rgba(37, 99, 235, 0.15);
+    color: #1A1A1A;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #D4D4D0;
+  }
+}
+
+@layer components {
+  /* Input base */
+  .input-base {
+    @apply w-full bg-card border-0 rounded-2xl px-5 py-4 text-text-primary placeholder-text-secondary font-sans text-base;
+    box-shadow: var(--tw-shadow-input);
+    transition: box-shadow 200ms ease;
+  }
+  .input-base:focus {
+    outline: none;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05), 0 0 0 2px #2563EB;
+  }
+
+  /* Node tooltip */
+  .node-tooltip {
+    @apply absolute z-50 bg-card rounded-xl shadow-lg-soft border border-border px-4 py-3 text-sm text-text-primary;
+    animation: fadeScaleIn 200ms ease-out;
+    pointer-events: none;
+  }
+
+  /* Activity item */
+  .activity-item {
+    @apply flex items-start gap-3 py-3 border-b border-border last:border-0;
+  }
+
+  /* Metric block */
+  .metric-block {
+    @apply flex flex-col;
+  }
+  .metric-number {
+    @apply text-3xl font-semibold tracking-tight text-text-primary;
+  }
+  .metric-label {
+    @apply text-xs text-text-secondary mt-0.5 uppercase tracking-wide;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    background: linear-gradient(90deg, #F2F2EF 25%, #EBEBEA 50%, #F2F2EF 75%);
+    background-size: 200% 100%;
+    @apply animate-shimmer rounded;
+  }
+}
+
+/* React Flow overrides — clean white canvas */
+.react-flow {
+  background: #FAFAF8 !important;
+}
+.react-flow__background {
+  opacity: 1;
+}
+.react-flow__edge-path {
+  stroke: #D4D4D0 !important;
+  stroke-width: 1.5 !important;
+}
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+.react-flow__controls {
+  box-shadow: none !important;
+  border: 1px solid #E8E8E5 !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+  background: white !important;
+}
+.react-flow__controls-button {
+  background: white !important;
+  border-bottom: 1px solid #E8E8E5 !important;
+  color: #6B7280 !important;
+}
+.react-flow__controls-button:hover {
+  background: #F8F8F6 !important;
+}
+.react-flow__controls-button svg {
+  fill: #6B7280 !important;
+}
+.react-flow__minimap {
+  border: 1px solid #E8E8E5 !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+.react-flow__handle {
+  background: #D4D4D0 !important;
+  border: 2px solid white !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+@keyframes dashdraw {
+  from { stroke-dashoffset: 10; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
