@@ -84,7 +84,6 @@ When the agent needs to act, a **Context Compiler** doesn't dump history — it 
 - Redis (Upstash free tier) — working-memory hot cache, sub-millisecond context bundle assembly
 
 **Infra / DevOps**
-- Docker Compose for local dev
 - GitHub Actions CI (lint + test on push) — shows production maturity
 - Vercel (frontend) + Render/Railway (backend) — both free tiers, both deploy in minutes
 
@@ -306,11 +305,11 @@ All extraction endpoints return **strict JSON** (Claude tool-use / structured ou
 ## 14. Deployment Strategy
 
 - **Frontend** → Vercel, auto-deploy from `main` branch, environment variables for API base URL.
-- **Backend** → Render/Railway Docker deploy; expose REST + WebSocket on same service.
+- **Backend** → Render/Railway deploy; expose REST + WebSocket on same service.
 - **Database** → Neon Postgres (serverless, free tier, pgvector extension enabled via `CREATE EXTENSION vector;`).
 - **Redis** → Upstash, connect via REST or TCP.
 - **Secrets** → `.env` locally, provider dashboard env vars in prod; never commit keys.
-- **Docker Compose** for local dev (`postgres`, `redis`, `backend`, `frontend` services) so judges/teammates can `docker compose up` and run it instantly.
+
 - **Fallback for demo day**: pre-seed a session with an interesting conversation history in case live API calls are rate-limited — always have a recorded backup video.
 
 ---
@@ -318,7 +317,7 @@ All extraction endpoints return **strict JSON** (Claude tool-use / structured ou
 ## 15. 24-Hour Hackathon Execution Roadmap
 
 **Hours 0–2: Foundation**
-- Repo scaffold, Docker Compose, Postgres schema migration, FastAPI skeleton, Next.js skeleton, deploy pipelines connected end-to-end with a "hello world" round trip.
+- Repo scaffold, Postgres schema migration, FastAPI skeleton, Next.js skeleton, deploy pipelines connected end-to-end with a "hello world" round trip.
 
 **Hours 2–6: Core Memory Loop**
 - Build Memory Compiler (Claude structured extraction), entities/facts tables wired, basic Context Compiler (vector top-K + budget cap), Agent Runtime using compiled bundle.
@@ -429,7 +428,7 @@ A: Memory-as-a-service API/SDK — usage-based pricing per compiled context bund
 ## The Solution (with architecture GIF)
 ## Demo (link + screenshots)
 ## Quick Start
-   - Docker Compose one-liner
+   - Local setup instructions
    - Environment variables needed
 ## Architecture Overview (diagram)
 ## Tech Stack
@@ -483,13 +482,12 @@ engram/
 │   │   ├── schemas/                 # Pydantic schemas
 │   │   └── ws/events.py
 │   ├── tests/
-│   ├── requirements.txt
-│   └── Dockerfile
+│   └── requirements.txt
 ├── docs/
 │   ├── ARCHITECTURE.md
 │   ├── API_REFERENCE.md
 │   └── BENCHMARKS.md
-├── docker-compose.yml
+├── .gitignore
 ├── .github/workflows/ci.yml
 ├── README.md
 └── LICENSE
@@ -505,7 +503,7 @@ engram/
 
 **Coding →** Build in the 24-hour order from Section 15: foundation → core memory loop → visibility layer → wow features → comparison metrics → polish → deploy.
 
-**Deployment →** Vercel (frontend) + Render/Railway (backend) + Neon Postgres + Upstash Redis, all free-tier, all connected via Docker Compose for local reproducibility.
+**Deployment →** Vercel (frontend) + Render/Railway (backend) + Neon Postgres + Upstash Redis, all free-tier.
 
 **Presentation →** Split-screen live demo (chat + blooming brain graph + flatline token counter) is your entire argument — let judges *see* the claim, then close with the 2-minute pitch from Section 17.
 
