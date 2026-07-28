@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.api.v1.routes import consolidation, graph, health, memory, metrics, observe, query, sessions, timeline, reason, entities
+from app.api.v1.routes import consolidation, graph, health, memory, metrics, observe, query, sessions, timeline, entities
 
 api_router = APIRouter()
 
@@ -18,5 +18,5 @@ api_router.include_router(consolidation.router)
 api_router.include_router(query.router)
 api_router.include_router(timeline.router)
 api_router.include_router(metrics.router)
-api_router.include_router(reason.router)
 api_router.include_router(entities.router)
+

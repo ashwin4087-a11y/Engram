@@ -22,7 +22,6 @@ async def list_timeline(
 
 
 @router.get("/context-bundle/{turn_number}", response_model=ContextBundleResponse)
-@router.get("/context", response_model=ContextBundleResponse)
 async def get_context_bundle_by_turn(
     session_id: UUID,
     turn_number: int,

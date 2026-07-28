@@ -1,17 +1,15 @@
-"""Memory retrieval, reason & metrics routes."""
+"""Memory retrieval & context routes."""
 from __future__ import annotations
 
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query
 
-from app.api.v1.deps import get_context_compiler, get_metrics_repo, get_retrieval_engine
-from app.domain.repositories.metrics_repo import MetricsRepository
+from app.api.v1.deps import get_context_compiler, get_retrieval_engine
 from app.llm.factory import get_llm_provider
 from app.memory.context.compiler import ContextCompiler
 from app.memory.retrieval.engine import HybridRetrievalEngine
 from app.schemas.context import ContextBundleResponse, ReasonRequest, ReasonResponse
-from app.schemas.memory import MemoryResponse, QueryRequest, QueryResponse
-from app.schemas.metrics import MetricsResponse, MetricsSummary
+from app.schemas.memory import MemoryResponse
 
 router = APIRouter(tags=["Memory & Retrieval"])
 
@@ -56,12 +54,3 @@ async def reason(
         memories_used=len(bundle.memories),
     )
 
-
-@router.get("/metrics", response_model=MetricsResponse)
-async def get_metrics(
-    session_id: UUID = Query(...),
-    metrics_repo: MetricsRepository = Depends(get_metrics_repo),
-) -> MetricsResponse:
-    """Fetch metrics summary."""
-    summary = MetricsSummary(session_id=session_id)
-    return MetricsResponse(summary=summary, recent=[])

@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
-    DEFAULT_LLM_PROVIDER: Literal["anthropic", "openai", "gemini", "mock"] = "mock"
+    DEFAULT_LLM_PROVIDER: Literal["anthropic", "openai", "gemini", "ollama", "mock"] = "mock"
     DEFAULT_LLM_MODEL: str = "claude-3-haiku-20240307"
     LLM_TIMEOUT_SECONDS: int = 30
     LLM_MAX_RETRIES: int = 3
