@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisionBall | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F8F9FA;
+  --card: #FFFFFF;
+  --primary: #2E7D32;
+  --primary-hover: #1B5E20;
+  --success: #2E7D32;
+  --warning: #D97706;
+  --error: #DC2626;
+  --heading: #111827;
+  --body: #4B5563;
+  --border: #E5E7EB;
+  --hover: #F3F4F6;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(0,0,0,0.05);
+  --sidebar-w: 260px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--body); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar ── */
+.sidebar { position: fixed; left: 0; top: 0; width: var(--sidebar-w); height: 100vh; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 50; }
+.sidebar-brand { padding: 28px 24px 24px; border-bottom: 1px solid var(--border); }
+.sidebar-brand h1 { font-size: 20px; font-weight: 700; color: var(--heading); }
+.sidebar-brand p { font-size: 13px; color: var(--body); margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 16px 12px; }
+.sidebar-nav a { display: block; padding: 11px 16px; border-radius: 8px; color: var(--body); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.15s ease; margin-bottom: 2px; }
+.sidebar-nav a:hover, .sidebar-nav a:focus-visible { background: var(--hover); color: var(--heading); outline: none; }
+.sidebar-nav a.active { background: #E8F5E9; color: var(--primary); font-weight: 600; }
+.sidebar-footer { padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--body); line-height: 1.8; }
+.sidebar-footer .status-line { display: flex; justify-content: space-between; }
+.sidebar-footer .status-val { font-weight: 600; color: var(--heading); }
+.sidebar-footer .ready { color: var(--primary); }
+
+/* ── Main ── */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(248,249,250,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 52px; display: flex; align-items: center; font-size: 13px; color: var(--body); }
+.topbar span { color: var(--heading); font-weight: 500; }
+.content { padding: 32px; max-width: 1140px; flex: 1; }
+
+/* ── Skeletons ── */
+.skeleton { background: #E5E7EB; border-radius: 4px; animation: pulse 1.5s infinite; color: transparent !important; }
+@keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+/* ── Hero ── */
+.hero { display: grid; grid-template-columns: 1fr 380px; gap: 32px; margin-bottom: 40px; }
+.hero-label { font-size: 13px; font-weight: 600; color: var(--primary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.hero h1 { font-size: 34px; font-weight: 700; color: var(--heading); margin-bottom: 12px; }
+.hero p { font-size: 15px; color: var(--body); line-height: 1.7; margin-bottom: 28px; max-width: 520px; }
+.hero-actions { display: flex; gap: 12px; }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.15s ease; border: none; text-decoration: none; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--primary-hover); outline: none; }
+.btn-outline { background: var(--card); color: var(--heading); border: 1px solid var(--border); }
+.btn-outline:hover, .btn-outline:focus-visible { background: var(--hover); outline: none; }
+.btn-sm { padding: 8px 18px; font-size: 13px; }
+
+/* ── Status Table Card ── */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-header { padding: 18px 24px; border-bottom: 1px solid var(--border); font-size: 16px; font-weight: 600; color: var(--heading); }
+.status-table { width: 100%; border-collapse: collapse; }
+.status-table tr { border-bottom: 1px solid var(--border); }
+.status-table tr:last-child { border-bottom: none; }
+.status-table td { padding: 12px 24px; font-size: 14px; }
+.status-table td:first-child { color: var(--body); width: 45%; }
+.status-table td:last-child { font-weight: 600; color: var(--heading); text-align: right; }
+.text-green { color: var(--primary); }
+.text-red { color: var(--error); }
+
+/* ── Section ── */
+.section-title { font-size: 24px; font-weight: 600; color: var(--heading); margin-bottom: 20px; }
+
+/* ── Metrics Grid ── */
+.metrics-grid { display: grid; gap: 16px; margin-bottom: 40px; }
+.metrics-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.metrics-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+.metric-card .label { font-size: 13px; font-weight: 500; color: var(--body); margin-bottom: 8px; }
+.metric-card .value { font-size: 32px; font-weight: 700; color: var(--heading); line-height: 1.2; margin-bottom: 6px; }
+.metric-card .sub { font-size: 13px; color: var(--body); }
+.metric-card .value.small-text { font-size: 20px; }
+
+/* ── Quick Actions ── */
+.actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 40px; }
+.action-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); transition: border-color 0.15s ease; }
+.action-card:hover { border-color: #D1D5DB; }
+.action-card h3 { font-size: 16px; font-weight: 600; color: var(--heading); margin-bottom: 6px; }
+.action-card p { font-size: 14px; color: var(--body); margin-bottom: 16px; }
+
+/* ── Activity Timeline ── */
+.timeline { margin-bottom: 40px; }
+.timeline-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.timeline-item { display: flex; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid var(--border); font-size: 14px; transition: background 0.15s ease; }
+.timeline-item:last-child { border-bottom: none; }
+.timeline-item:hover { background: var(--hover); }
+.timeline-time { font-size: 13px; font-weight: 600; color: var(--body); min-width: 48px; font-variant-numeric: tabular-nums; }
+.timeline-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.timeline-text { color: var(--heading); font-weight: 500; }
+.timeline-empty { padding: 24px; text-align: center; color: var(--body); font-size: 14px; }
+
+/* ── Benchmark Table ── */
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; margin-bottom: 40px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th { text-align: left; padding: 14px 24px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--body); border-bottom: 1px solid var(--border); background: #FAFBFC; }
+tbody td { padding: 14px 24px; border-bottom: 1px solid var(--border); color: var(--heading); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--hover); }
+tbody tr.highlight { background: #F0FFF0; }
+.mono { font-variant-numeric: tabular-nums; }
+
+/* ── Footer ── */
+.footer { margin-left: var(--sidebar-w); border-top: 1px solid var(--border); padding: 20px 32px; font-size: 12px; color: var(--body); display: flex; justify-content: space-between; background: var(--card); }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero { grid-template-columns: 1fr; }
+  .metrics-grid.cols-4, .metrics-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .main, .footer { margin-left: 0; }
+  .actions-grid { grid-template-columns: 1fr; }
+  .metrics-grid.cols-4, .metrics-grid.cols-3 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" aria-label="Sidebar Navigation">
+  <div class="sidebar-brand">
+    <h1>VisionBall</h1>
+    <p>Sports Ball Detection</p>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="/" class="active" aria-current="page">Dashboard</a>
+    <a href="/image">Image Detection</a>
+    <a href="/live">Live Camera</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="status-line"><span>Backend</span><span class="status-val skeleton" id="sb-backend">Loading</span></div>
+    <div class="status-line"><span>Status</span><span class="status-val ready skeleton" id="sb-status">Loading</span></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar" aria-label="Breadcrumb">Dashboard&nbsp;/&nbsp;<span>Overview</span></div>
+  <div class="content">
+
+    <div class="hero">
+      <div>
+        <div class="hero-label">Monocular Sports Ball Detection</div>
+        <h1>VisionBall</h1>
+        <p>Real-time sports ball detection powered by YOLOv11. Upload an image or connect a live camera for high-speed inference.</p>
+        <div class="hero-actions">
+          <a href="/image" class="btn btn-primary">Upload Image</a>
+          <a href="/live" class="btn btn-outline">Live Camera</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">System Status</div>
+        <table class="status-table">
+          <tr><td>Model</td><td id="sys-model" class="skeleton">Loading</td></tr>
+          <tr><td>Backend</td><td id="sys-backend" class="skeleton">Loading</td></tr>
+          <tr><td>Device</td><td id="sys-device" class="skeleton">Loading</td></tr>
+          <tr><td>Input Size</td><td id="sys-input" class="skeleton">Loading</td></tr>
+          <tr><td>Detection Ready</td><td id="sys-ready" class="skeleton">Loading</td></tr>
+          <tr><td>Model Version</td><td id="sys-version" class="skeleton">Loading</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- RUNTIME METRICS -->
+    <div class="section-title">Runtime Metrics</div>
+    <div class="metrics-grid cols-3">
+      <div class="metric-card">
+        <div class="label">Current Backend</div>
+        <div class="value small-text skeleton" id="rm-backend">Loading</div>
+        <div class="sub">Active execution provider</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Current FPS</div>
+        <div class="value mono skeleton" id="rm-fps">Waiting...</div>
+        <div class="sub">Frames per second</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Current Inference Time</div>
+        <div class="value mono skeleton" id="rm-latency">Waiting...</div>
+        <div class="sub">Milliseconds</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Current Model</div>
+        <div class="value small-text skeleton" id="rm-model">Loading</div>
+        <div class="sub">Active weights</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Device</div>
+        <div class="value small-text skeleton" id="rm-device">Loading</div>
+        <div class="sub">Hardware</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Active Session</div>
+        <div class="value small-text skeleton" id="rm-session">Inactive</div>
+        <div class="sub">Real-time status</div>
+      </div>
+    </div>
+
+    <!-- BENCHMARK METRICS -->
+    <div class="section-title">Benchmark Metrics</div>
+    <div class="metrics-grid cols-4">
+      <div class="metric-card">
+        <div class="label">Peak F1 Score</div>
+        <div class="value skeleton" id="bm-f1">Loading</div>
+        <div class="sub">Detection accuracy</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Optimal Confidence</div>
+        <div class="value skeleton" id="bm-conf">Loading</div>
+        <div class="sub">Best threshold</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Best Recorded FPS</div>
+        <div class="value skeleton" id="bm-fps">Loading</div>
+        <div class="sub">Max performance</div>
+      </div>
+      <div class="metric-card">
+        <div class="label">Fastest Backend</div>
+        <div class="value small-text skeleton" id="bm-fast">Loading</div>
+        <div class="sub">Top execution provider</div>
+      </div>
+    </div>
+
+    <div class="section-title">Quick Actions</div>
+    <div class="actions-grid">
+      <div class="action-card">
+        <h3>Image Detection</h3>
+        <p>Upload an image and perform inference.</p>
+        <a href="/image" class="btn btn-primary btn-sm">Open</a>
+      </div>
+      <div class="action-card">
+        <h3>Live Camera</h3>
+        <p>Start real-time webcam detection.</p>
+        <a href="/live" class="btn btn-outline btn-sm">Open</a>
+      </div>
+    </div>
+
+    <div class="section-title">Recent Activity</div>
+    <div class="timeline">
+      <div class="timeline-card" id="timeline-container">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <div class="section-title">Benchmark Results</div>
+    <div class="table-wrap">
+      <table aria-label="Benchmark comparison table">
+        <thead><tr><th>Backend</th><th>Mean Latency</th><th>P50</th><th>P95</th><th>FPS</th><th>Runs</th></tr></thead>
+        <tbody id="bench-body">
+          <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--body);">Loading benchmark data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <span>VisionBall v1.0 · Powered by YOLOv11</span>
+  <span>© 2026</span>
+</footer>
+
+<script>
+// Activity Logger
+function logActivity(message) {
+  let logs = JSON.parse(localStorage.getItem('vb_activity_logs') || '[]');
+  const now = new Date();
+  const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+  logs.unshift({ time: timeStr, text: message });
+  if (logs.length > 5) logs = logs.slice(0, 5);
+  localStorage.setItem('vb_activity_logs', JSON.stringify(logs));
+  renderActivity();
+}
+
+function renderActivity() {
+  const container = document.getElementById('timeline-container');
+  const logs = JSON.parse(localStorage.getItem('vb_activity_logs') || '[]');
+  
+  if (logs.length === 0) {
+    container.innerHTML = '<div class="timeline-empty">Waiting for application events...</div>';
+    return;
+  }
+  
+  container.innerHTML = logs.map(log => `
+    <div class="timeline-item">
+      <span class="timeline-time">${log.time}</span>
+      <span class="timeline-dot"></span>
+      <span class="timeline-text">${log.text}</span>
+    </div>
+  `).join('');
+}
+
+// Remove skeleton classes
+function removeSkeletons(elList) {
+  elList.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('skeleton');
+  });
+}
+
+// Global Poll Timer
+// Timer removed.
+
+
+// Main Load
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!localStorage.getItem('vb_app_started')) {
+    localStorage.setItem('vb_app_started', 'true');
+    logActivity('Application Started');
+  } else {
+    renderActivity();
+  }
+
+  const sbStatus = document.getElementById('sb-status');
+  const sbBackend = document.getElementById('sb-backend');
+  const sysReady = document.getElementById('sys-ready');
+  
+  try {
+    const res = await fetch('/api/metrics');
+    if (!res.ok) throw new Error('API Error');
+    const d = await res.json();
+    
+    // --- 1. SYSTEM STATUS & SIDEBAR (From backend runtime_status) ---
+    if (d.runtime_status) {
+      document.getElementById('sys-model').textContent = d.runtime_status.model;
+      document.getElementById('sys-backend').textContent = d.runtime_status.backend;
+      document.getElementById('sys-device').textContent = d.runtime_status.device;
+      document.getElementById('sys-input').textContent = d.runtime_status.input_size;
+      document.getElementById('sys-version').textContent = d.runtime_status.version;
+      sysReady.textContent = d.runtime_status.ready ? 'Yes' : 'No';
+      sysReady.className = d.runtime_status.ready ? 'text-green' : 'text-red';
+      
+      sbBackend.textContent = d.runtime_status.backend;
+      sbStatus.textContent = 'Ready';
+      sbStatus.className = 'status-val ready';
+      
+      // Update static parts of Runtime Metrics
+      document.getElementById('rm-backend').textContent = d.runtime_status.backend;
+      document.getElementById('rm-model').textContent = d.runtime_status.model;
+      document.getElementById('rm-device').textContent = d.runtime_status.device;
+      
+      removeSkeletons(['sys-model', 'sys-backend', 'sys-device', 'sys-input', 'sys-ready', 'sys-version', 'sb-backend', 'sb-status', 'rm-backend', 'rm-model', 'rm-device']);
+    }
+
+    // --- 2. BENCHMARK METRICS ---
+    if (d.max_f1_score != null) {
+      document.getElementById('bm-f1').textContent = d.max_f1_score.toFixed(4);
+    } else {
+      document.getElementById('bm-f1').textContent = 'Not Available';
+    }
+    
+    if (d.optimal_confidence_threshold != null) {
+      document.getElementById('bm-conf').textContent = d.optimal_confidence_threshold.toFixed(2);
+    } else {
+      document.getElementById('bm-conf').textContent = 'Not Available';
+    }
+    
+    if (d.max_fps != null) {
+      document.getElementById('bm-fps').textContent = d.max_fps.toFixed(1) + ' FPS';
+    } else {
+      document.getElementById('bm-fps').textContent = 'Not Available';
+    }
+    
+    if (d.fastest_backend) {
+      document.getElementById('bm-fast').textContent = d.fastest_backend;
+    } else {
+      document.getElementById('bm-fast').textContent = 'Not Available';
+    }
+
+    removeSkeletons(['bm-f1', 'bm-conf', 'bm-fps', 'bm-fast']);
+
+    // Benchmark Table
+    const tbody = document.getElementById('bench-body');
+    if (d.benchmark_results && d.benchmark_results.length > 0) {
+      tbody.innerHTML = '';
+      let maxFps = 0, maxIdx = 0;
+      d.benchmark_results.forEach((b, i) => { if (b.fps > maxFps) { maxFps = b.fps; maxIdx = i; } });
+      
+      d.benchmark_results.forEach((b, i) => {
+        const tr = document.createElement('tr');
+        if (i === maxIdx) tr.className = 'highlight';
+        tr.innerHTML = `
+          <td style="font-weight:600">${b.backend}</td>
+          <td class="mono">${b.mean_latency_ms.toFixed(2)} ms</td>
+          <td class="mono">${b.p50_latency_ms.toFixed(2)} ms</td>
+          <td class="mono">${b.p95_latency_ms.toFixed(2)} ms</td>
+          <td class="mono" style="font-weight:600">${b.fps.toFixed(2)}</td>
+          <td class="mono">${b.num_runs}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } else {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--body);">Not Available</td></tr>';
+    }
+
+    logActivity('Dashboard data loaded successfully');
+
+    // --- 3. DYNAMIC RUNTIME POLLING (FPS, Inference Time, Session) ---
+    removeSkeletons(['rm-fps', 'rm-latency', 'rm-session']);
+    
+    function updateRuntimeUI(state) {
+        const fpsEl = document.getElementById('rm-fps');
+        const latEl = document.getElementById('rm-latency');
+        const sessEl = document.getElementById('rm-session');
+        
+        if (!state || state.session === 'Idle') {
+            fpsEl.textContent = '--';
+            latEl.textContent = '--';
+            sessEl.textContent = 'Idle';
+            sessEl.style.color = 'var(--body)';
+        } else {
+            sessEl.textContent = state.session;
+            sessEl.style.color = 'var(--primary)';
+            fpsEl.textContent = state.fps > 0 ? state.fps.toFixed(1) + ' FPS' : '--';
+            latEl.textContent = state.latency > 0 ? state.latency.toFixed(1) + ' ms' : '--';
+        }
+    }
+
+    try {
+        const liveRes = await fetch('/api/detect/live_stats');
+        if (liveRes.ok) {
+            const stats = await liveRes.json();
+            const now = Date.now() / 1000;
+            // The backend might retain active=true if the connection drops abruptly.
+            // Check if last_active was within the last 5 seconds.
+            if (stats.active && stats.last_active && (now - stats.last_active < 5)) {
+                updateRuntimeUI({ session: 'Live Camera', fps: stats.fps, latency: stats.latency_ms });
+            } else {
+                const saved = JSON.parse(localStorage.getItem('vb_runtime_state'));
+                if (saved && saved.session === 'Image Detection') {
+                    updateRuntimeUI(saved);
+                } else {
+                    updateRuntimeUI({ session: 'Idle' });
+                }
+            }
+        }
+    } catch (err) {
+        updateRuntimeUI({ session: 'Idle' });
+    }
+
+    // Listen for updates from other tabs
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'vb_runtime_state' && e.newValue) {
+            updateRuntimeUI(JSON.parse(e.newValue));
+        }
+    });
+
+  } catch (e) {
+    console.error(e);
+    // Offline State
+    sbStatus.textContent = 'Offline';
+    sbStatus.className = 'status-val text-red';
+    sbBackend.textContent = 'Unknown';
+    sysReady.textContent = 'Unavailable';
+    sysReady.className = 'text-red';
+    
+    const unavailableFields = [
+      'sys-model', 'sys-backend', 'sys-device', 'sys-input', 'sys-version',
+      'rm-backend', 'rm-model', 'rm-device', 'bm-f1', 'bm-conf', 'bm-fps', 'bm-fast'
+    ];
+    unavailableFields.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = 'Not Available';
+    });
+    
+    document.getElementById('rm-fps').textContent = '--';
+    document.getElementById('rm-latency').textContent = '--';
+    document.getElementById('rm-session').textContent = 'Idle';
+    
+    document.getElementById('bench-body').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--error);">Backend unavailable. Start the API server.</td></tr>';
+    
+    removeSkeletons(unavailableFields.concat(['rm-fps', 'rm-latency', 'rm-session', 'sb-backend', 'sb-status', 'sys-ready']));
+    logActivity('Backend connection failed');
+  }
+});
+</script>
+</body>
+</html>

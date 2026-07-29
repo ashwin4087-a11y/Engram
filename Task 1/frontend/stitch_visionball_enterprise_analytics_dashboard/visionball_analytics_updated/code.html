@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisionBall | Enterprise Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#d4e3ff",
+                    "primary-fixed": "#d3e3ff",
+                    "on-secondary-fixed-variant": "#404752",
+                    "surface-container-high": "#e9e8e8",
+                    "outline-variant": "#DBE2EF",
+                    "background": "#F9F7F7",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#151c25",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary": "#585f6a",
+                    "tertiary": "#40597c",
+                    "on-primary-fixed": "#001c39",
+                    "secondary-fixed-dim": "#c0c7d3",
+                    "secondary-container": "#DBE2EF",
+                    "on-tertiary-fixed-variant": "#2f486a",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#3F72AF",
+                    "surface-container-low": "#f5f3f3",
+                    "on-primary-container": "#f2f5ff",
+                    "on-surface-variant": "#424750",
+                    "primary": "#3F72AF",
+                    "on-background": "#112D4E",
+                    "tertiary-container": "#587196",
+                    "outline": "#727781",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#a3c9ff",
+                    "surface-variant": "#e4e2e2",
+                    "inverse-surface": "#112D4E",
+                    "on-surface": "#112D4E",
+                    "surface-container-highest": "#DBE2EF",
+                    "secondary-fixed": "#dce3f0",
+                    "on-primary-fixed-variant": "#004882",
+                    "surface-tint": "#3F72AF",
+                    "on-secondary-container": "#5c636e",
+                    "on-tertiary-fixed": "#001c3a",
+                    "error": "#ba1a1a",
+                    "surface": "#F9F7F7",
+                    "surface-bright": "#fbf9f9",
+                    "surface-container": "#efeded",
+                    "inverse-on-surface": "#f2f0f0",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-container": "#f2f5ff",
+                    "surface-dim": "#dbdada",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#afc8f1",
+                    "inverse-primary": "#a3c9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "2xl": "48px",
+                    "md": "16px",
+                    "sm": "8px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "3xl": "64px",
+                    "base": "4px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "h2": ["Inter"],
+                    "h3": ["Inter"],
+                    "display": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "mono": ["JetBrains Mono"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "h2": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "h3": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "h1": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F9F7F7;
+            color: #112D4E;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .chart-container {
+            border: 1px solid #DBE2EF;
+            box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+            transition: all 0.2s ease-out;
+        }
+        .chart-container:hover {
+            box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: #3F72AF;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #DBE2EF;
+            border-radius: 10px;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface dark:bg-inverse-surface border-r border-outline-variant shadow-sm flex flex-col py-lg z-[60]">
+<div class="px-md mb-xl">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 bg-primary rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">sports_baseball</span>
+</div>
+<div>
+<h1 class="font-h2 text-h2 font-bold text-on-surface leading-tight">VisionBall</h1>
+<p class="font-label-md text-label-md text-secondary opacity-80 uppercase tracking-widest">Enterprise Analytics</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-xs px-sm custom-scrollbar overflow-y-auto">
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">image_search</span>
+<span class="font-body-md text-body-md">Image Detection</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">videocam</span>
+<span class="font-body-md text-body-md">Video Detection</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">sensors</span>
+<span class="font-body-md text-body-md">Live Camera</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm border-l-4 border-primary text-primary font-bold bg-secondary-container/50 rounded-r-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">speed</span>
+<span class="font-body-md text-body-md">Benchmark</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">model_training</span>
+<span class="font-body-md text-body-md">Models</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-body-md text-body-md">History</span>
+</a>
+<div class="mt-xl pt-md border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm text-secondary hover:text-primary transition-colors hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</nav>
+<div class="px-md mt-auto">
+<div class="flex items-center gap-sm text-outline font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>v1.2.4-stable</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Shell -->
+<div class="flex-1 ml-[280px] min-w-0">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 w-full h-[64px] bg-surface/90 backdrop-blur-md border-b border-outline-variant flex items-center justify-between px-xl">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-secondary text-[20px]">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="Search analytics sessions, models, or logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-md">
+<button class="p-2 text-secondary hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border border-surface"></span>
+</button>
+<button class="p-2 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">memory</span>
+</button>
+<button class="p-2 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-sm">
+<div class="text-right">
+<p class="font-body-sm text-body-sm font-bold text-on-surface">Alex Thompson</p>
+<p class="font-label-md text-label-md text-secondary">Lead AI Analyst</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-outline-variant object-cover" data-alt="A professional studio portrait of a technology analyst in their 30s with a clean, modern aesthetic. The lighting is soft and neutral, reflecting a corporate professional environment. The background is a blurred office with subtle hints of glass and greenery, maintaining a high-key minimalist vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKhfxKNvs-2UXO2OOeqIUX-YN2Js8RY-0aHotj2_EIphPWSXBbklHo7ioHDq3lW6EQs-opaY4rGh_FoRuyqbF4TkYQZ-DPtJJaunP7nhsnCkE9Iq0IeR3v0hHzwsviJ8nm_rc-7McNY6PE8KGVm9lmgF3O_wmqymm81wNPV_QHWKDqgxHIxss8H6eT54nO8or_IKHa7qjccnTJU4oNywaRKYBHLQPnpDG8-QnSpvwSgJtrEUSiPfNsbw"/>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="p-xl space-y-lg">
+<!-- Page Header -->
+<div class="flex items-end justify-between mb-2xl">
+<div>
+<h2 class="font-h1 text-h1 text-on-surface">Analytics &amp; Performance</h2>
+<p class="font-body-lg text-body-lg text-secondary mt-xs">Deep-dive telemetry for Model V4-Beta 'Striker'.</p>
+</div>
+<div class="flex items-center gap-md">
+<button class="px-md py-sm bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm text-secondary hover:bg-surface-container-low transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        Last 24 Hours
+                    </button>
+<button class="px-md py-sm bg-primary text-on-primary rounded-lg font-body-sm text-body-sm font-bold hover:opacity-90 transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+                        Export Report
+                    </button>
+</div>
+</div>
+<!-- Metric Cards Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="chart-container p-lg rounded-xl animate-slide-in" style="animation-delay: 0.1s">
+<p class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-sm">Avg. Confidence</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display text-display text-primary">94.2%</span>
+<span class="font-body-sm text-body-sm text-primary flex items-center">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                            1.2%
+                        </span>
+</div>
+<div class="w-full h-1 bg-surface-container-highest mt-md rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 94.2%"></div>
+</div>
+</div>
+<div class="chart-container p-lg rounded-xl animate-slide-in" style="animation-delay: 0.2s">
+<p class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-sm">Mean Precision</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display text-display text-on-surface">0.89</span>
+<span class="font-body-sm text-body-sm text-secondary">mAP@50</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mt-md">Optimized for high-speed tracking</p>
+</div>
+<div class="chart-container p-lg rounded-xl animate-slide-in" style="animation-delay: 0.3s">
+<p class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-sm">Total Detections</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display text-display text-on-surface">1.2M</span>
+<span class="font-body-sm text-body-sm text-secondary">Frames processed</span>
+</div>
+<p class="font-body-sm text-body-sm text-secondary mt-md">Session uptime: 124h 12m</p>
+</div>
+<div class="chart-container p-lg rounded-xl animate-slide-in" style="animation-delay: 0.4s">
+<p class="font-label-md text-label-md text-secondary uppercase tracking-wider mb-sm">Inference Latency</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display text-display text-on-surface">7.4ms</span>
+<span class="font-body-sm text-body-sm text-primary font-bold">STABLE</span>
+</div>
+<div class="flex gap-1 mt-md h-4 items-end">
+<div class="w-full bg-primary opacity-20 h-2"></div>
+<div class="w-full bg-primary opacity-40 h-3"></div>
+<div class="w-full bg-primary opacity-60 h-2"></div>
+<div class="w-full bg-primary h-4"></div>
+<div class="w-full bg-primary opacity-80 h-3"></div>
+</div>
+</div>
+</div>
+<!-- Main Charts Grid -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Detection Count (Bar) -->
+<div class="col-span-12 lg:col-span-8 chart-container rounded-xl p-lg animate-slide-in" style="animation-delay: 0.5s">
+<div class="flex items-center justify-between mb-xl">
+<div>
+<h3 class="font-h3 text-h3 text-on-surface">Detection Density</h3>
+<p class="font-body-sm text-body-sm text-secondary">Hourly counts of detected objects across all active streams.</p>
+</div>
+<div class="flex gap-sm">
+<span class="px-2 py-1 bg-primary/10 text-primary rounded font-label-md text-label-md">LIVE DATA</span>
+</div>
+</div>
+<div class="h-[300px] w-full flex items-end gap-3 px-md">
+<!-- Simulated Bar Chart -->
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary/20 w-full h-[40%] group-hover:bg-primary transition-all"></div>
+<span class="text-center font-label-md text-label-md text-secondary">08:00</span>
+</div>
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary/20 w-full h-[65%] group-hover:bg-primary transition-all"></div>
+<span class="text-center font-label-md text-label-md text-secondary">10:00</span>
+</div>
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary/20 w-full h-[85%] group-hover:bg-primary transition-all"></div>
+<span class="text-center font-label-md text-label-md text-secondary">12:00</span>
+</div>
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary w-full h-[95%]"></div>
+<span class="text-center font-label-md text-label-md text-primary font-bold">14:00</span>
+</div>
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary/20 w-full h-[75%] group-hover:bg-primary transition-all"></div>
+<span class="text-center font-label-md text-label-md text-secondary">16:00</span>
+</div>
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary/20 w-full h-[50%] group-hover:bg-primary transition-all"></div>
+<span class="text-center font-label-md text-label-md text-secondary">18:00</span>
+</div>
+<div class="group relative flex-1 flex flex-col justify-end gap-1">
+<div class="bg-primary/20 w-full h-[30%] group-hover:bg-primary transition-all"></div>
+<span class="text-center font-label-md text-label-md text-secondary">20:00</span>
+</div>
+</div>
+</div>
+<!-- Confidence Distribution (Histogram) -->
+<div class="col-span-12 lg:col-span-4 chart-container rounded-xl p-lg animate-slide-in" style="animation-delay: 0.6s">
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">Confidence Distribution</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xl">Probability spread per inference task.</p>
+<div class="space-y-md">
+<div class="space-y-xs">
+<div class="flex justify-between font-label-md text-label-md uppercase">
+<span class="text-secondary">High (0.9 - 1.0)</span>
+<span class="text-primary font-bold">78%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 78%"></div>
+</div>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between font-label-md text-label-md uppercase">
+<span class="text-secondary">Mid (0.5 - 0.9)</span>
+<span class="text-secondary">18%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary opacity-40" style="width: 18%"></div>
+</div>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between font-label-md text-label-md uppercase">
+<span class="text-secondary">Low (&lt; 0.5)</span>
+<span class="text-secondary">4%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-error" style="width: 4%"></div>
+</div>
+</div>
+</div>
+<div class="mt-xl pt-xl border-t border-outline-variant">
+<div class="flex items-center gap-md">
+<div class="p-2 rounded bg-surface-container-low text-primary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<p class="font-body-sm text-body-sm font-bold text-on-surface">Skew: Positive</p>
+<p class="font-label-md text-label-md text-secondary">Distribution indicates high model stability.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Precision/Recall (Line) -->
+<div class="col-span-12 lg:col-span-6 chart-container rounded-xl p-lg animate-slide-in" style="animation-delay: 0.7s">
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">Precision-Recall Curve</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xl">Trade-off between specificity and sensitivity.</p>
+<div class="relative h-[250px] w-full border-l border-b border-outline-variant overflow-hidden">
+<!-- Simulated SVG Curve -->
+<svg class="w-full h-full preserve-3d" preserveaspectratio="none" viewbox="0 0 500 200">
+<path d="M0,20 C50,25 150,30 300,50 C400,80 450,150 480,200" fill="none" stroke="#3F72AF" stroke-width="3"></path>
+<path d="M0,20 C50,25 150,30 300,50 C400,80 450,150 480,200 L480,200 L0,200 Z" fill="url(#gradient-primary)" opacity="0.1"></path>
+<defs>
+<lineargradient id="gradient-primary" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#3F72AF;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#3F72AF;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col justify-between p-2 pointer-events-none">
+<span class="text-[10px] text-outline">1.0</span>
+<span class="text-[10px] text-outline">0.5</span>
+<span class="text-[10px] text-outline">0.0</span>
+</div>
+</div>
+<div class="flex justify-between mt-sm font-label-md text-label-md text-outline">
+<span>Recall</span>
+<span>Precision: 0.912</span>
+</div>
+</div>
+<!-- Inference Time vs. FPS (Scatter) -->
+<div class="col-span-12 lg:col-span-6 chart-container rounded-xl p-lg animate-slide-in" style="animation-delay: 0.8s">
+<h3 class="font-h3 text-h3 text-on-surface mb-xs">Hardware Efficiency</h3>
+<p class="font-body-sm text-body-sm text-secondary mb-xl">Correlation between processing time and frame rate.</p>
+<div class="relative h-[250px] w-full border-l border-b border-outline-variant bg-surface-container-low/50">
+<!-- Scatter Points -->
+<div class="absolute w-2 h-2 rounded-full bg-primary opacity-60" style="left: 10%; bottom: 85%"></div>
+<div class="absolute w-2 h-2 rounded-full bg-primary opacity-60" style="left: 20%; bottom: 75%"></div>
+<div class="absolute w-2 h-2 rounded-full bg-primary opacity-60" style="left: 35%; bottom: 60%"></div>
+<div class="absolute w-2 h-2 rounded-full bg-primary opacity-60" style="left: 50%; bottom: 45%"></div>
+<div class="absolute w-2 h-3 rounded-full bg-primary" style="left: 65%; bottom: 35%; border: 2px solid white"></div>
+<div class="absolute w-2 h-2 rounded-full bg-primary opacity-60" style="left: 80%; bottom: 25%"></div>
+<div class="absolute w-2 h-2 rounded-full bg-primary opacity-60" style="left: 90%; bottom: 15%"></div>
+<!-- Regression Line -->
+<div class="absolute h-px w-[120%] bg-primary/20 rotate-[-25deg] origin-left top-[30%] left-0"></div>
+</div>
+<div class="flex justify-between mt-sm font-label-md text-label-md text-outline">
+<span>FPS (1 - 240)</span>
+<span>Latency (ms)</span>
+</div>
+</div>
+<!-- Professional Summary Card -->
+<div class="col-span-12 chart-container rounded-xl p-xl border-l-8 border-l-primary animate-slide-in" style="animation-delay: 0.9s">
+<div class="flex items-start gap-lg">
+<div class="p-md bg-secondary-container text-primary rounded-lg">
+<span class="material-symbols-outlined text-[32px]">summarize</span>
+</div>
+<div class="flex-1 space-y-md">
+<h3 class="font-h2 text-h2 text-on-surface">Executive Summary: Session 94-B</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+<div class="space-y-sm">
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                                        The Striker V4 model demonstrates a <strong class="text-primary">14% improvement</strong> in tracking stability under high-velocity conditions compared to V3. Confidence scores remain tightly clustered above 0.92, indicating a significant reduction in edge-case false positives.
+                                    </p>
+<p class="font-body-md text-body-md text-secondary">
+                                        Hardware utilization on NVIDIA A100 clusters remains efficient, with an average inference overhead of 7.4ms at 120fps.
+                                    </p>
+</div>
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant space-y-sm">
+<h4 class="font-label-md text-label-md font-bold uppercase text-secondary">System Recommendations</h4>
+<ul class="space-y-xs font-body-sm text-body-sm text-on-surface">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+                                            Current model version is verified for production deployment.
+                                        </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">check_circle</span>
+                                            Detection thresholds can be safely increased to 0.85.
+                                        </li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">info</span>
+                                            Monitor heat dissipation on Node-4 during peak 4K processing.
+                                        </li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulated number animation for metrics
+            const counters = document.querySelectorAll('.font-display');
+            counters.forEach(counter => {
+                const targetText = counter.innerText;
+                const targetValue = parseFloat(targetText.replace(/[^0-9.]/g, ''));
+                let current = 0;
+                const duration = 1000;
+                const increment = targetValue / (duration / 16);
+                
+                const update = () => {
+                    current += increment;
+                    if (current < targetValue) {
+                        const formatted = targetText.includes('.') ? current.toFixed(1) : Math.floor(current);
+                        const suffix = targetText.replace(/[0-9.]/g, '');
+                        counter.innerText = formatted + suffix;
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.innerText = targetText;
+                    }
+                };
+                update();
+            });
+        });
+    </script>
+</body></html>

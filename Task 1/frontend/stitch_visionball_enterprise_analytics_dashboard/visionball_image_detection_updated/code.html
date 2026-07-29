@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisionBall | Image Detection</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F8F9FA;
+  --card: #FFFFFF;
+  --primary: #2E7D32;
+  --primary-hover: #1B5E20;
+  --heading: #111827;
+  --body: #4B5563;
+  --border: #E5E7EB;
+  --hover: #F3F4F6;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(0,0,0,0.05);
+  --error: #DC2626;
+  --sidebar-w: 260px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--body); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sidebar { position: fixed; left: 0; top: 0; width: var(--sidebar-w); height: 100vh; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 50; }
+.sidebar-brand { padding: 28px 24px 24px; border-bottom: 1px solid var(--border); }
+.sidebar-brand h1 { font-size: 20px; font-weight: 700; color: var(--heading); }
+.sidebar-brand p { font-size: 13px; color: var(--body); margin-top: 2px; }
+.sidebar-nav { flex: 1; padding: 16px 12px; }
+.sidebar-nav a { display: block; padding: 11px 16px; border-radius: 8px; color: var(--body); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.15s ease; margin-bottom: 2px; }
+.sidebar-nav a:hover, .sidebar-nav a:focus-visible { background: var(--hover); color: var(--heading); outline: none; }
+.sidebar-nav a.active { background: #E8F5E9; color: var(--primary); font-weight: 600; }
+.sidebar-footer { padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--body); }
+.sl { display: flex; justify-content: space-between; }
+.sv { font-weight: 600; color: var(--heading); }
+.ready { color: var(--primary); }
+
+.main { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(248,249,250,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 52px; display: flex; align-items: center; font-size: 13px; color: var(--body); }
+.topbar span { color: var(--heading); font-weight: 500; }
+.content { padding: 32px; max-width: 1140px; flex: 1; }
+
+.page-title { font-size: 34px; font-weight: 700; color: var(--heading); margin-bottom: 8px; }
+.page-desc { font-size: 15px; color: var(--body); margin-bottom: 32px; }
+
+/* Upload */
+.upload-zone { background: var(--card); border: 2px dashed var(--border); border-radius: var(--radius); padding: 56px 24px; text-align: center; cursor: pointer; transition: all 0.2s ease; margin-bottom: 32px; }
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--primary); background: #F0FFF0; }
+.upload-zone h3 { font-size: 18px; font-weight: 600; color: var(--heading); margin-bottom: 8px; }
+.upload-zone p { font-size: 14px; color: var(--body); margin-bottom: 4px; }
+.formats { font-size: 13px; color: var(--body); margin-top: 12px; }
+
+.upload-actions { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+.btn { display: inline-flex; align-items: center; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.15s ease; border: none; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--primary-hover); outline: none; }
+.btn-outline { background: var(--card); color: var(--heading); border: 1px solid var(--border); }
+.btn-outline:hover, .btn-outline:focus-visible { background: var(--hover); outline: none; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+input[type="file"] { display: none; }
+
+/* Loading */
+.loading-state { display: none; text-align: center; padding: 48px 24px; }
+.loading-state.visible { display: block; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 20px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-steps { list-style: none; display: inline-block; text-align: left; }
+.loading-steps li { font-size: 14px; color: var(--body); padding: 4px 0; transition: color 0.2s ease; }
+.loading-steps li.done { color: var(--primary); }
+.loading-steps li.active { color: var(--heading); font-weight: 600; }
+.progress-bar-wrap { width: 320px; height: 4px; background: var(--border); border-radius: 2px; margin: 20px auto 0; overflow: hidden; }
+.progress-bar { height: 100%; width: 0%; background: var(--primary); border-radius: 2px; transition: width 0.4s ease; }
+
+/* Workspace */
+.workspace { display: none; margin-bottom: 32px; }
+.workspace.visible { display: block; }
+.image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.image-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.image-card-header { padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.image-card-header h3 { font-size: 14px; font-weight: 600; color: var(--heading); }
+.badge { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 6px; background: var(--hover); color: var(--body); }
+.image-container { position: relative; background: #F9FAFB; display: flex; align-items: center; justify-content: center; min-height: 320px; }
+.image-container img { max-width: 100%; max-height: 480px; object-fit: contain; display: block; }
+
+/* Summary */
+.summary-title { font-size: 24px; font-weight: 600; color: var(--heading); margin-bottom: 16px; margin-top: 40px; }
+.summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+.summary-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+.summary-card .label { font-size: 13px; font-weight: 500; color: var(--body); margin-bottom: 8px; }
+.summary-card .value { font-size: 32px; font-weight: 700; color: var(--heading); line-height: 1.1; margin-bottom: 6px; }
+.summary-card .sub { font-size: 13px; color: var(--body); }
+
+/* Det Table */
+.det-table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; margin-bottom: 40px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th { text-align: left; padding: 14px 24px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--body); border-bottom: 1px solid var(--border); background: #FAFBFC; cursor: pointer; user-select: none; }
+thead th:hover { background: var(--hover); }
+tbody td { padding: 14px 24px; border-bottom: 1px solid var(--border); color: var(--heading); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--hover); }
+.mono { font-variant-numeric: tabular-nums; }
+
+/* Empty & Error */
+.empty-state { text-align: center; padding: 48px 24px; color: var(--body); font-size: 14px; }
+.empty-state strong { display: block; font-size: 15px; color: var(--heading); margin-bottom: 4px; }
+.error-banner { display: none; padding: 14px 24px; border-radius: var(--radius); background: #FEF2F2; border: 1px solid #FECACA; color: var(--error); font-size: 14px; font-weight: 500; margin-bottom: 24px; }
+.error-banner.visible { display: block; }
+
+.footer { margin-left: var(--sidebar-w); border-top: 1px solid var(--border); padding: 20px 32px; font-size: 12px; color: var(--body); display: flex; justify-content: space-between; background: var(--card); }
+
+@media (max-width: 992px) {
+  .image-grid { grid-template-columns: 1fr; }
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .main, .footer { margin-left: 0; }
+  .summary-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand"><h1>VisionBall</h1><p>Sports Ball Detection</p></div>
+  <nav class="sidebar-nav">
+    <a href="/">Dashboard</a>
+    <a href="/image" class="active">Image Detection</a>
+    <a href="/live">Live Camera</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sl"><span>Backend</span><span class="sv">ONNX Runtime</span></div>
+    <div class="sl"><span>Status</span><span class="sv ready">Ready</span></div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">Dashboard&nbsp;/&nbsp;<span>Image Detection</span></div>
+  <div class="content">
+
+    <h1 class="page-title">Image Detection</h1>
+    <p class="page-desc">Upload an image to detect sports balls using YOLOv11.</p>
+
+    <div class="error-banner" id="error-banner"></div>
+
+    <div class="upload-zone" id="upload-zone">
+      <h3>Drag & Drop</h3>
+      <p>or click to browse files</p>
+      <div class="formats">Supported: JPG, PNG, JPEG · Max 10 MB · Input: 640 × 640</div>
+      <div class="upload-actions">
+        <button class="btn btn-primary" id="browse-btn">Browse Files</button>
+        <button class="btn btn-outline" id="clear-btn" style="display:none;">Clear</button>
+      </div>
+      <input type="file" id="file-input" accept="image/jpeg,image/png,image/jpg"/>
+    </div>
+
+    <!-- Professional Loading -->
+    <div class="loading-state" id="loading">
+      <div class="spinner"></div>
+      <ul class="loading-steps" id="steps">
+        <li id="step-1">Loading model...</li>
+        <li id="step-2">Reading image...</li>
+        <li id="step-3">Preprocessing...</li>
+        <li id="step-4">Running inference...</li>
+        <li id="step-5">Applying NMS...</li>
+        <li id="step-6">Drawing detections...</li>
+        <li id="step-7">Preparing output...</li>
+        <li id="step-8">Completed.</li>
+      </ul>
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progress"></div></div>
+    </div>
+
+    <div id="empty-state" class="empty-state">
+      <strong>No image uploaded.</strong>
+      Upload an image to begin detection.
+    </div>
+
+    <div class="workspace" id="workspace">
+      <div class="image-grid">
+        <div class="image-card">
+          <div class="image-card-header">
+            <h3>Original Image</h3>
+            <span class="badge" id="orig-res">—</span>
+          </div>
+          <div class="image-container">
+            <img id="orig-img" src="" alt="Original"/>
+          </div>
+        </div>
+        <div class="image-card">
+          <div class="image-card-header">
+            <h3>Detection Overlay</h3>
+            <span class="badge">ONNX Runtime</span>
+          </div>
+          <div class="image-container">
+            <img id="det-img" src="" alt="Detection" style="display:none;"/>
+            <div class="empty-state" id="det-empty" style="padding:24px;">
+              <strong>No sports ball detected.</strong>
+              Try another image or lower the confidence threshold.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-title">Detection Summary</div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="label">Detected Objects</div>
+          <div class="value" id="r-count">0</div>
+          <div class="sub">Total objects found</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Average Confidence</div>
+          <div class="value mono" id="r-avg">0.00</div>
+          <div class="sub">Mean score</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Highest Confidence</div>
+          <div class="value mono" id="r-high">0.00</div>
+          <div class="sub">Max score</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Inference Time</div>
+          <div class="value mono" id="r-latency">—</div>
+          <div class="sub">Milliseconds</div>
+        </div>
+      </div>
+
+      <div class="summary-title">Detection Details</div>
+      <div class="det-table-wrap">
+        <table aria-label="Detected objects table">
+          <thead>
+            <tr>
+              <th>Object</th>
+              <th id="sort-conf">Confidence ▼</th>
+              <th>Bounding Box [x1, y1, x2, y2]</th>
+              <th>Inference Time</th>
+            </tr>
+          </thead>
+          <tbody id="det-body">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="footer">
+  <span>VisionBall v1.0 · Powered by YOLOv11 · ONNX Runtime</span>
+  <span>© 2026</span>
+</footer>
+
+<script>
+// Logger
+function logActivity(message) {
+  let logs = JSON.parse(localStorage.getItem('vb_activity_logs') || '[]');
+  const now = new Date();
+  const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+  logs.unshift({ time: timeStr, text: message });
+  if (logs.length > 5) logs = logs.slice(0, 5);
+  localStorage.setItem('vb_activity_logs', JSON.stringify(logs));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const uploadZone = document.getElementById('upload-zone');
+  const browseBtn = document.getElementById('browse-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const fileInput = document.getElementById('file-input');
+  
+  const loading = document.getElementById('loading');
+  const workspace = document.getElementById('workspace');
+  const emptyState = document.getElementById('empty-state');
+  const errorBanner = document.getElementById('error-banner');
+  
+  const origImg = document.getElementById('orig-img');
+  const detImg = document.getElementById('det-img');
+  const detEmpty = document.getElementById('det-empty');
+  const progress = document.getElementById('progress');
+  
+  const detBody = document.getElementById('det-body');
+  
+  let currentDetails = [];
+  let sortDesc = true;
+  let currentLatency = 0;
+
+  function showError(msg) {
+    errorBanner.textContent = msg;
+    errorBanner.classList.add('visible');
+    setTimeout(() => errorBanner.classList.remove('visible'), 5000);
+  }
+
+  function setStep(n) {
+    for (let i = 1; i <= 8; i++) {
+      const el = document.getElementById('step-' + i);
+      if (el) el.className = i < n ? 'done' : i === n ? 'active' : '';
+    }
+    progress.style.width = ((n / 8) * 100) + '%';
+  }
+  
+  function renderTable() {
+    detBody.innerHTML = '';
+    
+    // Sort
+    const sorted = [...currentDetails].sort((a, b) => sortDesc ? b.confidence - a.confidence : a.confidence - b.confidence);
+    
+    if (sorted.length === 0) {
+      detBody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--body);">No objects detected.</td></tr>';
+      return;
+    }
+    
+    sorted.forEach((d) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-weight:600;">${d.object}</td>
+        <td class="mono">${d.confidence.toFixed(3)}</td>
+        <td class="mono">[${d.box.join(', ')}]</td>
+        <td class="mono">${currentLatency.toFixed(2)} ms</td>
+      `;
+      detBody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('sort-conf').addEventListener('click', () => {
+    sortDesc = !sortDesc;
+    document.getElementById('sort-conf').textContent = sortDesc ? 'Confidence ▼' : 'Confidence ▲';
+    renderTable();
+  });
+
+  browseBtn.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
+  uploadZone.addEventListener('click', () => fileInput.click());
+  uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+  uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault(); uploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', (e) => { if (e.target.files[0]) processFile(e.target.files[0]); });
+
+  clearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    workspace.classList.remove('visible');
+    emptyState.style.display = '';
+    clearBtn.style.display = 'none';
+    fileInput.value = '';
+    currentDetails = [];
+    localStorage.setItem('vb_runtime_state', JSON.stringify({
+        session: 'Idle',
+        fps: 0,
+        latency: 0
+    }));
+  });
+
+  async function processFile(file) {
+    const valid = ['image/jpeg','image/png','image/jpg'];
+    if (!valid.includes(file.type)) { showError('Unsupported file format. Use JPG or PNG.'); return; }
+    if (file.size > 10 * 1024 * 1024) { showError('File exceeds 10 MB limit.'); return; }
+
+    emptyState.style.display = 'none';
+    workspace.classList.remove('visible');
+    loading.classList.add('visible');
+    browseBtn.disabled = true;
+    clearBtn.style.display = 'none';
+    
+    logActivity('Image Uploaded: ' + file.name);
+
+    // Show original
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      origImg.src = e.target.result;
+      const t = new Image();
+      t.onload = () => { document.getElementById('orig-res').textContent = t.naturalWidth + ' × ' + t.naturalHeight; };
+      t.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Sequence fake delay for realistic feel
+    setStep(1); await delay(300);
+    setStep(2); await delay(300);
+    setStep(3); await delay(200);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    logActivity('Inference Started');
+
+    try {
+      setStep(4);
+      const res = await fetch('/api/detect/image', { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Server returned ' + res.status);
+      
+      setStep(5); await delay(200);
+      const data = await res.json();
+      
+      setStep(6); await delay(200);
+      setStep(7); await delay(300);
+      setStep(8); await delay(200);
+
+      loading.classList.remove('visible');
+      browseBtn.disabled = false;
+      clearBtn.style.display = '';
+      workspace.classList.add('visible');
+      
+      logActivity('Inference Finished: ' + data.detections + ' objects');
+
+      if (data.image_b64) {
+        detImg.src = data.image_b64;
+        detImg.style.display = '';
+        detEmpty.style.display = 'none';
+      } else {
+        detImg.style.display = 'none';
+        detEmpty.style.display = '';
+      }
+      
+      const detections = data.detections || 0;
+      document.getElementById('r-count').textContent = detections;
+      document.getElementById('r-latency').textContent = (data.latency_ms || 0).toFixed(1);
+      
+      currentDetails = data.details || [];
+      currentLatency = data.latency_ms || 0;
+      
+      if (detections === 0) {
+        detEmpty.style.display = '';
+        document.getElementById('r-avg').textContent = '0.00';
+        document.getElementById('r-high').textContent = '0.00';
+      } else {
+        detEmpty.style.display = 'none';
+        const confs = currentDetails.map(d => d.confidence);
+        const avg = confs.reduce((a,b) => a+b, 0) / confs.length;
+        const high = Math.max(...confs);
+        document.getElementById('r-avg').textContent = avg.toFixed(3);
+        document.getElementById('r-high').textContent = high.toFixed(3);
+      }
+      
+      renderTable();
+      
+      const fps = currentLatency > 0 ? 1000 / currentLatency : 0;
+      localStorage.setItem('vb_runtime_state', JSON.stringify({
+          session: 'Image Detection',
+          fps: fps,
+          latency: currentLatency
+      }));
+
+    } catch (err) {
+      loading.classList.remove('visible');
+      browseBtn.disabled = false;
+      showError('Inference failed: ' + err.message);
+      logActivity('Inference Error');
+    }
+  }
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+});
+</script>
+</body>
+</html>
