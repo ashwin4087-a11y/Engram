@@ -1,7 +1,0 @@
-python_version = "3.11"
-search_paths = [
-    ".",
-    ".venv/Lib/site-packages",
-    "../venv/Lib/site-packages"
-]
-interpreter_path = ".venv/Scripts/python.exe"
