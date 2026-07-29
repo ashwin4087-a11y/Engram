@@ -1,128 +1,129 @@
-# VisionBall — Monocular Ball Detection (Max F1 Score + Max FPS)
+# VisionBall — Enterprise Monocular Ball Detection System
 
-**VisionBall** — Real-time ball detection system optimized for monocular 2D vision under varied lighting, motion blur, and partial occlusion conditions. Built to maximize both **F1 Score** (accuracy) and **FPS** (throughput).
-
----
-
-## 1. Executive Summary & Strategy
-
-- **Detector Model:** Ultralytics YOLO (YOLOv8n / YOLO11n Nano architecture) single-class fine-tuned for `ball`.
-- **High-Throughput Runtime:** Exported to **ONNX Runtime** with optimized execution providers for 2–5x inference latency reduction.
-- **Accuracy Optimization:** Domain-specific augmentations (motion blur, lighting jitter, scale cutout) combined with a post-training **Confidence Threshold Sweep (0.05–0.95)** to lock in peak F1 score.
-- **Baseline Comparison:** Classical CV pipeline (HSV color mask + Hough Circle transform) for comparative engineering evaluation.
+**VisionBall** is a real-time sports ball detection system optimized for monocular 2D vision. Built to maximize **F1 Score** (accuracy) and **FPS** (throughput), it features a high-performance **FastAPI** backend and a modern, enterprise-grade web dashboard.
 
 ---
 
-## 2. Project Directory Structure
+## 🌟 Key Features
 
-```
-Task 1/
-├── README.md
-├── requirements.txt
-├── Task1_BallDetection_Blueprint.md
-├── dataset/
-│   ├── train/
-│   │   ├── images/
-│   │   └── labels/
-│   ├── valid/
-│   │   ├── images/
-│   │   └── labels/
-│   ├── test/
-│   │   ├── images/
-│   │   └── labels/
-│   ├── data.yaml
-│   ├── README.dataset.txt
-│   └── README.roboflow.txt
-├── src/
-│   ├── __init__.py
-│   ├── dataset_prep.py
-│   ├── augment.py
-│   ├── train.py
-│   ├── export_model.py
-│   ├── infer.py
-│   ├── classical_cv_baseline.py
-│   ├── eval_f1.py
-│   ├── benchmark_fps.py
-│   └── utils.py
-├── app/
-│   ├── live_demo.py
-│   └── streamlit_app.py
-├── models/
-│   ├── best.pt
-│   └── best.onnx
-├── results/
-│   ├── metrics.json
-│   ├── fps_report.csv
-│   └── f1_vs_threshold.png
-└── configs/
-    └── ball.yaml
-```
+- **Advanced Computer Vision:** Powered by a fine-tuned Ultralytics YOLOv11 Nano model.
+- **High-Throughput Runtime:** Exported to **ONNX Runtime** to significantly reduce inference latency.
+- **Enterprise Web Dashboard:** A sleek, professional, zero-build web interface for image detection and live camera streaming.
+- **Real-Time Telemetry:** Live tracking of FPS, inference latency (milliseconds), and model confidence.
+- **Accuracy Optimization:** Built-in benchmarking tools for confidence threshold sweeps to lock in peak F1 scores.
 
 ---
 
-## 3. Quickstart & Installation
+## 🚀 Setup & Installation
 
+Follow these steps to set up the project on your local machine.
+
+### 1. Prerequisites
+Ensure you have **Python 3.9+** installed on your system.
+
+### 2. Clone the Repository
 ```bash
-# Navigate to Task 1 directory
-cd "Task 1"
+git clone https://github.com/yourusername/VisionBall.git
+cd VisionBall
+```
 
-# Install dependencies
+### 3. Create a Virtual Environment (Recommended)
+```bash
+python -m venv venv
+
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+### 4. Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
+*(Note: The project requires `ultralytics`, `fastapi`, `uvicorn`, `opencv-python`, and `onnxruntime`)*
+
 ---
 
-## 4. Usage Workflow
+## 🖥️ Usage: Enterprise Dashboard
 
-### Step 1: Dataset Verification & Synthetic Test Generator
+The primary way to interact with VisionBall is through the Enterprise Web Dashboard.
+
+### Start the Server
+Run the FastAPI application using Uvicorn from the root directory:
+
 ```bash
-python src/dataset_prep.py --config configs/ball.yaml
+python -m uvicorn app.api:app --reload
 ```
 
-### Step 2: Train Model
-Fine-tune YOLO Nano on the ball dataset:
+### Access the UI
+Open your web browser and navigate to:
+**[http://127.0.0.1:8000](http://127.0.0.1:8000)**
+
+From the dashboard, you can:
+- **Image Detection:** Upload images for instant ball detection and telemetry analysis.
+- **Live Camera:** Connect to your local webcam for real-time inference streaming.
+
+---
+
+## ⚙️ Advanced Usage: Training & Benchmarking
+
+If you wish to retrain the model, run benchmarks, or evaluate the F1 score, use the provided scripts in the `src/` directory.
+
+### Train the Model
+Fine-tune the YOLO model on your dataset:
 ```bash
 python src/train.py --data configs/ball.yaml --model yolov8n.pt --epochs 15 --imgsz 640
 ```
 
-### Step 3: Export Model to ONNX
-Export fine-tuned PyTorch weights to ONNX format for accelerated inference:
+### Export to ONNX
+Export PyTorch weights to ONNX format for accelerated inference:
 ```bash
 python src/export_model.py --weights models/best.pt --format onnx --imgsz 640
 ```
 
-### Step 4: Evaluate F1 Score & Threshold Sweep
-Perform confidence threshold sweep across 0.05–0.95 on validation set:
+### Evaluate F1 Score
+Perform a confidence threshold sweep (0.05–0.95) to find the optimal F1 score:
 ```bash
 python src/eval_f1.py --model models/best.pt --data_split dataset/valid
 ```
 
-### Step 5: Benchmark Latency & FPS
-Measure inference latency and average FPS across backends:
+### Benchmark Latency & FPS
+Measure inference latency across PyTorch and ONNX backends:
 ```bash
 python src/benchmark_fps.py --pt_model models/best.pt --onnx_model models/best.onnx
 ```
 
-### Step 6: Run Live Stream / Webcam Demo
-```bash
-# Webcam live detection feed
-python app/live_demo.py --source 0 --model models/best.pt
+---
 
-# Video file demo
-python app/live_demo.py --source path/to/video.mp4 --model models/best.onnx
+## 📂 Project Structure
+
 ```
-
-### Step 7: Launch Streamlit Dashboard
-```bash
-streamlit run app/streamlit_app.py
+VisionBall/
+├── app/
+│   └── api.py                  # FastAPI Backend & Web Server
+├── frontend/                   # Enterprise Dashboard UI (HTML/CSS/JS)
+├── src/
+│   ├── infer.py                # Core YOLO Inference Logic
+│   ├── train.py                # Model Training Script
+│   ├── export_model.py         # ONNX Export Script
+│   ├── eval_f1.py              # F1 Score Evaluation
+│   └── benchmark_fps.py        # FPS Benchmarking
+├── models/
+│   ├── best.pt                 # PyTorch Weights
+│   └── best.onnx               # ONNX Runtime Weights
+├── results/
+│   └── metrics.json            # Auto-generated benchmark telemetry
+├── configs/
+│   └── ball.yaml               # Dataset configuration
+├── requirements.txt            # Python dependencies
+└── README.md
 ```
 
 ---
 
-## 5. Metrics & Combined Score Formula
+## ⚠️ Cloud Deployment Note
+VisionBall's **Live Camera** feature connects directly to your local hardware webcam via OpenCV (`cv2.VideoCapture(0)`). For this reason, the application is designed to be run **locally**. 
 
-The overall performance score balances accuracy and speed:
-
-$$\text{Combined Score} = (F1 \times 0.6) + (\text{Normalized FPS} \times 0.4)$$
-
-All benchmark numbers, optimal thresholds, and F1 curves are logged in `results/metrics.json` and rendered in the Streamlit UI.
+If you deploy this application to a cloud serverless environment (like Vercel), the Live Camera feature will not function because the cloud server does not have access to your local webcam. Image detection, however, will continue to work perfectly on cloud platforms that support Docker (e.g., Render, Railway, Google Cloud Run).
