@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['ball']
+
+roboflow:
+  workspace: yuvan-shankar-b
+  project: sports-balls-detection-plpp5
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/yuvan-shankar-b/sports-balls-detection-plpp5/dataset/1

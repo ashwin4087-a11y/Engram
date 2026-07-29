@@ -1,0 +1,39 @@
+{
+    "model_path": "models/best.pt",
+    "optimal_confidence_threshold": 0.15,
+    "max_f1_score": 0.3871,
+    "precision_at_optimal": 0.383,
+    "recall_at_optimal": 0.3913,
+    "eval_samples": 46,
+    "benchmark_results": [
+        {
+            "backend": "YOLO (PYTORCH)",
+            "mean_latency_ms": 62.67,
+            "p50_latency_ms": 62.09,
+            "p95_latency_ms": 65.12,
+            "p99_latency_ms": 68.42,
+            "fps": 15.96,
+            "num_runs": 20
+        },
+        {
+            "backend": "YOLO (ONNX)",
+            "mean_latency_ms": 51.39,
+            "p50_latency_ms": 52.23,
+            "p95_latency_ms": 55.17,
+            "p99_latency_ms": 55.54,
+            "fps": 19.46,
+            "num_runs": 20
+        },
+        {
+            "backend": "Classical CV (Hough + Color)",
+            "mean_latency_ms": 4.9,
+            "p50_latency_ms": 4.92,
+            "p95_latency_ms": 5.41,
+            "p99_latency_ms": 5.52,
+            "fps": 204.13,
+            "num_runs": 20
+        }
+    ],
+    "max_fps": 204.13,
+    "fastest_backend": "Classical CV (Hough + Color)"
+}

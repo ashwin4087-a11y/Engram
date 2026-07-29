@@ -1,0 +1,4 @@
+backend,fps,mean_latency_ms,p50_latency_ms,p95_latency_ms,p99_latency_ms,num_runs
+YOLO (PYTORCH),15.96,62.67,62.09,65.12,68.42,20
+YOLO (ONNX),19.46,51.39,52.23,55.17,55.54,20
+Classical CV (Hough + Color),204.13,4.9,4.92,5.41,5.52,20
