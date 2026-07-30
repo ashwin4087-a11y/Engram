@@ -9,6 +9,44 @@ from typing import List, Tuple, Union, Dict, Any
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from utils import letterbox, compute_iou
 
+
+def merge_detection_candidates(
+    first_boxes: List[List[float]],
+    first_scores: List[float],
+    first_classes: List[int],
+    second_boxes: List[List[float]],
+    second_scores: List[float],
+    second_classes: List[int],
+    iou_threshold: float = 0.25,
+) -> Tuple[List[List[float]], List[float], List[int]]:
+    """Merge two detection passes while keeping the highest-confidence box for overlaps."""
+    merged_boxes: List[List[float]] = []
+    merged_scores: List[float] = []
+    merged_classes: List[int] = []
+
+    for boxes, scores, classes in [
+        (first_boxes, first_scores, first_classes),
+        (second_boxes, second_scores, second_classes),
+    ]:
+        for box, score, class_id in zip(boxes, scores, classes):
+            matched_idx = None
+            for idx, existing_box in enumerate(merged_boxes):
+                if compute_iou(existing_box, box) >= iou_threshold:
+                    matched_idx = idx
+                    break
+
+            if matched_idx is None:
+                merged_boxes.append(list(box))
+                merged_scores.append(float(score))
+                merged_classes.append(int(class_id))
+            elif float(score) > merged_scores[matched_idx]:
+                merged_boxes[matched_idx] = list(box)
+                merged_scores[matched_idx] = float(score)
+                merged_classes[matched_idx] = int(class_id)
+
+    return merged_boxes, merged_scores, merged_classes
+
+
 class BallDetector:
     """
     Unified Ball Detection Engine supporting PyTorch (.pt) and ONNX (.onnx) backends.
@@ -137,11 +175,16 @@ class BallDetector:
                 boxes_raw.append([x1, y1, x2, y2])
                 scores_raw.append(score)
 
-        # Perform NMS
+        # Perform NMS — cv2.dnn.NMSBoxes expects [x, y, width, height] format
         final_boxes, final_scores, final_cls = [], [], []
         if len(boxes_raw) > 0:
+            # Convert xyxy → xywh for NMS
+            boxes_xywh = []
+            for b in boxes_raw:
+                boxes_xywh.append([b[0], b[1], b[2] - b[0], b[3] - b[1]])
+
             indices = cv2.dnn.NMSBoxes(
-                bboxes=boxes_raw,
+                bboxes=boxes_xywh,
                 scores=scores_raw,
                 score_threshold=conf_thres,
                 nms_threshold=iou_thres
@@ -149,7 +192,7 @@ class BallDetector:
 
             if len(indices) > 0:
                 for idx in indices.flatten():
-                    final_boxes.append(boxes_raw[idx])
+                    final_boxes.append(boxes_raw[idx])  # Return xyxy format
                     final_scores.append(scores_raw[idx])
                     final_cls.append(0)
 

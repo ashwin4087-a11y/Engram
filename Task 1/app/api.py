@@ -11,18 +11,20 @@ from fastapi.responses import HTMLResponse, JSONResponse
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-from src.infer import BallDetector
+from src.infer import BallDetector, merge_detection_candidates
 from src.utils import draw_detections
 
 app = FastAPI(title="VisionBall API")
 
 # LIVE CAMERA PIPELINE CONFIGURATION
-LIVE_CONF_THRESHOLD = 0.60
-LIVE_IOU_THRESHOLD = 0.45
-BOX_MIN_PX = 15
-BOX_MAX_FRAME_RATIO = 0.60
-BOX_ASPECT_MIN = 0.4
-BOX_ASPECT_MAX = 2.5
+LIVE_CONF_THRESHOLD = 0.25
+LIVE_IOU_THRESHOLD = 0.50
+LIVE_FALLBACK_CONF_THRESHOLD = 0.18
+LIVE_FALLBACK_IOU_THRESHOLD = 0.55
+BOX_MIN_PX = 10
+BOX_MAX_FRAME_RATIO = 0.75
+BOX_ASPECT_MIN = 0.5
+BOX_ASPECT_MAX = 2.0
 
 # Initialize detector once at startup (shared instance)
 detector = BallDetector(model_path=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models", "best.onnx")))
@@ -127,7 +129,7 @@ async def detect_image(file: UploadFile = File(...)):
     })
 
 
-# Helper: geometric box filter
+# Helper: filter boxes by size and aspect ratio (balls are roughly circular = square bbox)
 def filter_boxes(boxes, scores, class_ids, frame_shape):
     h, w = frame_shape[:2]
     fb, fs, fc = [], [], []
@@ -138,7 +140,8 @@ def filter_boxes(boxes, scores, class_ids, frame_shape):
             continue
         if bw > w * BOX_MAX_FRAME_RATIO or bh > h * BOX_MAX_FRAME_RATIO:
             continue
-        aspect = bw / bh if bh > 0 else 0
+        # Aspect ratio filter: reject elongated boxes (faces, limbs, etc.)
+        aspect = bw / max(bh, 1)
         if aspect < BOX_ASPECT_MIN or aspect > BOX_ASPECT_MAX:
             continue
         fb.append(b)
@@ -168,12 +171,38 @@ async def detect_live_frame(payload: dict):
         frame = cv2.resize(frame, (640, 480))
 
         t0 = time.time()
+        
+        # Primary pass: balanced detection with moderate thresholds
         boxes, scores, class_ids = detector.predict(
             frame,
             conf_thres=LIVE_CONF_THRESHOLD,
             iou_thres=LIVE_IOU_THRESHOLD
         )
         boxes, scores, class_ids = filter_boxes(boxes, scores, class_ids, frame.shape)
+
+        # Fallback pass: if we only found 0-1 ball, do a second very permissive inference pass
+        if len(boxes) < 2:
+            fallback_boxes, fallback_scores, fallback_class_ids = detector.predict(
+                frame,
+                conf_thres=LIVE_FALLBACK_CONF_THRESHOLD,
+                iou_thres=LIVE_FALLBACK_IOU_THRESHOLD
+            )
+            fallback_boxes, fallback_scores, fallback_class_ids = filter_boxes(
+                fallback_boxes,
+                fallback_scores,
+                fallback_class_ids,
+                frame.shape,
+            )
+            boxes, scores, class_ids = merge_detection_candidates(
+                boxes,
+                scores,
+                class_ids,
+                fallback_boxes,
+                fallback_scores,
+                fallback_class_ids,
+                iou_threshold=0.30,
+            )
+
         latency_ms = (time.time() - t0) * 1000
 
         details = []
