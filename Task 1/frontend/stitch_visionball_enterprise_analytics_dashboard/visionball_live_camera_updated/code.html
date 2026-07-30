@@ -1,414 +1,892 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>VisionBall | Live Camera</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>VisionBall | Live Camera</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-:root {
-  --bg: #F8F9FA;
-  --card: #FFFFFF;
-  --primary: #2E7D32;
-  --primary-hover: #1B5E20;
-  --heading: #111827;
-  --body: #4B5563;
-  --border: #E5E7EB;
-  --hover: #F3F4F6;
-  --radius: 12px;
-  --shadow: 0 1px 2px rgba(0,0,0,0.05);
-  --error: #DC2626;
-  --sidebar-w: 260px;
-}
+      :root {
+        --bg: #f8f9fa;
+        --card: #ffffff;
+        --primary: #2e7d32;
+        --primary-hover: #1b5e20;
+        --heading: #111827;
+        --body: #4b5563;
+        --border: #e5e7eb;
+        --hover: #f3f4f6;
+        --radius: 12px;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --error: #dc2626;
+        --sidebar-w: 260px;
+      }
 
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--body); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg);
+        color: var(--body);
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
 
-.sidebar { position: fixed; left: 0; top: 0; width: var(--sidebar-w); height: 100vh; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 50; }
-.sidebar-brand { padding: 28px 24px 24px; border-bottom: 1px solid var(--border); }
-.sidebar-brand h1 { font-size: 20px; font-weight: 700; color: var(--heading); }
-.sidebar-brand p { font-size: 13px; color: var(--body); margin-top: 2px; }
-.sidebar-nav { flex: 1; padding: 16px 12px; }
-.sidebar-nav a { display: block; padding: 11px 16px; border-radius: 8px; color: var(--body); text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.15s ease; margin-bottom: 2px; }
-.sidebar-nav a:hover, .sidebar-nav a:focus-visible { background: var(--hover); color: var(--heading); outline: none; }
-.sidebar-nav a.active { background: #E8F5E9; color: var(--primary); font-weight: 600; }
-.sidebar-footer { padding: 20px 24px; border-top: 1px solid var(--border); font-size: 12px; color: var(--body); }
-.sl { display: flex; justify-content: space-between; }
-.sv { font-weight: 600; color: var(--heading); }
-.ready { color: var(--primary); }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: var(--sidebar-w);
+        height: 100vh;
+        background: var(--card);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        z-index: 50;
+      }
+      .sidebar-brand {
+        padding: 28px 24px 24px;
+        border-bottom: 1px solid var(--border);
+      }
+      .sidebar-brand h1 {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--heading);
+      }
+      .sidebar-brand p {
+        font-size: 13px;
+        color: var(--body);
+        margin-top: 2px;
+      }
+      .sidebar-nav {
+        flex: 1;
+        padding: 16px 12px;
+      }
+      .sidebar-nav a {
+        display: block;
+        padding: 11px 16px;
+        border-radius: 8px;
+        color: var(--body);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.15s ease;
+        margin-bottom: 2px;
+      }
+      .sidebar-nav a:hover,
+      .sidebar-nav a:focus-visible {
+        background: var(--hover);
+        color: var(--heading);
+        outline: none;
+      }
+      .sidebar-nav a.active {
+        background: #e8f5e9;
+        color: var(--primary);
+        font-weight: 600;
+      }
+      .sidebar-footer {
+        padding: 20px 24px;
+        border-top: 1px solid var(--border);
+        font-size: 12px;
+        color: var(--body);
+      }
+      .sl {
+        display: flex;
+        justify-content: space-between;
+      }
+      .sv {
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .ready {
+        color: var(--primary);
+      }
 
-.main { margin-left: var(--sidebar-w); min-height: 100vh; display: flex; flex-direction: column; }
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(248,249,250,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); padding: 0 32px; height: 52px; display: flex; align-items: center; font-size: 13px; color: var(--body); }
-.topbar span { color: var(--heading); font-weight: 500; }
-.content { padding: 32px; max-width: 1140px; flex: 1; }
+      .main {
+        margin-left: var(--sidebar-w);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: rgba(248, 249, 250, 0.95);
+        backdrop-filter: blur(6px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 32px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        color: var(--body);
+      }
+      .topbar span {
+        color: var(--heading);
+        font-weight: 500;
+      }
+      .content {
+        padding: 32px;
+        max-width: 1140px;
+        flex: 1;
+      }
 
-.page-title { font-size: 34px; font-weight: 700; color: var(--heading); margin-bottom: 8px; }
-.page-desc { font-size: 15px; color: var(--body); margin-bottom: 32px; }
+      .page-title {
+        font-size: 34px;
+        font-weight: 700;
+        color: var(--heading);
+        margin-bottom: 8px;
+      }
+      .page-desc {
+        font-size: 15px;
+        color: var(--body);
+        margin-bottom: 32px;
+      }
 
-.btn { display: inline-flex; align-items: center; padding: 11px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: all 0.15s ease; border: none; }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover, .btn-primary:focus-visible { background: var(--primary-hover); outline: none; }
-.btn-outline { background: var(--card); color: var(--heading); border: 1px solid var(--border); }
-.btn-outline:hover, .btn-outline:focus-visible { background: var(--hover); outline: none; }
-.btn-danger { background: #FEF2F2; color: var(--error); border: 1px solid #FECACA; }
-.btn-danger:hover { background: #FEE2E2; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-sm { padding: 9px 18px; font-size: 13px; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 11px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border: none;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+      }
+      .btn-primary:hover,
+      .btn-primary:focus-visible {
+        background: var(--primary-hover);
+        outline: none;
+      }
+      .btn-outline {
+        background: var(--card);
+        color: var(--heading);
+        border: 1px solid var(--border);
+      }
+      .btn-outline:hover,
+      .btn-outline:focus-visible {
+        background: var(--hover);
+        outline: none;
+      }
+      .btn-danger {
+        background: #fef2f2;
+        color: var(--error);
+        border: 1px solid #fecaca;
+      }
+      .btn-danger:hover {
+        background: #fee2e2;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .btn-sm {
+        padding: 9px 18px;
+        font-size: 13px;
+      }
 
-/* Layout */
-.live-layout { display: grid; grid-template-columns: 1fr 360px; gap: 24px; }
+      /* Layout */
+      .live-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 24px;
+      }
 
-/* Feed */
-.feed-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-.feed-header { padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.feed-header h3 { font-size: 14px; font-weight: 600; color: var(--heading); }
-.live-badge { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 6px; }
-.live-badge.on { background: #E8F5E9; color: var(--primary); }
-.live-badge.off { background: var(--hover); color: var(--body); }
+      /* Feed */
+      .feed-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .feed-header {
+        padding: 14px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .feed-header h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .live-badge {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 6px;
+      }
+      .live-badge.on {
+        background: #e8f5e9;
+        color: var(--primary);
+      }
+      .live-badge.off {
+        background: var(--hover);
+        color: var(--body);
+      }
 
-.feed-container { background: #111; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; }
-.feed-container img { width: 100%; height: 100%; object-fit: contain; }
-.feed-empty { color: #9CA3AF; font-size: 14px; text-align: center; line-height: 1.8; }
+      .feed-container {
+        background: #111;
+        aspect-ratio: 16/9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .feed-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      .feed-empty {
+        color: #9ca3af;
+        font-size: 14px;
+        text-align: center;
+        line-height: 1.8;
+      }
 
-/* Loading Camera */
-.camera-loading { display: none; text-align: center; color: #9CA3AF; font-size: 14px; }
-.camera-loading.visible { display: block; }
-.cam-spinner { width: 28px; height: 28px; border: 2px solid #374151; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.cam-steps { list-style: none; font-size: 13px; }
-.cam-steps li { padding: 2px 0; }
-.cam-steps li.done { color: var(--primary); }
-.cam-steps li.active { color: #E5E7EB; font-weight: 600; }
+      /* Loading Camera */
+      .camera-loading {
+        display: none;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 14px;
+      }
+      .camera-loading.visible {
+        display: block;
+      }
+      .cam-spinner {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #374151;
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin: 0 auto 12px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .cam-steps {
+        list-style: none;
+        font-size: 13px;
+      }
+      .cam-steps li {
+        padding: 2px 0;
+      }
+      .cam-steps li.done {
+        color: var(--primary);
+      }
+      .cam-steps li.active {
+        color: #e5e7eb;
+        font-weight: 600;
+      }
 
-.feed-card.fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 100; border-radius: 0; }
-.feed-card.fullscreen .feed-container { aspect-ratio: unset; height: calc(100vh - 52px); }
+      .feed-card.fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+        border-radius: 0;
+      }
+      .feed-card.fullscreen .feed-container {
+        aspect-ratio: unset;
+        height: calc(100vh - 52px);
+      }
 
-/* Controls */
-.controls { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+      /* Controls */
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
 
-/* Side panels */
-.side-panels { display: flex; flex-direction: column; gap: 20px; }
-.panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
-.panel-header { padding: 14px 24px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; color: var(--heading); }
-.panel-body { padding: 0; }
+      /* Side panels */
+      .side-panels {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+      .panel-header {
+        padding: 14px 24px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--heading);
+      }
+      .panel-body {
+        padding: 0;
+      }
 
-.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; font-size: 13px; border-bottom: 1px solid var(--border); }
-.stat-row:last-child { border-bottom: none; }
-.stat-row .label { color: var(--body); }
-.stat-row .val { font-weight: 600; color: var(--heading); font-variant-numeric: tabular-nums; }
-.stat-row .val.green { color: var(--primary); }
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 24px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--border);
+      }
+      .stat-row:last-child {
+        border-bottom: none;
+      }
+      .stat-row .label {
+        color: var(--body);
+      }
+      .stat-row .val {
+        font-weight: 600;
+        color: var(--heading);
+        font-variant-numeric: tabular-nums;
+      }
+      .stat-row .val.green {
+        color: var(--primary);
+      }
 
-.error-card { display: none; background: #FEF2F2; border: 1px solid #FECACA; border-radius: var(--radius); padding: 16px 24px; color: var(--error); font-size: 14px; font-weight: 500; margin-bottom: 24px; }
-.error-card.visible { display: block; }
+      .error-card {
+        display: none;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: var(--radius);
+        padding: 16px 24px;
+        color: var(--error);
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 24px;
+      }
+      .error-card.visible {
+        display: block;
+      }
 
-.footer { margin-left: var(--sidebar-w); border-top: 1px solid var(--border); padding: 20px 32px; font-size: 12px; color: var(--body); display: flex; justify-content: space-between; background: var(--card); }
+      .footer {
+        margin-left: var(--sidebar-w);
+        border-top: 1px solid var(--border);
+        padding: 20px 32px;
+        font-size: 12px;
+        color: var(--body);
+        display: flex;
+        justify-content: space-between;
+        background: var(--card);
+      }
 
-@media (max-width: 992px) { .live-layout { grid-template-columns: 1fr; } }
-@media (max-width: 768px) { .sidebar { transform: translateX(-100%); } .main, .footer { margin-left: 0; } }
-</style>
-</head>
-<body>
-
-<aside class="sidebar">
-  <div class="sidebar-brand"><h1>VisionBall</h1><p>Sports Ball Detection</p></div>
-  <nav class="sidebar-nav">
-    <a href="/">Dashboard</a>
-    <a href="/image">Image Detection</a>
-    <a href="/live" class="active">Live Camera</a>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="sl"><span>Backend</span><span class="sv">ONNX Runtime</span></div>
-    <div class="sl"><span>Status</span><span class="sv ready">Ready</span></div>
-  </div>
-</aside>
-
-<div class="main">
-  <div class="topbar">Dashboard&nbsp;/&nbsp;<span>Live Camera</span></div>
-  <div class="content">
-
-    <h1 class="page-title">Live Camera Detection</h1>
-    <p class="page-desc">Real-time sports ball detection using webcam.</p>
-
-    <div class="error-card" id="error-card"></div>
-
-    <div class="live-layout">
-      <div>
-        <div class="feed-card" id="feed-card">
-          <div class="feed-header">
-            <h3>Live View</h3>
-            <span class="live-badge off" id="live-badge">Offline</span>
-          </div>
-          <div class="feed-container" id="feed-container">
-            <!-- Used crossOrigin anonymous to allow canvas capture -->
-            <img id="live-feed" crossorigin="anonymous" src="" style="display:none;" alt="Live Feed"/>
-            <div class="feed-empty" id="feed-empty">
-              Camera not connected.<br>Press <strong>Start</strong> to begin detection.
-            </div>
-            <div class="camera-loading" id="cam-loading">
-              <div class="cam-spinner"></div>
-              <ul class="cam-steps">
-                <li id="cs-1">Connecting to camera...</li>
-                <li id="cs-2">Loading model...</li>
-                <li id="cs-3">Initializing detector...</li>
-                <li id="cs-4">Ready.</li>
-              </ul>
-            </div>
-          </div>
+      @media (max-width: 992px) {
+        .live-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .main,
+        .footer {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <h1>VisionBall</h1>
+        <p>Sports Ball Detection</p>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/">Dashboard</a>
+        <a href="/image">Image Detection</a>
+        <a href="/live" class="active">Live Camera</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sl">
+          <span>Backend</span><span class="sv">ONNX Runtime</span>
         </div>
-
-        <div class="controls" style="margin-top:16px;">
-          <button class="btn btn-primary btn-sm" id="start-btn">Start</button>
-          <button class="btn btn-outline btn-sm" id="pause-btn" disabled>Pause</button>
-          <button class="btn btn-danger btn-sm" id="stop-btn" disabled>Stop</button>
-          <button class="btn btn-outline btn-sm" id="capture-btn" disabled>Capture Frame</button>
-          <button class="btn btn-outline btn-sm" id="fullscreen-btn">Fullscreen</button>
+        <div class="sl">
+          <span>Status</span><span class="sv ready">Ready</span>
         </div>
       </div>
+    </aside>
 
-      <div class="side-panels">
-        <div class="panel">
-          <div class="panel-header">Live Stats</div>
-          <div class="panel-body">
-            <div class="stat-row"><span class="label">Status</span><span class="val" id="s-status">Disconnected</span></div>
-            <div class="stat-row"><span class="label">Detected Objects</span><span class="val" id="s-det">0</span></div>
-            <div class="stat-row"><span class="label">Highest Confidence</span><span class="val" id="s-conf">0.000</span></div>
-            <div class="stat-row"><span class="label">Current FPS</span><span class="val" id="s-fps">0.0</span></div>
-            <div class="stat-row"><span class="label">Latency</span><span class="val" id="s-lat">0.0 ms</span></div>
-            <div class="stat-row"><span class="label">Session Time</span><span class="val" id="s-time">00:00</span></div>
+    <div class="main">
+      <div class="topbar">Dashboard&nbsp;/&nbsp;<span>Live Camera</span></div>
+      <div class="content">
+        <h1 class="page-title">Live Camera Detection</h1>
+        <p class="page-desc">Real-time sports ball detection using webcam.</p>
+
+        <div class="error-card" id="error-card"></div>
+
+        <div class="live-layout">
+          <div>
+            <div class="feed-card" id="feed-card">
+              <div class="feed-header">
+                <h3>Live View</h3>
+                <span class="live-badge off" id="live-badge">Offline</span>
+              </div>
+              <div class="feed-container" id="feed-container">
+                <!-- Used crossOrigin anonymous to allow canvas capture -->
+                <video
+                  id="live-video"
+                  autoplay
+                  playsinline
+                  muted
+                  style="
+                    display: none;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                  "
+                ></video>
+                <canvas
+                  id="overlay-canvas"
+                  style="
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                    display: none;
+                  "
+                ></canvas>
+                <div class="feed-empty" id="feed-empty">
+                  Camera not connected.<br />Press <strong>Start</strong> to
+                  begin detection.
+                </div>
+                <div class="camera-loading" id="cam-loading">
+                  <div class="cam-spinner"></div>
+                  <ul class="cam-steps">
+                    <li id="cs-1">Connecting to camera...</li>
+                    <li id="cs-2">Loading model...</li>
+                    <li id="cs-3">Initializing detector...</li>
+                    <li id="cs-4">Ready.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="controls" style="margin-top: 16px">
+              <button class="btn btn-primary btn-sm" id="start-btn">
+                Start
+              </button>
+              <button class="btn btn-outline btn-sm" id="pause-btn" disabled>
+                Pause
+              </button>
+              <button class="btn btn-danger btn-sm" id="stop-btn" disabled>
+                Stop
+              </button>
+              <button class="btn btn-outline btn-sm" id="capture-btn" disabled>
+                Capture Frame
+              </button>
+              <button class="btn btn-outline btn-sm" id="fullscreen-btn">
+                Fullscreen
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div class="panel">
-          <div class="panel-header">System Info</div>
-          <div class="panel-body">
-            <div class="stat-row"><span class="label">Source</span><span class="val">Webcam (0)</span></div>
-            <div class="stat-row"><span class="label">Backend</span><span class="val">ONNX Runtime</span></div>
-            <div class="stat-row"><span class="label">Model Version</span><span class="val">YOLOv11</span></div>
-            <div class="stat-row"><span class="label">Input Shape</span><span class="val">640 × 640</span></div>
-            <div class="stat-row"><span class="label">Device</span><span class="val">CPU</span></div>
+          <div class="side-panels">
+            <div class="panel">
+              <div class="panel-header">Live Stats</div>
+              <div class="panel-body">
+                <div class="stat-row">
+                  <span class="label">Status</span
+                  ><span class="val" id="s-status">Disconnected</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Detected Objects</span
+                  ><span class="val" id="s-det">0</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Highest Confidence</span
+                  ><span class="val" id="s-conf">0.000</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Current FPS</span
+                  ><span class="val" id="s-fps">0.0</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Latency</span
+                  ><span class="val" id="s-lat">0.0 ms</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Session Time</span
+                  ><span class="val" id="s-time">00:00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">System Info</div>
+              <div class="panel-body">
+                <div class="stat-row">
+                  <span class="label">Source</span
+                  ><span class="val">Webcam (0)</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Backend</span
+                  ><span class="val">ONNX Runtime</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Model Version</span
+                  ><span class="val">YOLOv11</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Input Shape</span
+                  ><span class="val">640 × 640</span>
+                </div>
+                <div class="stat-row">
+                  <span class="label">Device</span><span class="val">CPU</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
-</div>
+    <footer class="footer">
+      <span>VisionBall v1.0 · Powered by YOLOv11 · ONNX Runtime</span>
+      <span>© 2026</span>
+    </footer>
 
-<footer class="footer">
-  <span>VisionBall v1.0 · Powered by YOLOv11 · ONNX Runtime</span>
-  <span>© 2026</span>
-</footer>
+    <!-- Hidden canvas for capturing frames -->
+    <canvas id="capture-canvas" style="display: none"></canvas>
 
-<!-- Hidden canvas for capturing frames -->
-<canvas id="capture-canvas" style="display:none;"></canvas>
-
-<script>
-function logActivity(message) {
-  let logs = JSON.parse(localStorage.getItem('vb_activity_logs') || '[]');
-  const now = new Date();
-  const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-  logs.unshift({ time: timeStr, text: message });
-  if (logs.length > 5) logs = logs.slice(0, 5);
-  localStorage.setItem('vb_activity_logs', JSON.stringify(logs));
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const feed = document.getElementById('live-feed');
-  const feedEmpty = document.getElementById('feed-empty');
-  const camLoading = document.getElementById('cam-loading');
-  const startBtn = document.getElementById('start-btn');
-  const pauseBtn = document.getElementById('pause-btn');
-  const stopBtn = document.getElementById('stop-btn');
-  const captureBtn = document.getElementById('capture-btn');
-  const fsBtn = document.getElementById('fullscreen-btn');
-  const feedCard = document.getElementById('feed-card');
-  const badge = document.getElementById('live-badge');
-  const statusEl = document.getElementById('s-status');
-  const timeEl = document.getElementById('s-time');
-  const errorCard = document.getElementById('error-card');
-  
-  const sDet = document.getElementById('s-det');
-  const sConf = document.getElementById('s-conf');
-  const sFps = document.getElementById('s-fps');
-  const sLat = document.getElementById('s-lat');
-
-  let streaming = false;
-  let paused = false;
-  let timer = null;
-  let pollTimer = null;
-  let seconds = 0;
-
-  function showError(msg) {
-    errorCard.textContent = msg;
-    errorCard.classList.add('visible');
-    setTimeout(() => errorCard.classList.remove('visible'), 5000);
-  }
-
-  function setCamStep(n) {
-    for (let i = 1; i <= 4; i++) {
-      const el = document.getElementById('cs-' + i);
-      if (el) el.className = i < n ? 'done' : i === n ? 'active' : '';
-    }
-  }
-
-  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-  function updateTime() {
-    seconds++;
-    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const s = (seconds % 60).toString().padStart(2, '0');
-    timeEl.textContent = m + ':' + s;
-  }
-  
-  async function pollStats() {
-    if (!streaming || paused) return;
-    try {
-      const res = await fetch('/api/detect/live_stats');
-      if (res.ok) {
-        const stats = await res.json();
-        if (stats.active) {
-          sDet.textContent = stats.detections;
-          sConf.textContent = stats.highest_confidence.toFixed(3);
-          sFps.textContent = stats.fps > 0 ? stats.fps.toFixed(1) : '--';
-          sLat.textContent = stats.latency_ms > 0 ? stats.latency_ms.toFixed(1) + ' ms' : '--';
-          
-          localStorage.setItem('vb_runtime_state', JSON.stringify({
-              session: 'Live Camera',
-              fps: stats.fps,
-              latency: stats.latency_ms
-          }));
-        }
+    <script>
+      function logActivity(message) {
+        let logs = JSON.parse(localStorage.getItem("vb_activity_logs") || "[]");
+        const now = new Date();
+        const timeStr =
+          now.getHours().toString().padStart(2, "0") +
+          ":" +
+          now.getMinutes().toString().padStart(2, "0");
+        logs.unshift({ time: timeStr, text: message });
+        if (logs.length > 5) logs = logs.slice(0, 5);
+        localStorage.setItem("vb_activity_logs", JSON.stringify(logs));
       }
-    } catch (e) {
-      console.error('Failed to fetch live stats', e);
-    }
-  }
 
-  async function startFeed() {
-    if (streaming) return;
+      document.addEventListener("DOMContentLoaded", () => {
+        const video = document.getElementById("live-video");
+        const overlay = document.getElementById("overlay-canvas");
+        const feedEmpty = document.getElementById("feed-empty");
+        const camLoading = document.getElementById("cam-loading");
+        const startBtn = document.getElementById("start-btn");
+        const pauseBtn = document.getElementById("pause-btn");
+        const stopBtn = document.getElementById("stop-btn");
+        const captureBtn = document.getElementById("capture-btn");
+        const fsBtn = document.getElementById("fullscreen-btn");
+        const feedCard = document.getElementById("feed-card");
+        const badge = document.getElementById("live-badge");
+        const statusEl = document.getElementById("s-status");
+        const timeEl = document.getElementById("s-time");
+        const errorCard = document.getElementById("error-card");
 
-    feedEmpty.style.display = 'none';
-    camLoading.classList.add('visible');
-    startBtn.disabled = true;
+        const sDet = document.getElementById("s-det");
+        const sConf = document.getElementById("s-conf");
+        const sFps = document.getElementById("s-fps");
+        const sLat = document.getElementById("s-lat");
 
-    setCamStep(1); await delay(300);
-    setCamStep(2); await delay(300);
-    setCamStep(3); await delay(200);
-    setCamStep(4); await delay(200);
+        let streaming = false;
+        let paused = false;
+        let timer = null;
+        let seconds = 0;
+        let mediaStream = null;
+        let inferRunning = false;
+        let lastSent = 0;
+        let clientFps = 0;
+        let lastFpsTick = performance.now();
+        let sentCount = 0;
 
-    camLoading.classList.remove('visible');
-    feed.src = '/api/detect/live?' + new Date().getTime(); // cache busting
-    feed.style.display = '';
-    streaming = true;
-    paused = false;
+        function showError(msg) {
+          errorCard.textContent = msg;
+          errorCard.classList.add("visible");
+          setTimeout(() => errorCard.classList.remove("visible"), 5000);
+        }
 
-    startBtn.disabled = true;
-    pauseBtn.disabled = false;
-    stopBtn.disabled = false;
-    captureBtn.disabled = false;
-    badge.textContent = 'Live';
-    badge.className = 'live-badge on';
-    statusEl.textContent = 'Connected';
-    statusEl.className = 'val green';
-    
-    logActivity('Camera Connected');
+        function setCamStep(n) {
+          for (let i = 1; i <= 4; i++) {
+            const el = document.getElementById("cs-" + i);
+            if (el) el.className = i < n ? "done" : i === n ? "active" : "";
+          }
+        }
 
-    localStorage.setItem('vb_runtime_state', JSON.stringify({
-        session: 'Live Camera',
-        fps: 0,
-        latency: 0
-    }));
+        function delay(ms) {
+          return new Promise((r) => setTimeout(r, ms));
+        }
 
-    seconds = 0;
-    timer = setInterval(updateTime, 1000);
-    pollTimer = setInterval(pollStats, 1000);
-  }
+        function updateTime() {
+          seconds++;
+          const m = Math.floor(seconds / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = (seconds % 60).toString().padStart(2, "0");
+          timeEl.textContent = m + ":" + s;
+        }
 
-  function stopFeed() {
-    if (!streaming) return;
-    feed.src = '';
-    feed.style.display = 'none';
-    // Explicitly tell the server to release the camera hardware
-    fetch('/api/detect/live/stop', { method: 'POST' }).catch(() => {});
-    feedEmpty.style.display = '';
-    feedEmpty.innerHTML = 'Camera stopped.<br>Press <strong>Start</strong> to resume.';
-    streaming = false;
-    paused = false;
+        async function startFeed() {
+          if (streaming) return;
 
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-    stopBtn.disabled = true;
-    captureBtn.disabled = true;
-    badge.textContent = 'Offline';
-    badge.className = 'live-badge off';
-    statusEl.textContent = 'Disconnected';
-    statusEl.className = 'val';
-    
-    sDet.textContent = '0';
-    sConf.textContent = '0.000';
-    sFps.textContent = '--';
-    sLat.textContent = '--';
+          feedEmpty.style.display = "none";
+          camLoading.classList.add("visible");
+          startBtn.disabled = true;
 
-    clearInterval(timer);
-    clearInterval(pollTimer);
-    
-    localStorage.setItem('vb_runtime_state', JSON.stringify({
-        session: 'Idle',
-        fps: 0,
-        latency: 0
-    }));
-    
-    logActivity('Camera Disconnected');
-  }
+          setCamStep(1);
+          setCamStep(2);
+          setCamStep(3);
+          setCamStep(4);
 
-  startBtn.addEventListener('click', startFeed);
-  stopBtn.addEventListener('click', stopFeed);
+          try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({
+              video: { width: 640, height: 480 },
+              audio: false,
+            });
+            video.srcObject = mediaStream;
+            video.style.display = "";
+            overlay.style.display = "";
+            // ensure canvas sized to container
+            await new Promise((res) => (video.onloadedmetadata = res));
+          } catch (e) {
+            console.error("getUserMedia failed", e);
+            showError(
+              "Unable to access webcam. Please allow camera permission.",
+            );
+            camLoading.classList.remove("visible");
+            startBtn.disabled = false;
+            return;
+          }
 
-  pauseBtn.addEventListener('click', () => {
-    if (!streaming) return;
-    if (!paused) {
-      // Pause
-      feed.src = '';
-      paused = true;
-      pauseBtn.textContent = 'Resume';
-      badge.textContent = 'Paused';
-      badge.className = 'live-badge off';
-      clearInterval(timer);
-      logActivity('Camera Paused');
-    } else {
-      // Resume
-      feed.src = '/api/detect/live?' + new Date().getTime();
-      paused = false;
-      pauseBtn.textContent = 'Pause';
-      badge.textContent = 'Live';
-      badge.className = 'live-badge on';
-      timer = setInterval(updateTime, 1000);
-      logActivity('Camera Resumed');
-    }
-  });
+          camLoading.classList.remove("visible");
+          streaming = true;
+          paused = false;
 
-  captureBtn.addEventListener('click', () => {
-    if (!streaming || paused) return;
-    try {
-      const canvas = document.getElementById('capture-canvas');
-      canvas.width = feed.naturalWidth || 640;
-      canvas.height = feed.naturalHeight || 480;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(feed, 0, 0, canvas.width, canvas.height);
-      const link = document.createElement('a');
-      link.download = 'visionball_capture_' + new Date().getTime() + '.jpg';
-      link.href = canvas.toDataURL('image/jpeg', 0.9);
-      link.click();
-      logActivity('Frame Captured');
-    } catch (e) {
-      showError('Failed to capture frame. This may happen if the stream does not send proper CORS headers.');
-    }
-  });
+          startBtn.disabled = true;
+          pauseBtn.disabled = false;
+          stopBtn.disabled = false;
+          captureBtn.disabled = false;
+          badge.textContent = "Live";
+          badge.className = "live-badge on";
+          statusEl.textContent = "Connected";
+          statusEl.className = "val green";
 
-  fsBtn.addEventListener('click', () => feedCard.classList.toggle('fullscreen'));
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') feedCard.classList.remove('fullscreen'); });
-});
-</script>
-</body>
+          logActivity("Camera Connected");
+
+          seconds = 0;
+          timer = setInterval(updateTime, 1000);
+
+          // Start capture loop
+          captureLoop();
+        }
+
+        async function stopFeed() {
+          if (!streaming) return;
+          // stop tracks
+          if (mediaStream) {
+            mediaStream.getTracks().forEach((t) => t.stop());
+            mediaStream = null;
+          }
+          video.srcObject = null;
+          video.style.display = "none";
+          overlay.style.display = "none";
+          feedEmpty.style.display = "";
+          feedEmpty.innerHTML =
+            "Camera stopped.<br>Press <strong>Start</strong> to resume.";
+          streaming = false;
+          paused = false;
+
+          startBtn.disabled = false;
+          pauseBtn.disabled = true;
+          stopBtn.disabled = true;
+          captureBtn.disabled = true;
+          badge.textContent = "Offline";
+          badge.className = "live-badge off";
+          statusEl.textContent = "Disconnected";
+          statusEl.className = "val";
+
+          sDet.textContent = "0";
+          sConf.textContent = "0.000";
+          sFps.textContent = "--";
+          sLat.textContent = "--";
+
+          clearInterval(timer);
+
+          localStorage.setItem(
+            "vb_runtime_state",
+            JSON.stringify({ session: "Idle", fps: 0, latency: 0 }),
+          );
+          logActivity("Camera Disconnected");
+        }
+
+        function drawDetections(boxes, scores) {
+          const rect = overlay.getBoundingClientRect();
+          overlay.width = 640;
+          overlay.height = 480;
+          const ctx = overlay.getContext("2d");
+          ctx.clearRect(0, 0, overlay.width, overlay.height);
+          ctx.lineWidth = 2;
+          ctx.font = "16px Inter, sans-serif";
+          boxes.forEach((b, i) => {
+            const [x1, y1, x2, y2] = b;
+            ctx.strokeStyle = "lime";
+            ctx.fillStyle = "rgba(0,0,0,0.5)";
+            ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+            const label = `Ball ${scores && scores[i] ? "(" + (scores[i] * 100).toFixed(1) + "%)" : ""}`;
+            const w = ctx.measureText(label).width + 8;
+            ctx.fillRect(x1, Math.max(0, y1 - 22), w, 20);
+            ctx.fillStyle = "white";
+            ctx.fillText(label, x1 + 4, y1 - 6);
+          });
+        }
+
+        async function captureLoop() {
+          const frameIntervalMs = 100;
+          const canvas = document.getElementById("capture-canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = 640;
+          canvas.height = 480;
+
+          while (streaming && !paused) {
+            const now = performance.now();
+            // target interval 100ms for snappier updates; inference still gates overlap
+            if (now - lastSent < frameIntervalMs) {
+              await new Promise((r) => setTimeout(r, 20));
+              continue;
+            }
+            if (inferRunning) {
+              // Skip this frame if inference still running
+              lastSent = now;
+              await new Promise((r) => setTimeout(r, 20));
+              continue;
+            }
+
+            // draw current frame
+            try {
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            } catch (e) {
+              // video not ready yet
+              await new Promise((r) => setTimeout(r, 30));
+              continue;
+            }
+
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+            inferRunning = true;
+            lastSent = now;
+
+            // compute client-side FPS
+            const tick = performance.now();
+            const dt = tick - lastFpsTick;
+            if (dt > 0) clientFps = (1000.0 / dt).toFixed(1);
+            lastFpsTick = tick;
+
+            fetch("/api/detect/live/frame", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ image_b64: dataUrl }),
+            })
+              .then((r) => r.json())
+              .then((res) => {
+                inferRunning = false;
+                if (res && res.details) {
+                  const boxes = res.details.map((d) => d.box);
+                  const scores = res.details.map((d) => d.confidence);
+                  drawDetections(boxes, scores);
+                  sDet.textContent = res.detections || 0;
+                  sConf.textContent =
+                    res.details.length > 0
+                      ? Math.max(...scores).toFixed(3)
+                      : "0.000";
+                  sLat.textContent =
+                    res.latency_ms !== undefined
+                      ? res.latency_ms.toFixed(1) + " ms"
+                      : "--";
+                  sFps.textContent = clientFps || "--";
+                }
+              })
+              .catch((err) => {
+                inferRunning = false;
+                console.error("Live frame upload failed", err);
+              });
+
+            // slight delay to avoid tight loop
+            await new Promise((r) => setTimeout(r, 10));
+          }
+        }
+
+        startBtn.addEventListener("click", startFeed);
+        stopBtn.addEventListener("click", stopFeed);
+
+        pauseBtn.addEventListener("click", () => {
+          if (!streaming) return;
+          if (!paused) {
+            // Pause
+            paused = true;
+            pauseBtn.textContent = "Resume";
+            badge.textContent = "Paused";
+            badge.className = "live-badge off";
+            clearInterval(timer);
+            logActivity("Camera Paused");
+          } else {
+            // Resume
+            paused = false;
+            pauseBtn.textContent = "Pause";
+            badge.textContent = "Live";
+            badge.className = "live-badge on";
+            timer = setInterval(updateTime, 1000);
+            captureLoop();
+            logActivity("Camera Resumed");
+          }
+        });
+
+        captureBtn.addEventListener("click", () => {
+          if (!streaming || paused) return;
+          try {
+            const canvas = document.getElementById("capture-canvas");
+            canvas.width = 640;
+            canvas.height = 480;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const link = document.createElement("a");
+            link.download =
+              "visionball_capture_" + new Date().getTime() + ".jpg";
+            link.href = canvas.toDataURL("image/jpeg", 0.9);
+            link.click();
+            logActivity("Frame Captured");
+          } catch (e) {
+            showError("Failed to capture frame.");
+          }
+        });
+
+        fsBtn.addEventListener("click", () =>
+          feedCard.classList.toggle("fullscreen"),
+        );
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") feedCard.classList.remove("fullscreen");
+        });
+      });
+    </script>
+  </body>
 </html>
