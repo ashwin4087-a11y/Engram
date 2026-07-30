@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptiVue AI | OptiVue Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#bcb7b2",
+                    "tertiary": "#615e59",
+                    "background": "#fdf8f6",
+                    "tertiary-fixed": "#e7e1dc",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#fdf8f6",
+                    "on-secondary-container": "#6a635d",
+                    "on-secondary-fixed-variant": "#4c4640",
+                    "on-tertiary-fixed": "#1d1b18",
+                    "tertiary-fixed-dim": "#cbc6c0",
+                    "on-primary-container": "#554633",
+                    "primary-fixed": "#f5dfc5",
+                    "on-surface": "#1c1b1a",
+                    "on-surface-variant": "#4d463d",
+                    "secondary-fixed": "#ebe1d8",
+                    "inverse-primary": "#d8c3aa",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#1f1b16",
+                    "on-tertiary-fixed-variant": "#494642",
+                    "surface-variant": "#e6e2df",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#4b4844",
+                    "on-primary-fixed": "#241a09",
+                    "secondary-fixed-dim": "#cec5bd",
+                    "error": "#ba1a1a",
+                    "surface-container": "#f2edeb",
+                    "inverse-surface": "#31302f",
+                    "outline": "#7e766c",
+                    "surface-container-high": "#ece7e5",
+                    "on-background": "#1c1b1a",
+                    "surface-dim": "#ddd9d7",
+                    "primary": "#6b5c47",
+                    "on-primary-fixed-variant": "#534431",
+                    "inverse-on-surface": "#f4f0ee",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#6b5c47",
+                    "surface-container-low": "#f7f3f0",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#d0c5ba",
+                    "secondary-container": "#ebe1d8",
+                    "primary-fixed-dim": "#d8c3aa",
+                    "secondary": "#645d57",
+                    "on-tertiary": "#ffffff",
+                    "surface": "#fdf8f6",
+                    "primary-container": "#c9b59c",
+                    "surface-container-highest": "#e6e2df"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "md": "16px",
+                    "sm": "12px",
+                    "xl": "32px",
+                    "margin": "32px",
+                    "base": "8px",
+                    "gutter": "24px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "code-md": ["JetBrains Mono"],
+                    "headline-xl": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-sm": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #EFE9E3; /* Brand Anchor: Canvas base */
+            color: #1c1b1a;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(253, 248, 246, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #BCB0A5;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .performance-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hud-overlay {
+            background: rgba(26, 25, 24, 0.7);
+            color: #EFE9E3;
+            border: 1px solid rgba(201, 181, 156, 0.3);
+        }
+        /* Custom filter to tint logo to #D9CFC7 */
+        .brand-logo-filter {
+            filter: brightness(0) saturate(100%) invert(88%) sepia(8%) saturate(168%) hue-rotate(344deg) brightness(91%) contrast(89%);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-inverse-surface dark:bg-on-surface border-b border-outline flex justify-between items-center w-full px-margin h-16 sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<img alt="OptiVue Logo" class="h-8 w-auto brand-logo-filter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbED_N6RMFigR3wiS8waloIxqVJ105-YERXb7Hjwq1gma20bxBtu4FukDjlLTf9EBsEU8K0BWb9aq9-bQeJF11-1I2rstJg9NvpVyzq5rW9Y6GTHq5ZlJwm9j_01xZFJYMA6HxHogSTctfeJ9xYt7BAlGGmBeQ9etZN78cDhYkq9hr7q2vXxY-l8hwXErSc63mKJoOMgHHdUz6nffouxSCWcHNB0zyDhNM0bife7RbdwcJVC3XfOR78RhwACvUmwcb6g"/>
+<span class="font-headline-md text-headline-md font-bold text-inverse-on-surface dark:text-inverse-on-surface">OptiVue</span>
+</div>
+<nav class="hidden md:flex ml-xl gap-lg">
+<a class="text-primary-fixed font-bold border-b-2 border-primary-fixed pb-1 font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-surface-variant dark:text-outline-variant hover:text-inverse-on-surface transition-colors font-body-md text-body-md" href="#">Calibration</a>
+<a class="text-surface-variant dark:text-outline-variant hover:text-inverse-on-surface transition-colors font-body-md text-body-md" href="#">Analytics</a>
+<a class="text-surface-variant dark:text-outline-variant hover:text-inverse-on-surface transition-colors font-body-md text-body-md" href="#">Evaluation</a>
+<a class="text-surface-variant dark:text-outline-variant hover:text-inverse-on-surface transition-colors font-body-md text-body-md" href="#">Architecture</a>
+<a class="text-surface-variant dark:text-outline-variant hover:text-inverse-on-surface transition-colors font-body-md text-body-md" href="#">About</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-inverse-on-surface hover:bg-tertiary-fixed-dim/10 p-base rounded-full transition-colors">settings</button>
+<button class="material-symbols-outlined text-inverse-on-surface hover:bg-tertiary-fixed-dim/10 p-base rounded-full transition-colors">account_circle</button>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col h-full py-lg px-md bg-surface-container border-r border-outline-variant w-64">
+<div class="mb-xl flex items-center gap-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center p-xs">
+<img alt="OptiVue Icon" class="w-full h-full object-contain brightness-0 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUPfVbxX4oaJj3juaJyD0v2P9jHjXzocOnHG0qCvnYgIeJwwudODihz6rylEoZowieYaMN6CVJwfKTkPH8KBQMKLkFFjzdZGHSEhZFq-ZYVVt0bEP7fkaBy_X2Z3kII24j7XSh6ogWPu2f-huXdEbPMV7fCy3x1EPzoszTexKSZVoRFxT33gUMkc2QkTUb0Wu3YpUnAv8lTLZU6W12ZqN5sd9q6Q0RntVrKU5BjvonesjpediQy3LrfaaGCxZwY5IN8Q"/>
+</div>
+<div>
+<h3 class="text-on-surface font-bold font-label-md text-label-md">OptiVue Console</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm">v1.2.4-stable</p>
+</div>
+</div>
+<div class="flex-1 space-y-xs">
+<a class="flex items-center gap-md p-sm bg-primary-container text-on-primary-container rounded-lg font-bold font-label-md text-label-md scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+                    Calibration
+                </a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+                    Analytics
+                </a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+                    Evaluation
+                </a>
+</div>
+<div class="mt-auto space-y-md">
+<button class="w-full bg-primary-container text-on-primary-container py-sm rounded-lg font-bold font-label-md text-label-md hover:opacity-90 transition-all">
+                    Run Diagnostics
+                </button>
+<div class="pt-md border-t border-outline-variant space-y-xs">
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+                        Docs
+                    </a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                        Logout
+                    </a>
+</div>
+</div>
+</aside>
+<!-- Content Area -->
+<div class="flex-1 p-margin overflow-y-auto bg-background">
+<div class="bento-grid">
+<!-- Live Preview Section (Large) -->
+<section class="col-span-12 xl:col-span-8 space-y-gutter">
+<div class="relative rounded-xl overflow-hidden aspect-video bg-inverse-surface group border border-outline shadow-lg">
+<img id="live-stream" class="w-full h-full object-cover opacity-90" src="http://127.0.0.1:8000/preview?mode=default" />
+<!-- HUD Overlays -->
+<div class="absolute inset-0 p-lg pointer-events-none flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md">
+<span class="font-label-sm text-label-sm block opacity-70">LIVE STREAM</span>
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+<span class="font-label-md text-label-md">OPTIVUE_CAM_01</span>
+</div>
+</div>
+<div class="flex gap-sm">
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md text-right">
+<span class="font-label-sm text-label-sm block opacity-70">CONFIDENCE</span>
+<span id="val-confidence" class="font-label-md text-label-md text-primary-fixed">--%</span>
+</div>
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md text-right">
+<span class="font-label-sm text-label-sm block opacity-70">FPS</span>
+<span id="val-fps" class="font-label-md text-label-md">--</span>
+</div>
+</div>
+</div>
+<!-- Tracking HUD -->
+<div class="flex justify-center mb-xl">
+<div class="w-48 h-48 border-2 border-primary-container/30 rounded-full flex items-center justify-center relative">
+<div class="absolute inset-0 border border-dashed border-primary-container/20 rounded-full animate-spin" style="animation-duration: 10s"></div>
+<div class="text-center">
+<span class="block font-label-sm text-label-sm text-primary-fixed">DISTANCE</span>
+<span id="val-distance" class="text-headline-md font-bold text-inverse-on-surface">-- mm</span>
+</div>
+<!-- Dynamic Pointer -->
+<div class="absolute w-1 h-24 bg-primary-container left-1/2 -ml-0.5 origin-bottom transform -rotate-12"></div>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md">
+<span class="font-label-sm text-label-sm block opacity-70">ANGLE</span>
+<span id="val-angle" class="font-label-md text-label-md">--° <span class="text-primary-fixed">Δ</span></span>
+</div>
+<div class="flex gap-sm">
+<button class="bg-primary text-on-primary px-md py-sm rounded font-label-md pointer-events-auto hover:opacity-90">CAPTURE FRAME</button>
+<button class="bg-inverse-on-surface text-on-surface px-md py-sm rounded font-label-md pointer-events-auto hover:bg-surface-variant">FULLSCREEN</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance Summary Chart Area -->
+<div class="bg-surface-container rounded-xl p-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<h2 class="text-on-surface font-bold font-headline-md text-headline-md">Throughput Stability</h2>
+<div class="flex gap-sm">
+<span class="flex items-center gap-xs font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary"></span> Primary Lane
+                                </span>
+<span class="flex items-center gap-xs font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-tertiary"></span> Secondary Lane
+                                </span>
+</div>
+</div>
+<div class="h-48 w-full flex items-end gap-xs">
+<!-- Simple Bar Mockup -->
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[70%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[75%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[80%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[72%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[90%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[85%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[82%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[78%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[95%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[88%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[84%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm hover:bg-primary/40 transition-all h-[80%]"></div>
+</div>
+<div class="mt-md pt-md border-t border-outline-variant flex justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>08:00 AM</span>
+<span>LAST 12 MINUTES</span>
+<span>REAL-TIME AGGREGATE</span>
+</div>
+</div>
+</section>
+<!-- Performance Sidebar -->
+<aside class="col-span-12 xl:col-span-4 space-y-gutter">
+<!-- System Health Badge -->
+<div class="bg-surface-container-high rounded-xl p-lg border border-outline-variant">
+<div class="flex justify-between items-start mb-md">
+<div>
+<h3 class="text-on-surface font-bold font-label-md text-label-md uppercase tracking-wider">System Health</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Node: US-EAST-04</p>
+</div>
+<span class="px-sm py-xs bg-emerald-100 text-emerald-800 rounded font-label-sm text-label-sm font-bold flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">check_circle</span> <span id="val-system-health">OPERATIONAL</span>
+                            </span>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-surface-container rounded-lg p-md border border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">UPTIME</span>
+<span id="val-uptime" class="block font-label-md text-label-md font-bold mt-xs">00:00:00</span>
+</div>
+<div class="bg-surface-container rounded-lg p-md border border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">TEMP</span>
+<span class="block font-label-md text-label-md font-bold mt-xs">42.4°C</span>
+</div>
+</div>
+</div>
+<!-- Performance Sidebar: Loads -->
+<div class="bg-surface-container-high rounded-xl p-lg border border-outline-variant">
+<h3 class="text-on-surface font-bold font-label-md text-label-md mb-lg">Hardware Utilization</h3>
+<div class="space-y-lg">
+<!-- NPU Load -->
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-on-surface-variant">NPU Load (OptiVue Core)</span>
+<span class="font-bold text-on-surface">82%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden border border-outline-variant">
+<div class="performance-bar h-full bg-primary w-[82%]"></div>
+</div>
+</div>
+<!-- CPU Load -->
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-on-surface-variant">System CPU Load</span>
+<span class="font-bold text-on-surface">34%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden border border-outline-variant">
+<div class="performance-bar h-full bg-tertiary-container w-[34%]"></div>
+</div>
+</div>
+<!-- Memory -->
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-on-surface-variant">VRAM Consumption</span>
+<span class="font-bold text-on-surface">6.4GB / 8GB</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden border border-outline-variant">
+<div class="performance-bar h-full bg-secondary w-[78%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Calibration Summary Badge -->
+<div class="bg-primary-container/10 rounded-xl p-lg border border-primary-container flex gap-md items-center">
+<div class="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center p-xs">
+<img alt="OptiVue Icon" class="w-full h-full object-contain brightness-0 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhCLxv08glYEmgBvPj7W1UQRUw2CCFUeYdl1EDWHyN-74rHrw8KGmiSx4G7tDaL490BtHKTA7Ptr_GKl4bWtlP3ObSweyH8sTfMFd48soiKCz4DQh9heykP8py_l8jmbgtgY20UpBF9NdjHioUe2RlcjgD79f8ONzECZ9w9zOufb8tyRfhE0Uzgmfgl2wIX5fV6OKoUE1KfAmNUzJQ7zFWr-VtvOrlhXaq8d3UmmuOEDfXOKkbFGXFqmd9a_-Pwv3Taw"/>
+</div>
+<div class="flex-1">
+<h3 class="text-on-surface font-bold font-label-md text-label-md">Calibration Summary</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm"><span id="val-calibration-time" class="font-label-sm">--</span></p>
+</div>
+<div class="text-right">
+<span class="block font-label-sm text-label-sm text-on-surface-variant">STATUS</span>
+<span id="val-calibration-status" class="font-label-md text-label-md font-bold text-primary">--</span>
+</div>
+</div>
+<!-- Recent Alerts -->
+<div class="bg-surface-container-high rounded-xl p-lg border border-outline-variant">
+<h3 class="text-on-surface font-bold font-label-md text-label-md mb-md">System Events</h3>
+<div class="space-y-sm">
+<div class="flex items-start gap-sm p-sm bg-surface-container rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-amber-600 text-sm mt-xs">warning</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface font-bold">Confidence dip detected</p>
+<span class="text-[10px] text-on-surface-variant font-label-sm">08:42:15 AM - Camera 01</span>
+</div>
+</div>
+<div class="flex items-start gap-sm p-sm bg-surface-container rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-sm mt-xs">sync</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface font-bold">Auto-Calibration complete</p>
+<span class="text-[10px] text-on-surface-variant font-label-sm">06:12:01 AM - System</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-dim dark:bg-surface-container-lowest border-t border-outline-variant mt-auto flex justify-between items-center px-margin py-md w-full">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<img alt="OptiVue Footer Logo" class="h-4 w-auto opacity-60 grayscale brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChUtnsnMLc_YopaPRP_vyV5kAMX9hAXKrrxRmWtlP2_-Ra9_6WCfodXShzRCl4ltBBS0Lkh_8MwcmxZUNoAbAB5tGvBrDP0hB7yOw7U71Ul_w9vTSxGEHnlN3s6bhClViZ5vuYx-2KKzzCVW7kPuDrJPySqwhLBgn_axjPv61UF9Tpkw9nIMj5unBrJxdTFhsLGDVPiOM-VXsNhRRcWcOhhkF_dUAOK3BZpzjuaJUNPVKRNlrb0uX5mvcpyn9WVq9FXg"/>
+<span class="font-code-md text-on-surface text-label-sm">OptiVue // SYSTEM_STATUS_OK</span>
+</div>
+<span class="text-on-surface-variant font-label-sm text-label-sm ml-md">© 2024 Industrial Vision Systems. All rights reserved.</span>
+</div>
+<div class="flex gap-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Documentation</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">API Reference</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Report Bug</a>
+</div>
+</footer>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body></html>

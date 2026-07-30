@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptiVue AI | System Architecture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#bcb7b2",
+                        "tertiary": "#615e59",
+                        "background": "#fdf8f6",
+                        "tertiary-fixed": "#e7e1dc",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fdf8f6",
+                        "on-secondary-container": "#6a635d",
+                        "on-secondary-fixed-variant": "#4c4640",
+                        "on-tertiary-fixed": "#1d1b18",
+                        "tertiary-fixed-dim": "#cbc6c0",
+                        "on-primary-container": "#554633",
+                        "primary-fixed": "#f5dfc5",
+                        "on-surface": "#1c1b1a",
+                        "on-surface-variant": "#4d463d",
+                        "secondary-fixed": "#ebe1d8",
+                        "inverse-primary": "#d8c3aa",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#1f1b16",
+                        "on-tertiary-fixed-variant": "#494642",
+                        "surface-variant": "#e6e2df",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#4b4844",
+                        "on-primary-fixed": "#241a09",
+                        "secondary-fixed-dim": "#cec5bd",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f2edeb",
+                        "inverse-surface": "#31302f",
+                        "outline": "#7e766c",
+                        "surface-container-high": "#ece7e5",
+                        "on-background": "#1c1b1a",
+                        "surface-dim": "#ddd9d7",
+                        "primary": "#6b5c47",
+                        "on-primary-fixed-variant": "#534431",
+                        "inverse-on-surface": "#f4f0ee",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#6b5c47",
+                        "surface-container-low": "#f7f3f0",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#d0c5ba",
+                        "secondary-container": "#ebe1d8",
+                        "primary-fixed-dim": "#d8c3aa",
+                        "secondary": "#645d57",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#fdf8f6",
+                        "primary-container": "#c9b59c",
+                        "surface-container-highest": "#e6e2df"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "margin": "32px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #EFE9E3; /* Overriding with brand anchor canvas color */
+            color: #1c1b1a;
+        }
+        .pipeline-arrow {
+            position: relative;
+        }
+        .pipeline-arrow::after {
+            content: "";
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            width: 20px;
+            height: 2px;
+            background-color: #BCB0A5;
+            transform: translateY(-50%);
+        }
+        .math-font {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #D9CFC7;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #BCB0A5;
+            border-radius: 3px;
+        }
+        /* Custom filter to tint logo to #D9CFC7 compatible tone */
+        .brand-logo-tint {
+            filter: invert(86%) sepia(5%) saturate(301%) hue-rotate(345deg) brightness(92%) contrast(89%);
+        }
+        .brand-logo-tint-light {
+             filter: invert(96%) sepia(3%) saturate(489%) hue-rotate(340deg) brightness(101%) contrast(92%);
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 docked left-0 bg-surface-container border-r border-outline-variant py-lg px-md fixed z-50">
+<div class="flex items-center gap-3 mb-xl">
+<div class="w-10 h-10 bg-inverse-surface rounded flex items-center justify-center p-1.5">
+<img alt="OptiVue Logo" class="w-full h-full object-contain brand-logo-tint-light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ9eIgI_196GdGbtBZ4ohO7GgwxwykBocFCWqLcOiP5N23ExyjsEIuBOPw92Z4xOs7FyqT21FyNg6zuEtgQIPEoaN76SwXcglL_Fp5CM8dcqvMsmvkvXcaKNTXUcWd7snf-y56M9cjcT1DLdG5Jmhyvg57oFbfOQdIXHlSm3Ti3raUjpZ0bpQy8EWQmHItaD6ERMnh0l8tVBemYRsHPb4ELIX4nE7Rs4Bf7IFqMROM87GRs7K6BQhNi2DkGd2lMnFgqw"/>
+</div>
+<div>
+<h1 class="text-on-surface font-bold font-headline-md leading-tight">OptiVue AI</h1>
+<p class="font-label-sm text-on-surface-variant opacity-70">v1.2.4-stable</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-md py-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-md py-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="font-label-md">Calibration</span>
+</a>
+<a class="flex items-center gap-3 px-md py-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span class="font-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-md py-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="biotech">biotech</span>
+<span class="font-label-md">Evaluation</span>
+</a>
+<a class="flex items-center gap-3 px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="font-label-md">Architecture</span>
+</a>
+<a class="flex items-center gap-3 px-md py-sm text-on-surface-variant hover:bg-secondary-container/50 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<span class="font-label-md">About</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 border-t border-outline-variant pt-lg">
+<button class="w-full bg-primary-container text-on-primary-container py-2 rounded font-bold font-label-md hover:bg-primary transition-all">
+            Run Diagnostics
+        </button>
+<div class="flex flex-col gap-1 mt-4">
+<a class="flex items-center gap-3 px-md py-2 text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-label-sm">Docs</span>
+</a>
+<a class="flex items-center gap-3 px-md py-2 text-on-surface-variant hover:text-on-surface" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-sm">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-64 flex flex-col bg-background">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin h-16 bg-inverse-surface border-b border-outline z-40 sticky top-0">
+<div class="flex items-center gap-4">
+<img alt="OptiVue" class="w-8 h-8 object-contain brand-logo-tint-light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd5IEHWEndyMhLgEoQp0h05wZ8BtPTH1Oj5dsvyUFtBidq5Dntq2DjAI-8b-zXfWc_fVNnRXW7-jgAyVBk4d-LVhX05-eA4y-agY1zqoDcil4Te0rY1CCFyau46w1-kuY9cJ9n7e-UaGrnei_lEqL-cQISRqZJt4WTXrx2qCKsIwkDtEvlenS5qfFXQmiBcpyC3wxQqsD5PzcNk8Av5xGJjv_cDuPadBipetXgQYOJTXb-MHYFPuREDDFLF_6kj47fZA"/>
+<span class="font-headline-md font-bold text-inverse-on-surface">Architecture Overview</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden lg:flex items-center gap-lg">
+<a class="text-surface-variant hover:text-inverse-on-surface font-body-md transition-colors" href="#">System Status: Optimal</a>
+<a class="text-surface-variant hover:text-inverse-on-surface font-body-md transition-colors" href="#">Server: US-EAST-1</a>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-surface-variant hover:text-inverse-on-surface cursor-pointer" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-surface-variant hover:text-inverse-on-surface cursor-pointer" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-margin space-y-gutter">
+<!-- Pipeline Diagram Section -->
+<section class="bg-surface-container rounded-xl border border-outline-variant p-lg">
+<div class="flex justify-between items-center mb-lg">
+<h2 class="font-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="schema">schema</span>
+                    Process Pipeline Pipeline Diagram
+                </h2>
+<span class="font-label-sm bg-primary-container px-3 py-1 rounded-full text-on-primary-container">Live System Flow</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap- gutter items-center">
+<!-- Step 1: Camera -->
+<div class="flex flex-col items-center p-md border border-outline-variant rounded-lg bg-surface relative pipeline-arrow">
+<span class="material-symbols-outlined text-primary mb-2 text-4xl" data-icon="photo_camera">photo_camera</span>
+<span class="font-label-md font-bold text-on-surface">Camera</span>
+<span class="font-label-sm text-on-surface-variant mt-1">RAW RGB Stream</span>
+</div>
+<!-- Step 2: Detection -->
+<div class="flex flex-col items-center p-md border border-outline-variant rounded-lg bg-surface relative pipeline-arrow">
+<span class="material-symbols-outlined text-primary mb-2 text-4xl" data-icon="detection_and_zone">detection_and_zone</span>
+<span class="font-label-md font-bold text-on-surface">Detection</span>
+<span class="font-label-sm text-on-surface-variant mt-1">YOLOv8 Engine</span>
+</div>
+<!-- Step 3: Calibration -->
+<div class="flex flex-col items-center p-md border border-outline-variant rounded-lg bg-surface relative pipeline-arrow">
+<span class="material-symbols-outlined text-primary mb-2 text-4xl" data-icon="straighten">straighten</span>
+<span class="font-label-md font-bold text-on-surface">Calibration</span>
+<span class="font-label-sm text-on-surface-variant mt-1">Extrinsic Matrix</span>
+</div>
+<!-- Step 4: Estimation -->
+<div class="flex flex-col items-center p-md border border-outline-variant rounded-lg bg-surface relative pipeline-arrow">
+<span class="material-symbols-outlined text-primary mb-2 text-4xl" data-icon="calculate">calculate</span>
+<span class="font-label-md font-bold text-on-surface">Estimation</span>
+<span class="font-label-sm text-on-surface-variant mt-1">Spatial Projection</span>
+</div>
+<!-- Step 5: API -->
+<div class="flex flex-col items-center p-md border border-outline-variant rounded-lg bg-surface">
+<span class="material-symbols-outlined text-primary mb-2 text-4xl" data-icon="api">api</span>
+<span class="font-label-md font-bold text-on-surface">REST API</span>
+<span class="font-label-sm text-on-surface-variant mt-1">JSON Response</span>
+</div>
+</div>
+</section>
+<!-- Middle Grid: Formulas and File Structure -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Math Formulas Section -->
+<section class="bg-surface-container rounded-xl border border-outline-variant p-lg">
+<h2 class="font-headline-md text-on-surface mb-lg flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="functions">functions</span>
+                    Spatial Logic
+                </h2>
+<div class="space-y-6">
+<div class="p-md bg-surface border border-outline-variant rounded-lg">
+<span class="font-label-sm text-on-secondary-container block mb-2 uppercase tracking-widest">Euclidean Distance Formula</span>
+<div class="text-2xl math-font flex justify-center py-4 text-on-surface">
+                            d = √[(x&amp;sub2 - x&amp;sub1)² + (y&amp;sub2 - y&amp;sub1)² + (z&amp;sub2 - z&amp;sub1)²]
+                        </div>
+<p class="font-body-sm text-on-surface-variant">Calculates the direct distance between the lens principal point and the detected object centroid in 3D space.</p>
+</div>
+<div class="p-md bg-surface border border-outline-variant rounded-lg">
+<span class="font-label-sm text-on-secondary-container block mb-2 uppercase tracking-widest">Angular Projection Equation</span>
+<div class="text-2xl math-font flex justify-center py-4 text-on-surface">
+                            θ = arctan(f / √(u² + v²))
+                        </div>
+<p class="font-body-sm text-on-surface-variant">Maps 2D pixel coordinates (u, v) to a relative angular displacement using focal length (f) constants.</p>
+</div>
+</div>
+</section>
+<!-- Folder Structure Section -->
+<section class="bg-surface-container rounded-xl border border-outline-variant p-lg">
+<h2 class="font-headline-md text-on-surface mb-lg flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="folder_zip">folder_zip</span>
+                    Module Architecture
+                </h2>
+<div class="bg-inverse-surface rounded-lg p-md custom-scrollbar overflow-auto h-[280px]">
+<div class="font-label-md text-surface-variant space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="folder_open">folder_open</span>
+<span>optivue_root/</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<span class="material-symbols-outlined text-sm" data-icon="folder">folder</span>
+<span>core/</span>
+</div>
+<div class="flex items-center gap-2 ml-12">
+<span class="material-symbols-outlined text-sm" data-icon="article">article</span>
+<span class="text-primary-fixed">engine.py</span>
+</div>
+<div class="flex items-center gap-2 ml-12">
+<span class="material-symbols-outlined text-sm" data-icon="article">article</span>
+<span>calibration.py</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<span class="material-symbols-outlined text-sm" data-icon="folder">folder</span>
+<span>models/</span>
+</div>
+<div class="flex items-center gap-2 ml-12">
+<span class="material-symbols-outlined text-sm" data-icon="database">database</span>
+<span>yolov8_weights.pt</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<span class="material-symbols-outlined text-sm" data-icon="folder">folder</span>
+<span>api/</span>
+</div>
+<div class="flex items-center gap-2 ml-12">
+<span class="material-symbols-outlined text-sm" data-icon="article">article</span>
+<span>routes.py</span>
+</div>
+<div class="flex items-center gap-2 ml-12">
+<span class="material-symbols-outlined text-sm" data-icon="article">article</span>
+<span>schemas.py</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<span class="material-symbols-outlined text-sm" data-icon="article">article</span>
+<span>config.yaml</span>
+</div>
+<div class="flex items-center gap-2 ml-6">
+<span class="material-symbols-outlined text-sm" data-icon="terminal">terminal</span>
+<span>main.py</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Grid: Tech Stack and API Preview -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Tech Stack -->
+<div class="lg:col-span-1 bg-surface-container rounded-xl border border-outline-variant p-lg">
+<h2 class="font-headline-md text-on-surface mb-lg">Tech Stack</h2>
+<div class="grid grid-cols-2 gap-md">
+<div class="flex flex-col items-center p-md bg-secondary-container/30 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface mb-1" data-icon="code">code</span>
+<span class="font-label-md font-bold">Python 3.11</span>
+</div>
+<div class="flex flex-col items-center p-md bg-secondary-container/30 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface mb-1" data-icon="layers">layers</span>
+<span class="font-label-md font-bold">FastAPI</span>
+</div>
+<div class="flex flex-col items-center p-md bg-secondary-container/30 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface mb-1" data-icon="view_in_ar">view_in_ar</span>
+<span class="font-label-md font-bold">OpenCV 4.x</span>
+</div>
+<div class="flex flex-col items-center p-md bg-secondary-container/30 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface mb-1" data-icon="memory">memory</span>
+<span class="font-label-md font-bold">PyTorch</span>
+</div>
+<div class="flex flex-col items-center p-md bg-secondary-container/30 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface mb-1" data-icon="web">web</span>
+<span class="font-label-md font-bold">React TS</span>
+</div>
+<div class="flex flex-col items-center p-md bg-secondary-container/30 rounded-lg border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface mb-1" data-icon="dns">dns</span>
+<span class="font-label-md font-bold">Redis</span>
+</div>
+</div>
+</div>
+<!-- API Reference Preview -->
+<div class="lg:col-span-2 bg-surface-container rounded-xl border border-outline-variant p-lg">
+<div class="flex justify-between items-center mb-lg">
+<h2 class="font-headline-md text-on-surface">Interactive API Reference</h2>
+<div class="flex gap-2">
+<button class="bg-primary text-on-primary px-3 py-1 rounded font-label-sm">GET</button>
+<button class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded font-label-sm">POST</button>
+</div>
+</div>
+<div class="bg-inverse-surface rounded-lg border border-outline-variant overflow-hidden">
+<div class="flex items-center px-4 py-2 bg-surface-container-low border-b border-outline-variant">
+<div class="flex gap-1.5 mr-4">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<div class="w-3 h-3 rounded-full bg-primary-container"></div>
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+</div>
+<span class="font-code-md text-on-surface-variant text-sm">v1/inference/current_frame</span>
+</div>
+<div class="p-4 font-code-md text-primary-fixed text-sm">
+<pre class="whitespace-pre-wrap">{
+  <span class="text-secondary-fixed-dim">"status"</span>: <span class="text-on-secondary-fixed">"success"</span>,
+  <span class="text-secondary-fixed-dim">"frame_id"</span>: 10293,
+  <span class="text-secondary-fixed-dim">"detections"</span>: [
+    {
+      <span class="text-secondary-fixed-dim">"label"</span>: <span class="text-on-secondary-fixed">"human"</span>,
+      <span class="text-secondary-fixed-dim">"confidence"</span>: 0.982,
+      <span class="text-secondary-fixed-dim">"coordinates"</span>: { <span class="text-secondary-fixed-dim">"x"</span>: 240, <span class="text-secondary-fixed-dim">"y"</span>: 480 },
+      <span class="text-secondary-fixed-dim">"estimated_distance"</span>: 4.25,
+      <span class="text-secondary-fixed-dim">"unit"</span>: <span class="text-on-secondary-fixed">"meters"</span>
+    }
+  ],
+  <span class="text-secondary-fixed-dim">"timestamp"</span>: <span class="text-on-secondary-fixed">"2023-11-20T14:42:01Z"</span>
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="flex flex-col md:flex-row justify-between items-center px-margin py-md w-full bg-surface-dim border-t border-outline-variant mt-auto">
+<div class="flex items-center gap-3">
+<img alt="OptiVue" class="w-5 h-5 object-contain brand-logo-tint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5sL774ymxl6TqsK9YSoMH_0ThZicteo3p_SxQ2v1gFZi1ejIFG4CVZ4TYaPc6qjDlQF399AESEkKcTPucTHgQEeaSuHL0L1zZL5MzxG4tnWD-fU3ZVAm3BUBBAxNi-Qu7W-s1bLRnU-ampbpnq69-HEwJq9mH2jZ4EcVt-5w31I4zlD-5uKx_8gM4FlJmSV8Si0vr3hu6hreVUYjhf3NeeSz_kMc__SZzikwpDe_xrYjVXAjF_T3C_Y4ZOZx4x4KHyg"/>
+<span class="font-code-md text-on-surface text-sm">OPTIVUE_AI_SYSTEM_CORE</span>
+</div>
+<div class="flex gap-lg mt-md md:mt-0">
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">API Reference</a>
+<a class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Report Bug</a>
+</div>
+<p class="font-label-sm text-on-surface-variant mt-md md:mt-0">© 2024 Industrial Vision Systems. All rights reserved.</p>
+</footer>
+</main>
+<script>
+    // Micro-interaction for code blocks and pipeline elements
+    document.querySelectorAll('.pipeline-arrow').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            el.classList.add('shadow-md');
+            el.style.transform = 'translateY(-2px)';
+        });
+        el.addEventListener('mouseleave', () => {
+            el.classList.remove('shadow-md');
+            el.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Simple API reference switcher logic
+    const buttons = document.querySelectorAll('button[class*="GET"], button[class*="POST"]');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            console.log('API Method Switched:', btn.innerText);
+            // Placeholder for real logic
+        });
+    });
+</script>
+</body></html>

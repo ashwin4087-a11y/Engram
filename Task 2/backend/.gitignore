@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+app/data/focal_length.json
+app/data/*.csv
+.pytest_cache/
