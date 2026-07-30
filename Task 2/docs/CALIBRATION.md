@@ -1,0 +1,3 @@
+# Calibration Guide
+
+Ensure you are in a well-lit environment...

@@ -1,0 +1,3 @@
+# Architecture
+
+The backend follows a layered, modular service architecture...
