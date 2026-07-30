@@ -15,8 +15,8 @@ if _src_dir not in sys.path:
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
-from infer import BallDetector
-from utils import draw_detections
+from src.infer import BallDetector
+from src.utils import draw_detections
 
 st.set_page_config(
     page_title="VisionBall | Image Detection",

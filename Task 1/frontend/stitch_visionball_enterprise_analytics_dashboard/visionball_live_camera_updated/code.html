@@ -329,6 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!streaming) return;
     feed.src = '';
     feed.style.display = 'none';
+    // Explicitly tell the server to release the camera hardware
+    fetch('/api/detect/live/stop', { method: 'POST' }).catch(() => {});
     feedEmpty.style.display = '';
     feedEmpty.innerHTML = 'Camera stopped.<br>Press <strong>Start</strong> to resume.';
     streaming = false;

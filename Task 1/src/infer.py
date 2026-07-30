@@ -59,7 +59,7 @@ class BallDetector:
         self.output_name = self.session.get_outputs()[0].name
         print(f"[BallDetector] Initialized ONNX backend with providers: {self.session.get_providers()}")
 
-    def predict(self, image: np.ndarray) -> Tuple[List[Tuple[float, float, float, float]], List[float], List[int]]:
+    def predict(self, image: np.ndarray, conf_thres: float = None, iou_thres: float = None) -> Tuple[List[Tuple[float, float, float, float]], List[float], List[int]]:
         """
         Runs detection on an OpenCV BGR image frame.
         Returns:
@@ -67,18 +67,21 @@ class BallDetector:
             scores: List of confidence floats
             class_ids: List of integer class IDs (0 for ball)
         """
+        conf = conf_thres if conf_thres is not None else self.conf_thres
+        iou = iou_thres if iou_thres is not None else self.iou_thres
+
         if self.backend == "pytorch":
-            return self._predict_pytorch(image)
+            return self._predict_pytorch(image, conf, iou)
         elif self.backend == "onnx":
-            return self._predict_onnx(image)
+            return self._predict_onnx(image, conf, iou)
         else:
             return [], [], []
 
-    def _predict_pytorch(self, image: np.ndarray):
+    def _predict_pytorch(self, image: np.ndarray, conf_thres: float, iou_thres: float):
         results = self.model.predict(
             source=image,
-            conf=self.conf_thres,
-            iou=self.iou_thres,
+            conf=conf_thres,
+            iou=iou_thres,
             imgsz=self.imgsz,
             verbose=False
         )
@@ -96,7 +99,7 @@ class BallDetector:
 
         return boxes, scores, class_ids
 
-    def _predict_onnx(self, image: np.ndarray):
+    def _predict_onnx(self, image: np.ndarray, conf_thres: float, iou_thres: float):
         orig_h, orig_w = image.shape[:2]
         padded_img, (ratio_w, ratio_h), (pad_w, pad_h) = letterbox(image, (self.imgsz, self.imgsz))
 
@@ -119,7 +122,7 @@ class BallDetector:
             # Handle single class or multi-class confidences
             score = float(pred[4]) if len(pred) == 5 else float(np.max(pred[4:]))
             
-            if score >= self.conf_thres:
+            if score >= conf_thres:
                 x1 = (cx - w / 2 - pad_w) / ratio_w
                 y1 = (cy - h / 2 - pad_h) / ratio_h
                 x2 = (cx + w / 2 - pad_w) / ratio_w
@@ -140,8 +143,8 @@ class BallDetector:
             indices = cv2.dnn.NMSBoxes(
                 bboxes=boxes_raw,
                 scores=scores_raw,
-                score_threshold=self.conf_thres,
-                nms_threshold=self.iou_thres
+                score_threshold=conf_thres,
+                nms_threshold=iou_thres
             )
 
             if len(indices) > 0:
