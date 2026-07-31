@@ -22,3 +22,28 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Archives
+*.zip
+
+# Screenshots
+*.png
+
+# Captured images
+Task 2/backend/app/data/captures/*.jpg
+
+# Runtime data
+Task 2/backend/app/data/captures/captures.jsonl

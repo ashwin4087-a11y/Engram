@@ -21,3 +21,9 @@ async def serve_js(path: str) -> FileResponse:
 async def serve_css(filename: str) -> FileResponse:
     asset_path = FRONTEND_DIR / "css" / filename
     return FileResponse(asset_path, media_type="text/css")
+
+
+@router.get("/assets/{path:path}", include_in_schema=False)
+async def serve_assets(path: str) -> FileResponse:
+    asset_path = FRONTEND_DIR / "assets" / path
+    return FileResponse(asset_path)

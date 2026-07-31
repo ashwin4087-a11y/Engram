@@ -40,8 +40,8 @@ a{color:inherit}
 /* Top header (modern SaaS) */
 header{background:var(--primary-900);color:#fff;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-32);box-shadow:0 2px 8px rgba(0,0,0,0.06);position:sticky;top:0;z-index:60}
 .header-left{display:flex;align-items:center;gap:var(--space-16)}
-.brand-badge{width:44px;height:44px;border-radius:999px;background:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow-default)}
-.brand-badge img{width:24px;height:auto}
+.brand-badge{width:40px;height:40px;border-radius:999px;background:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(17,45,78,0.08);border:1px solid rgba(255,255,255,0.65)}
+.brand-badge img{width:22px;height:auto}
 .app-logo{font-weight:800;font-size:28px;margin-left:12px;color:#fff;letter-spacing:0.02em}
 .nav-links{display:flex;align-items:center;gap:18px;margin-left:18px}
 .nav-links .nav-link{color:rgba(255,255,255,0.95);text-decoration:none;font-weight:600;font-size:15px}
@@ -77,8 +77,9 @@ header{background:var(--primary-900);color:#fff;height:72px;display:flex;align-i
 .distance-value{font-family:var(--font-family-mono);font-size:56px;font-weight:800;color:var(--primary-900)}
 .metric-value{font-family:var(--font-family-mono);font-size:40px;font-weight:700;color:var(--primary-900)}
 .metric-small{font-family:var(--font-family-mono);font-size:22px;color:var(--primary-900);font-weight:600}
-.camera-controls-bottom{position:absolute;left:16px;right:16px;bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.controls{display:flex;gap:12px}
+.camera-controls-bottom{position:absolute;left:16px;right:16px;bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.angle-block{display:flex;flex-direction:column;justify-content:center;gap:4px}
+.controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:12px}
 
 /* Metric cards */
 .metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-16);margin-top:var(--space-24)}

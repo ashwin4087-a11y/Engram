@@ -1,52 +1,18 @@
+"""Compatibility entrypoint for the top-level task package.
+
+This project has both a root-level app package and a backend app package.
+The regression tests import the root-level package, so the root entrypoint now
+re-exports the production backend app to guarantee one consistent route surface.
 """
-main.py — FastAPI Application Factory
-=======================================
 
-Creates and configures the FastAPI application instance.
-"""
+from pathlib import Path
+import sys
 
-from fastapi import FastAPI, APIRouter
-from fastapi.middleware.cors import CORSMiddleware
+backend_dir = Path(__file__).resolve().parents[1] / "backend"
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
 
-from app.api import health, estimate, calibration
+from backend.app.main import app as backend_app
 
-
-def create_app() -> FastAPI:
-    """
-    Application factory.
-    Creates and configures the FastAPI instance.
-    """
-    app = FastAPI(
-        title="Monocular Face Distance Estimator API",
-        description=(
-            "Estimates a person's distance from the camera and horizontal "
-            "viewing angle using a single webcam and the pinhole camera model."
-        ),
-        version="1.0.0",
-        docs_url="/docs",
-        redoc_url="/redoc",
-    )
-
-    # Add Middleware
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],  # Tighten in production
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
-    # Construct API Router
-    api_router = APIRouter()
-    api_router.include_router(health.router)
-    api_router.include_router(estimate.router)
-    api_router.include_router(calibration.router)
-
-    # Register Router
-    app.include_router(api_router)
-
-    return app
-
-
-# Create the global app instance for Uvicorn
-app = create_app()
+app = backend_app
+create_app = backend_app

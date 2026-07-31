@@ -15,7 +15,6 @@ const elements = {
     about: document.getElementById('page-about'),
   },
   backendStatusDot: document.getElementById('backend-status-dot'),
-  backendStatusText: document.getElementById('backend-status-text'),
 };
 
 let pollers = [];
@@ -26,11 +25,10 @@ function clearPollers() {
 }
 
 function setBackendStatus(connected) {
-  if (!elements.backendStatusDot || !elements.backendStatusText) return;
+  if (!elements.backendStatusDot) return;
   elements.backendStatusDot.className = connected
     ? 'w-2 h-2 rounded-full bg-emerald-500'
     : 'w-2 h-2 rounded-full bg-red-500';
-  elements.backendStatusText.textContent = connected ? 'Backend Connected' : 'Backend Offline';
 }
 
 function startPolling(page) {

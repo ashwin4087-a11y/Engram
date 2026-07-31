@@ -4,6 +4,21 @@ function buildUrl(path) {
   return `${API_BASE_URL}${path}`;
 }
 
+function unwrapApiPayload(payload) {
+  if (!payload || typeof payload !== 'object') {
+    return payload;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(payload, 'success') && Object.prototype.hasOwnProperty.call(payload, 'data')) {
+    if (!payload.success) {
+      return null;
+    }
+    return payload.data ?? payload;
+  }
+
+  return payload;
+}
+
 export async function fetchJson(path, options = {}) {
   try {
     const url = buildUrl(path);
@@ -11,7 +26,8 @@ export async function fetchJson(path, options = {}) {
     if (!response.ok) {
       throw new Error(`Request failed ${response.status} ${response.statusText}`);
     }
-    return await response.json();
+    const payload = await response.json();
+    return unwrapApiPayload(payload);
   } catch (error) {
     console.error(`API fetch error for ${path}:`, error);
     return null;

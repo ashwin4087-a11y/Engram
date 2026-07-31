@@ -3,19 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>OptiVue AI | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <title>OptiVue AI | Real-Time Monocular Face Distance Estimation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/design-system.css" />
   </head>
   <body>
     <div class="app-shell">
       <header class="app-header">
         <div class="header-left">
-          <div class="brand-badge" aria-hidden="true"><img alt="OptiVue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbED_N6RMFigR3wiS8waloIxqVJ105-YERXb7Hjwq1gma20bxBtu4FukDjlLTf9EBsEU8K0BWb9aq9-bQeJF11-1I2rstJg9NvpVyzq5rW9Y6GTHq5ZlJwm9j_01xZFJYMA6HxHogSTctfeJ9xYt7BAlGGmBeQ9etZN78cDhYkq9hr7q2vXxY-l8hwXErSc63mKJoOMgHHdUz6nffouxSCWcHNB0zyDhNM0bife7RbdwcJVC3XfOR78RhwACvUmwcb6g"/></div>
+          <div class="brand-badge" aria-hidden="true">
+            <img alt="OptiVue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbED_N6RMFigR3wiS8waloIxqVJ105-YERXb7Hjwq1gma20bxBtu4FukDjlLTf9EBsEU8K0BWb9aq9-bQeJF11-1I2rstJg9NvpVyzq5rW9Y6GTHq5ZlJwm9j_01xZFJYMA6HxHogSTctfeJ9xYt7BAlGGmBeQ9etZN78cDhYkq9hr7q2vXxY-l8hwXErSc63mKJoOMgHHdUz6nffouxSCWcHNB0zyDhNM0bife7RbdwcJVC3XfOR78RhwACvUmwcb6g" />
+          </div>
           <div class="brand-text">
             <div class="app-logo">OptiVue</div>
-            <div class="nav-links">
+            <nav class="nav-links" aria-label="Primary">
               <a class="nav-link active" href="#dashboard" data-page="dashboard">Dashboard</a>
               <a class="nav-link" href="#calibration" data-page="calibration">Calibration</a>
               <a class="nav-link" href="#analytics" data-page="analytics">Analytics</a>
@@ -24,54 +26,171 @@
               <a class="nav-link" href="#demoGuide" data-page="demoGuide">Demo Guide</a>
               <a class="nav-link" href="#settings" data-page="settings">Settings</a>
               <a class="nav-link" href="#about" data-page="about">About</a>
-            </div>
+            </nav>
           </div>
         </div>
         <div class="header-right">
           <div class="sys-score"><span class="pct">98.5%</span> <span>Calibration</span></div>
-          <button class="header-action" title="Settings">⚙</button>
-          <button class="header-action" title="Account">👤</button>
+          <div class="sys-status-pill" id="backend-status-dot" aria-hidden="true"></div>
         </div>
       </header>
 
-      <main class="dashboard-grid">
-        <section class="left-column">
-          <div class="camera-hero">
-            <div class="camera-hud">
-              <div class="live-badge"><div class="dot live"></div><div class="camera-id">OPTIVUE_CAM_01</div></div>
-              <div class="metrics-inline">
-                <div class="hud-card"><div class="ui-label">CONFIDENCE</div><div id="val-confidence" class="metric-value">--%</div></div>
-                <div class="hud-card"><div class="ui-label">FPS</div><div id="val-fps" class="metric-value">--</div></div>
+      <main class="page-content">
+        <section id="page-dashboard" class="page-section">
+          <div class="dashboard-grid">
+            <section class="left-column">
+              <div class="camera-hero">
+                <div class="camera-hud">
+                  <div class="live-badge"><div class="dot live"></div><div class="camera-id">OPTIVUE_CAM_01</div></div>
+                  <div class="metrics-inline">
+                    <div class="hud-card"><div class="ui-label">CONFIDENCE</div><div id="val-confidence" class="metric-value">--%</div></div>
+                    <div class="hud-card"><div class="ui-label">FPS</div><div id="val-fps" class="metric-value">--</div></div>
+                  </div>
+                </div>
+                <div class="camera-viewport" id="camera-viewport">
+                  <img id="live-stream" src="/preview?mode=full" alt="Live preview" />
+                  <div class="center-overlay">
+                    <div class="distance-label ui-label">DISTANCE</div>
+                    <div id="val-distance" class="distance-value">-- mm</div>
+                  </div>
+                  <div class="camera-controls-bottom">
+                    <div class="angle-block">
+                      <div class="ui-label">ANGLE</div>
+                      <div id="val-angle" class="metric-small">--°</div>
+                    </div>
+                    <div class="controls">
+                      <button id="btn-capture-frame" class="btn btn-primary">CAPTURE FRAME</button>
+                      <button id="btn-fullscreen" class="btn btn-secondary">FULLSCREEN</button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="camera-viewport" id="camera-viewport">
-              <img id="live-stream" src="assets/placeholder.svg" alt="Live preview"/>
-              <div class="center-overlay"><div class="distance-label ui-label">DISTANCE</div><div id="val-distance" class="distance-value">-- mm</div></div>
-              <div class="camera-controls-bottom"><div class="angle-block"><div class="ui-label">ANGLE</div><div id="val-angle" class="metric-small">--°</div></div><div class="controls"><button id="btn-capture-frame" class="btn btn-primary">CAPTURE FRAME</button><button id="btn-fullscreen" class="btn btn-secondary">FULLSCREEN</button></div></div>
-            </div>
-          </div>
 
-          <div class="throughput-card metric-card">
-            <div class="card-head"><h3 class="section-title">Throughput Stability</h3><div class="legend"><span class="dot primary"></span> Primary Lane <span class="dot secondary"></span> Secondary Lane</div></div>
-            <div class="throughput-chart" aria-hidden="true"><div class="bars"><div class="bar h-4/5"></div><div class="bar h-3/4"></div><div class="bar h-5/6"></div><div class="bar h-2/3"></div><div class="bar h-11/12"></div><div class="bar h-4/5"></div><div class="bar h-3/5"></div><div class="bar h-5/6"></div></div></div>
-            <div class="card-foot ui-label">08:00 AM — LAST 12 MINUTES — REAL-TIME AGGREGATE</div>
+              <div class="throughput-card metric-card">
+                <div class="card-head">
+                  <h3 class="section-title">Throughput Stability</h3>
+                  <div class="legend"><span class="dot primary"></span> Primary Lane <span class="dot secondary"></span> Secondary Lane</div>
+                </div>
+                <div class="throughput-chart" aria-hidden="true"><div class="bars"><div class="bar h-4/5"></div><div class="bar h-3/4"></div><div class="bar h-5/6"></div><div class="bar h-2/3"></div><div class="bar h-11/12"></div><div class="bar h-4/5"></div><div class="bar h-3/5"></div><div class="bar h-5/6"></div></div></div>
+                <div class="card-foot ui-label">08:00 AM — LAST 12 MINUTES — REAL-TIME AGGREGATE</div>
+              </div>
+            </section>
+
+            <aside class="right-column">
+              <div class="system-health metric-card"><div class="health-head"><h3 class="card-title">System Health</h3><div class="health-status">OPERATIONAL</div></div><div class="health-grid"><div><div class="ui-label">UPTIME</div><div id="val-uptime" class="metric-small">142:12:08</div></div><div><div class="ui-label">TEMP</div><div class="metric-small">42.4°C</div></div></div></div>
+
+              <div class="utilization metric-card"><h3 class="card-title">Hardware Utilization</h3><div class="util-row"><div class="label">NPU Load (OptiVue Core)</div><div class="value">82%</div></div><div class="progress"><i style="width:82%"></i></div><div class="util-row"><div class="label">System CPU Load</div><div class="value">34%</div></div><div class="progress"><i style="width:34%"></i></div><div class="util-row"><div class="label">VRAM Consumption</div><div class="value">6.4GB / 8GB</div></div><div class="progress"><i style="width:78%"></i></div></div>
+
+              <div class="calibration-summary metric-card"><div class="flex-row"><div class="icon-box">⚙</div><div><h4 class="card-title">Calibration Summary</h4><div class="ui-label">Last calibrated: 2h 4m ago</div></div><div class="text-right"><div class="ui-label">DEVIATION</div><div class="metric-small">0.002m</div></div></div></div>
+
+              <div class="events metric-card"><h3 class="card-title">System Events</h3><div class="event"><div class="ev-icon">⚠</div><div><div class="card-title">Confidence dip detected</div><div class="ui-label">08:42:15 AM — Camera 01</div></div></div><div class="event"><div class="ev-icon">✓</div><div><div class="card-title">Auto-Calibration complete</div><div class="ui-label">06:12:01 AM — System</div></div></div></div>
+
+              <div id="session-history-panel" class="metric-card"><h3 class="card-title">Session History</h3><div id="session-history-list">No captures yet.</div></div>
+            </aside>
           </div>
         </section>
 
-        <aside class="right-column">
-          <div class="system-health metric-card"><div class="health-head"><h3 class="card-title">System Health</h3><div class="health-status">OPERATIONAL</div></div><div class="health-grid"><div><div class="ui-label">UPTIME</div><div id="val-uptime" class="metric-small">142:12:08</div></div><div><div class="ui-label">TEMP</div><div class="metric-small">42.4°C</div></div></div></div>
+        <section id="page-calibration" class="page-section hidden">
+          <div class="metric-card">
+            <div class="card-head"><h2 class="section-title">Calibration Workflow</h2><span id="calibration-page-status-text" class="health-status">Pending</span></div>
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="ui-label">Calibration status</div>
+                <div id="calibration-page-timestamp" class="metric-small">--</div>
+              </div>
+              <div class="metric-card">
+                <label class="ui-label" for="calib-distance">Known distance (m)</label>
+                <input id="calib-distance" type="number" value="1.5" step="0.1" class="form-control" />
+              </div>
+              <div class="metric-card">
+                <label class="ui-label" for="calib-width">Known face width (m)</label>
+                <input id="calib-width" type="number" value="0.15" step="0.01" class="form-control" />
+              </div>
+            </div>
+            <div class="controls" style="margin-top:16px;">
+              <button id="btn-run-calibration" class="btn btn-primary">Run Calibration</button>
+            </div>
+            <p id="calibration-message" class="helper-text" style="margin-top:12px;">No calibration session started.</p>
+          </div>
+        </section>
 
-          <div class="utilization metric-card"><h3 class="card-title">Hardware Utilization</h3><div class="util-row"><div class="label">NPU Load (OptiVue Core)</div><div class="value">82%</div></div><div class="progress"><i style="width:82%"></i></div><div class="util-row"><div class="label">System CPU Load</div><div class="value">34%</div></div><div class="progress"><i style="width:34%"></i></div><div class="util-row"><div class="label">VRAM Consumption</div><div class="value">6.4GB / 8GB</div></div><div class="progress"><i style="width:78%"></i></div></div>
+        <section id="page-analytics" class="page-section hidden">
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="ui-label">FPS</div><div id="analytics-fps" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">Camera</div><div id="analytics-camera" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">Calibration</div><div id="analytics-calibration" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">Latency</div><div id="analytics-latency" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">Status</div><div id="analytics-status" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">Uptime</div><div id="analytics-uptime" class="metric-small">--</div></div>
+          </div>
+          <div class="metric-card" style="margin-top:16px;">
+            <h3 class="section-title">Capture Gallery</h3>
+            <div id="analytics-captures" class="capture-grid"></div>
+          </div>
+        </section>
 
-          <div class="calibration-summary metric-card"><div class="flex-row"><div class="icon-box">⚙</div><div><h4 class="card-title">Calibration Summary</h4><div class="ui-label">Last calibrated: 2h 4m ago</div></div><div class="text-right"><div class="ui-label">DEVIATION</div><div class="metric-small">0.002m</div></div></div></div>
+        <section id="page-evaluation" class="page-section hidden">
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="ui-label">Accuracy</div><div id="eval-accuracy" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">MAE</div><div id="eval-mae" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">RMSE</div><div id="eval-rmse" class="metric-small">--</div></div>
+            <div class="metric-card"><div class="ui-label">MAPE</div><div id="eval-mape" class="metric-small">--</div></div>
+          </div>
+          <div class="metric-card" style="margin-top:16px;">
+            <h3 class="section-title">Prediction History</h3>
+            <ul id="eval-history-list" class="data-list"></ul>
+          </div>
+        </section>
 
-          <div class="events metric-card"><h3 class="card-title">System Events</h3><div class="event"><div class="ev-icon">⚠</div><div><div class="card-title">Confidence dip detected</div><div class="ui-label">08:42:15 AM — Camera 01</div></div></div><div class="event"><div class="ev-icon">✓</div><div><div class="card-title">Auto-Calibration complete</div><div class="ui-label">06:12:01 AM — System</div></div></div></div>
+        <section id="page-architecture" class="page-section hidden">
+          <div class="metrics-grid">
+            <div class="metric-card"><h3 class="section-title">System Overview</h3><p class="helper-text">OptiVue combines browser UI, FastAPI, OpenCV, and MediaPipe into a live monocular estimation stack.</p></div>
+            <div class="metric-card"><h3 class="section-title">Frontend Architecture</h3><p class="helper-text">Vanilla JavaScript pipelines status, route switching, polling, and dashboard state updates without framework overhead.</p></div>
+            <div class="metric-card"><h3 class="section-title">Backend Architecture</h3><p class="helper-text">FastAPI routers expose health, estimate, capture, calibration, and metrics endpoints using a shared service layer.</p></div>
+            <div class="metric-card"><h3 class="section-title">MediaPipe Pipeline</h3><p class="helper-text">Face landmarks feed the detector service and the tracker state cache that powers frontend metrics and previews.</p></div>
+            <div class="metric-card"><h3 class="section-title">Distance Estimation Pipeline</h3><p class="helper-text">Pin-hole geometry, smoothing filters, and calibration values are combined into the distance and angle estimate output.</p></div>
+            <div class="metric-card"><h3 class="section-title">Capture Workflow</h3><p class="helper-text">UI capture requests are submitted to the capture API and persisted to disk with metadata for analytics review.</p></div>
+          </div>
+        </section>
 
-          <div id="session-history-panel" class="metric-card"><h3 class="card-title">Session History</h3><div id="session-history-list">No captures yet.</div></div>
-        </aside>
+        <section id="page-demoGuide" class="page-section hidden">
+          <div class="metric-card">
+            <h2 class="section-title">Demo Guide</h2>
+            <p id="demo-guide-status" class="helper-text">Ready for live walkthrough</p>
+            <ol class="data-list">
+              <li data-step="1">Open the dashboard and confirm the live camera preview is visible.</li>
+              <li data-step="2">Run calibration with a known face width and a known distance reference.</li>
+              <li data-step="3">Capture a frame and review the saved session metadata in analytics.</li>
+              <li data-step="4">Use the evaluation page to compare distance estimates against the expected reference values.</li>
+            </ol>
+            <div class="controls" style="margin-top:16px;">
+              <button id="btn-demo-start" class="btn btn-primary">Start Walkthrough</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-settings" class="page-section hidden">
+          <div class="metric-card">
+            <h2 class="section-title">System Settings</h2>
+            <div class="metrics-grid">
+              <div class="metric-card"><label class="ui-label" for="settings-camera">Camera index</label><input id="settings-camera" class="form-control" value="0" /></div>
+              <div class="metric-card"><label class="ui-label" for="settings-threshold">Min confidence</label><input id="settings-threshold" class="form-control" value="0.5" /></div>
+              <div class="metric-card"><label class="ui-label" for="settings-theme">Theme</label><select id="settings-theme" class="form-control"><option>Industrial Navy</option><option>Light</option></select></div>
+            </div>
+            <div class="controls" style="margin-top:16px;">
+              <button id="btn-save-settings" class="btn btn-primary">Save Settings</button>
+            </div>
+            <p id="settings-status" class="helper-text">Backend status: pending</p>
+          </div>
+        </section>
+
+        <section id="page-about" class="page-section hidden">
+          <div class="metric-card">
+            <h2 class="section-title">About OptiVue</h2>
+            <p class="helper-text">OptiVue is a production-oriented AI system for real-time monocular face distance estimation. It combines camera access, MediaPipe face mesh detection, calibration-aware geometry, and a responsive monitoring dashboard for rapid validation and deployment.</p>
+          </div>
+        </section>
       </main>
-
-      <footer class="app-footer"><div class="footer-left">OptiVue // SYSTEM_STATUS_OK</div><div class="footer-right">© 2024 Industrial Vision Systems. All rights reserved.</div></footer>
     </div>
 
     <script type="module" src="js/app.js"></script>

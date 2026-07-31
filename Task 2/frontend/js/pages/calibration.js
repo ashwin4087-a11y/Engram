@@ -15,21 +15,23 @@ async function refreshCalibration() {
   const timestamp = elements.timestamp();
 
   if (!statusText || !timestamp) return;
-  if (!result) {
+  if (!result || typeof result !== 'object') {
     statusText.innerText = 'Offline';
     timestamp.innerText = '--';
     return;
   }
 
-  const calibrated = result.success && result.data && result.data.calibrated;
+  const calibrated = Boolean(result.calibrated ?? result.data?.calibrated);
   statusText.innerText = calibrated ? 'Calibrated' : 'Not calibrated';
-  timestamp.innerText = new Date().toLocaleString();
+  timestamp.innerText = result.data?.data ? new Date().toLocaleString() : '--';
 }
 
 export const calibration = {
   mount() {
     const button = elements.button();
     if (!button) return;
+    if (button.dataset.bound === 'true') return;
+    button.dataset.bound = 'true';
     button.addEventListener('click', async event => {
       event.preventDefault();
       const knownDistance = parseFloat(elements.distanceInput()?.value || '0');
@@ -41,7 +43,7 @@ export const calibration = {
       const result = await runCalibration(knownDistance, knownWidth);
       if (message) {
         if (result && result.success) {
-          message.innerText = 'Calibration successful.';
+          message.innerText = result.message || 'Calibration successful.';
         } else {
           message.innerText = 'Calibration failed. Check backend status.';
         }

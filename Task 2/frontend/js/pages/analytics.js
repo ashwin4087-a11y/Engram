@@ -18,46 +18,44 @@ function formatUptime(seconds) {
 }
 
 export const analytics = {
-  async mount() {
-    await this.refresh();
+  async mount(options = {}) {
+    await this.refresh(options);
     this.renderCaptures();
   },
 
-  async refresh({ setBackendStatus }) {
+  async refresh(options = {}) {
+    const { setBackendStatus } = options || {};
     const result = await fetchMetrics();
-    if (!result) {
+    if (!result || typeof result !== 'object') {
       if (setBackendStatus) setBackendStatus(false);
       return;
     }
     if (setBackendStatus) setBackendStatus(true);
-    if (!result.success || !result.data) return;
-    const data = result.data;
+
+    const data = result;
     const fpsElement = elements.fps();
     if (fpsElement) fpsElement.innerText = data.fps != null ? data.fps.toFixed(1) : '--';
     const cameraElement = elements.camera();
     if (cameraElement) cameraElement.innerText = data.camera ?? '--';
     const calibrationElement = elements.calibration();
     if (calibrationElement) calibrationElement.innerText = data.calibration ?? '--';
-    const totalLatency = data.total_pipeline_latency_ms ?? (data.camera_latency_ms + data.detection_latency_ms + data.estimation_latency_ms);
+    const totalLatency = data.total_pipeline_latency_ms ?? (
+      (data.camera_latency_ms ?? 0) + (data.detection_latency_ms ?? 0) + (data.estimation_latency_ms ?? 0)
+    );
     const latencyElement = elements.latency();
     if (latencyElement) latencyElement.innerText = totalLatency != null ? totalLatency.toFixed(1) : '--';
     const healthText = data.status === 'ERROR' || data.status === 'NO_CAMERA' ? data.status : 'OPERATIONAL';
     const statusElement = elements.status();
     if (statusElement) statusElement.innerText = healthText;
     const uptimeElement = elements.uptime();
-    if (uptimeElement) uptimeElement.innerText = formatUptime(data.uptime_seconds);
+    if (uptimeElement) uptimeElement.innerText = formatUptime(data.uptime_seconds ?? data.uptimeSeconds);
   },
 
   async renderCaptures() {
     const container = document.getElementById('analytics-captures');
     if (!container) return;
-    const result = await fetchCaptures();
-    if (!result || !result.success) {
-      container.innerHTML = '<p class="text-on-surface-variant">No captures available.</p>';
-      return;
-    }
-    const items = result.data || [];
-    if (!items.length) {
+    const items = await fetchCaptures();
+    if (!Array.isArray(items) || !items.length) {
       container.innerHTML = '<p class="text-on-surface-variant">No captures available.</p>';
       return;
     }

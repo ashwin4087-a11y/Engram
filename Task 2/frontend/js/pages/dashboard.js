@@ -1,5 +1,4 @@
 import { fetchEstimate, fetchMetrics, captureFrame } from '../services/index.js';
-import { FEATURE_FLAGS } from '../core/Config.js';
 
 const elements = {
   distance: () => document.getElementById('val-distance'),
@@ -8,14 +7,6 @@ const elements = {
   fps: () => document.getElementById('val-fps'),
   liveStream: () => document.getElementById('live-stream'),
 };
-
-function formatUptime(seconds) {
-  if (!seconds) return '00:00:00';
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
-  return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
-}
 
 function updateEstimateData(data) {
   const distance = elements.distance();
@@ -54,28 +45,33 @@ export const dashboard = {
     const btnFull = document.getElementById('btn-fullscreen');
     const live = elements.liveStream();
 
-    if (btnCapture) {
-      btnCapture.disabled = false;
-      btnCapture.classList.remove('pointer-events-none','opacity-60');
-      btnCapture.addEventListener('click', async () => {
-        await this.handleCapture();
-      });
-    }
+    if (!this.controlsAttached) {
+      if (btnCapture) {
+        btnCapture.disabled = false;
+        btnCapture.classList.remove('pointer-events-none', 'opacity-60');
+        btnCapture.addEventListener('click', async () => {
+          await this.handleCapture();
+        });
+      }
 
-    if (btnFull && live) {
-      btnFull.disabled = false;
-      btnFull.classList.remove('pointer-events-none','opacity-60');
-      btnFull.addEventListener('click', async () => {
-        try {
-          if (!document.fullscreenElement) {
-            await live.closest('.relative')?.requestFullscreen();
-          } else {
-            await document.exitFullscreen();
+      if (btnFull && live) {
+        btnFull.disabled = false;
+        btnFull.classList.remove('pointer-events-none', 'opacity-60');
+        btnFull.addEventListener('click', async () => {
+          try {
+            const viewport = document.getElementById('camera-viewport');
+            if (!document.fullscreenElement) {
+              await viewport?.requestFullscreen();
+            } else {
+              await document.exitFullscreen();
+            }
+          } catch (err) {
+            console.error('Fullscreen error', err);
           }
-        } catch (err) {
-          console.error('Fullscreen error', err);
-        }
-      });
+        });
+      }
+
+      this.controlsAttached = true;
     }
   },
 
@@ -83,18 +79,29 @@ export const dashboard = {
     const live = elements.liveStream();
     if (!live) return;
     try {
-      const resp = await fetch(live.src, { cache: 'no-store' });
-      const blob = await resp.blob();
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const width = live.naturalWidth || 640;
+      const height = live.naturalHeight || 480;
 
-      // convert blob to dataURL for local history storage
-      const dataUrl = await new Promise(resolve => {
+      canvas.width = width;
+      canvas.height = height;
+
+      context.drawImage(live, 0, 0, width, height);
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((value) => {
+          if (value) resolve(value);
+          else reject(new Error('Unable to create capture blob'));
+        }, 'image/jpeg', 0.92);
+      });
+
+      const dataUrl = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(blob);
       });
 
-      // collect metadata from displayed elements
-      const getText = el => el ? el.innerText.trim() : '';
+      const getText = (el) => (el ? el.innerText.trim() : '');
       const metadata = {
         timestamp: new Date().toISOString(),
         distance: getText(elements.distance()),
@@ -103,36 +110,33 @@ export const dashboard = {
         fps: getText(elements.fps()),
       };
 
-      // prepare formData for backend
       const form = new FormData();
       const fileName = `capture-${Date.now()}.jpg`;
       form.append('file', blob, fileName);
       form.append('metadata', JSON.stringify(metadata));
 
-      // optimistically add to local history
       const entry = { id: `s-${Date.now()}`, image: dataUrl, metadata };
       this.addToLocalHistory(entry);
       this.showToast('Capture saved locally');
 
-      // send to backend (may fail if backend offline)
       const result = await captureFrame(form);
       if (result && result.success) {
-        // backend returned capture_id and path
         try {
           const serverId = result.capture_id || result.captureId || null;
           const path = result.path || result.url || null;
-          // update last local entry (match by timestamp)
           const key = 'optivue.session.history';
           const current = JSON.parse(localStorage.getItem(key) || '[]');
           const ts = metadata.timestamp;
-          for (let i=0;i<current.length;i++){
-            if (current[i].metadata && current[i].metadata.timestamp === ts){
+          for (let i = 0; i < current.length; i += 1) {
+            if (current[i].metadata && current[i].metadata.timestamp === ts) {
               current[i].server = { id: serverId, path };
               break;
             }
           }
           localStorage.setItem(key, JSON.stringify(current));
-        } catch(e){console.warn('update local entry failed', e)}
+        } catch (e) {
+          console.warn('update local entry failed', e);
+        }
         this.showToast('Capture uploaded');
       } else {
         this.showToast('Upload failed — saved locally');
@@ -199,25 +203,21 @@ export const dashboard = {
 
   async refresh({ setBackendStatus }) {
     const result = await fetchEstimate();
-    if (!result) {
+    if (!result || typeof result !== 'object') {
       setBackendStatus(false);
       return;
     }
     setBackendStatus(true);
-    if (result.success && result.data) {
-      updateEstimateData(result.data);
-    }
+    updateEstimateData(result);
   },
 
   async refreshMetrics({ setBackendStatus }) {
     const result = await fetchMetrics();
-    if (!result) {
+    if (!result || typeof result !== 'object') {
       setBackendStatus(false);
       return;
     }
     setBackendStatus(true);
-    if (result.success && result.data) {
-      updateMetricsData(result.data);
-    }
+    updateMetricsData(result);
   },
 };
