@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     PORT: int = 8000
     DEBUG: bool = False
 
+    DATA_DIR: Path = DATA_DIR
+    CALIBRATION_FILE: Path = CALIBRATION_FILE
+    LOG_FILE: Path = LOG_FILE
+
     CAMERA_INDEX: int = 0
     CAMERA_WIDTH: int = 640
     CAMERA_HEIGHT: int = 480

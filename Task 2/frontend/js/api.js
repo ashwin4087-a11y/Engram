@@ -1,35 +1,49 @@
-/**
- * api.js - Handles communication with the FastAPI Backend
- */
+import { API_BASE_URL, API_ROUTES } from './config.js';
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
-
-class BackendAPI {
-    /**
-     * Fetches the latest tracker estimation state.
-     */
-    static async getEstimate() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/estimate`);
-            if (!response.ok) throw new Error('Network response was not ok');
-            return await response.json();
-        } catch (error) {
-            console.error("Failed to fetch estimate:", error);
-            return null;
-        }
-    }
-
-    /**
-     * Fetches system metrics and performance data.
-     */
-    static async getMetrics() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/metrics`);
-            if (!response.ok) throw new Error('Network response was not ok');
-            return await response.json();
-        } catch (error) {
-            console.error("Failed to fetch metrics:", error);
-            return null;
-        }
-    }
+function buildUrl(path) {
+  return `${API_BASE_URL}${path}`;
 }
+
+export async function fetchJson(path, options = {}) {
+  try {
+    const url = buildUrl(path);
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`Request failed ${response.status} ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`API fetch error for ${path}:`, error);
+    return null;
+  }
+}
+
+export const BackendAPI = {
+  getEstimate: () => fetchJson(API_ROUTES.ESTIMATE),
+  getMetrics: () => fetchJson(API_ROUTES.METRICS),
+  getHealth: () => fetchJson(API_ROUTES.HEALTH),
+  getCalibration: () => fetchJson(API_ROUTES.CALIBRATION),
+  runCalibration: (knownDistance, knownFaceWidth) =>
+    fetchJson(API_ROUTES.CALIBRATE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ known_distance: knownDistance, known_face_width: knownFaceWidth }),
+    }),
+  captureFrame: (formData) => {
+    // POST multipart/form-data to capture endpoint
+    try {
+      const url = buildUrl(API_ROUTES.CAPTURE);
+      return fetch(url, { method: 'POST', body: formData }).then(async res => {
+        if (!res.ok) throw new Error('Capture failed');
+        return await res.json();
+      }).catch(err => {
+        console.error('Capture API error', err);
+        return null;
+      });
+    } catch (err) {
+      console.error('captureFrame error', err);
+      return null;
+    }
+  },
+  fetchCaptures: () => fetchJson('/captures'),
+};

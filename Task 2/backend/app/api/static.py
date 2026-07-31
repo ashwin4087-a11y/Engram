@@ -5,13 +5,19 @@ from pathlib import Path
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 FRONTEND_DIR = PROJECT_ROOT / "frontend"
 
 router = APIRouter(tags=["Frontend"])
 
 
-@router.get("/js/{filename}", include_in_schema=False)
-async def serve_js(filename: str) -> FileResponse:
-    asset_path = FRONTEND_DIR / "js" / filename
-    return FileResponse(asset_path)
+@router.get("/js/{path:path}", include_in_schema=False)
+async def serve_js(path: str) -> FileResponse:
+    asset_path = FRONTEND_DIR / "js" / path
+    return FileResponse(asset_path, media_type="application/javascript")
+
+
+@router.get("/css/{filename}", include_in_schema=False)
+async def serve_css(filename: str) -> FileResponse:
+    asset_path = FRONTEND_DIR / "css" / filename
+    return FileResponse(asset_path, media_type="text/css")

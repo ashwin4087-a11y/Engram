@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptiVue AI | OptiVue Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-background": "#112D4E",
+                "surface-bright": "#fbf9f9",
+                "on-primary-fixed": "#001c3a",
+                "tertiary-fixed": "#dce3f0",
+                "primary-fixed-dim": "#afc8f1",
+                "surface-tint": "#476083",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed-variant": "#404752",
+                "on-surface-variant": "#43474e",
+                "tertiary-fixed-dim": "#c0c7d3",
+                "tertiary-container": "#262d37",
+                "on-surface": "#112D4E",
+                "secondary-container": "#8bbbfd",
+                "outline-variant": "#c4c6cf",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed-dim": "#a3c9ff",
+                "surface-container-highest": "#e4e2e2",
+                "on-primary-container": "#7c95bc",
+                "on-error-container": "#93000a",
+                "error": "#ba1a1a",
+                "on-secondary-fixed-variant": "#004882",
+                "on-secondary-fixed": "#001c39",
+                "on-primary": "#ffffff",
+                "on-tertiary-fixed": "#151c25",
+                "background": "#F9F7F7",
+                "outline": "#74777f",
+                "inverse-primary": "#afc8f1",
+                "on-error": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-dim": "#dbdada",
+                "primary-container": "#112D4E",
+                "on-primary-fixed-variant": "#2f486a",
+                "inverse-surface": "#112D4E",
+                "error-container": "#ffdad6",
+                "on-tertiary-container": "#8d94a0",
+                "primary-fixed": "#d4e3ff",
+                "surface-container-low": "#F9F7F7",
+                "surface-container": "#efeded",
+                "primary": "#112D4E",
+                "on-tertiary": "#ffffff",
+                "surface-container-high": "#e9e8e8",
+                "surface": "#F9F7F7",
+                "secondary": "#3F72AF",
+                "tertiary": "#111922",
+                "secondary-fixed": "#d3e3ff",
+                "on-secondary-container": "#064a85",
+                "inverse-on-surface": "#f2f0f0"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-max-width": "1440px",
+                "unit": "4px",
+                "gutter": "16px",
+                "margin-mobile": "16px",
+                "margin-desktop": "32px",
+                "margin": "32px",
+                "md": "16px",
+                "sm": "12px",
+                "xl": "32px",
+                "lg": "24px",
+                "base": "8px",
+                "xs": "4px"
+        },
+        "fontFamily": {
+                "label-md": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "IBM Plex Sans"
+                ],
+                "body-md": [
+                        "IBM Plex Sans"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "headline-lg": [
+                        "IBM Plex Sans"
+                ],
+                "headline-md": [
+                        "IBM Plex Sans"
+                ],
+                "code-md": [
+                        "JetBrains Mono"
+                ]
+        },
+        "fontSize": {
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: #F9F7F7; /* New Precision Industrial Blue base */
+            color: #112D4E;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #c4c6cf;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .performance-bar {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hud-overlay {
+            background: rgba(17, 45, 78, 0.7);
+            color: #F9F7F7;
+            border: 1px solid rgba(63, 114, 175, 0.3);
+        }
+        /* Custom filter for logo branding */
+        .brand-logo-filter {
+            filter: brightness(0) invert(1);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-primary border-b border-primary/20 flex justify-between items-center w-full px-margin h-16 sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<img alt="OptiVue Logo" class="h-8 w-auto brand-logo-filter" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbED_N6RMFigR3wiS8waloIxqVJ105-YERXb7Hjwq1gma20bxBtu4FukDjlLTf9EBsEU8K0BWb9aq9-bQeJF11-1I2rstJg9NvpVyzq5rW9Y6GTHq5ZlJwm9j_01xZFJYMA6HxHogSTctfeJ9xYt7BAlGGmBeQ9etZN78cDhYkq9hr7q2vXxY-l8hwXErSc63mKJoOMgHHdUz6nffouxSCWcHNB0zyDhNM0bife7RbdwcJVC3XfOR78RhwACvUmwcb6g"/>
+<span class="font-headline-md text-headline-md font-bold text-white">OptiVue</span>
+</div>
+<nav class="hidden md:flex ml-xl gap-lg">
+<a class="text-white font-bold border-b-2 border-secondary pb-1 font-body-md text-body-md" href="#">98.5%</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Calibration</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Analytics</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Evaluation</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Architecture</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">About</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-white hover:bg-white/10 p-base rounded-full transition-colors">settings</button>
+<button class="material-symbols-outlined text-white hover:bg-white/10 p-base rounded-full transition-colors">account_circle</button>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- Content Area -->
+<div class="flex-1 p-margin overflow-y-auto bg-background">
+<div class="bento-grid">
+<!-- Live Preview Section (Large) -->
+<section class="col-span-12 xl:col-span-8 space-y-gutter">
+<div class="relative rounded-xl overflow-hidden aspect-video bg-primary group border border-outline-variant shadow-lg">
+<img class="w-full h-full object-cover opacity-90" data-alt="High-resolution industrial camera feed showing a robotic manufacturing arm assembling precision electronics. A clean factory background with warm, controlled lighting. The visual style is technical, clear, and professional with earth-toned machinery. Overlay digital bounding boxes are faintly visible on components." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfDuy1KqMq3uQU1iYixlE1AN6ku3K5KvyMFSnDFaiO0V87YYZRMHwAGuRZ8YZqFkAteX96oG0YfrlIkoS8wEZaAgk9zV4uLWcakdsLrwaxGOfAMVXR9f10JUc5tWZAIIPq2oPjOUo8EF36t0EnYIoC9AOPY2m3vFF-ZfFHePOKfqB5uiQsGmkOVHXlIYNxy7ejAxe6xAL6ozgUXCMXwGBX-PHPu-F0jj1SpfNXpLeP-euhHCkWw2oY"/>
+<!-- HUD Overlays -->
+<div class="absolute inset-0 p-lg pointer-events-none flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md">
+<span class="font-label-sm text-label-sm block opacity-70">LIVE STREAM</span>
+<div class="flex items-center gap-sm">
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+<span class="font-label-md text-label-md">OPTIVUE_CAM_01</span>
+</div>
+</div>
+<div class="flex gap-sm">
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md text-right">
+<span class="font-label-sm text-label-sm block opacity-70">CONFIDENCE</span>
+<span class="font-label-md text-label-md text-secondary-fixed">98.4%</span>
+</div>
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md text-right">
+<span class="font-label-sm text-label-sm block opacity-70">FPS</span>
+<span class="font-label-md text-label-md">60.2</span>
+</div>
+</div>
+</div>
+<!-- Tracking HUD -->
+<div class="flex justify-center mb-xl">
+<div class="w-48 h-48 border-2 border-secondary/30 rounded-full flex items-center justify-center relative">
+<div class="absolute inset-0 border border-dashed border-secondary/20 rounded-full animate-spin" style="animation-duration: 10s"></div>
+<div class="text-center">
+<span class="block font-label-sm text-label-sm text-secondary-fixed">DISTANCE</span>
+<span class="text-headline-md font-bold text-white">1,242mm</span>
+</div>
+<!-- Dynamic Pointer -->
+<div class="absolute w-1 h-24 bg-secondary left-1/2 -ml-0.5 origin-bottom transform -rotate-12"></div>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="hud-overlay px-md py-sm rounded-lg backdrop-blur-md">
+<span class="font-label-sm text-label-sm block opacity-70">ANGLE</span>
+<span class="font-label-md text-label-md">14.2° <span class="text-secondary-fixed">Δ</span></span>
+</div>
+<div class="flex gap-sm">
+<button class="bg-secondary text-white px-md py-sm rounded font-label-md pointer-events-auto hover:opacity-90 transition-opacity">CAPTURE FRAME</button>
+<button class="bg-surface-container-lowest text-primary px-md py-sm rounded font-label-md pointer-events-auto hover:bg-surface-variant transition-colors">FULLSCREEN</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance Summary Chart Area -->
+<div class="bg-white rounded-xl p-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<h2 class="text-primary font-bold font-headline-md text-headline-md">Throughput Stability</h2>
+<div class="flex gap-sm">
+<span class="flex items-center gap-xs font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-secondary"></span> Primary Lane
+                                </span>
+<span class="flex items-center gap-xs font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary"></span> Secondary Lane
+                                </span>
+</div>
+</div>
+<div class="h-48 w-full flex items-end gap-xs">
+<!-- Bar Mockup using secondary color -->
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[70%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[75%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[80%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[72%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[90%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[85%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[82%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[78%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[95%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[88%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[84%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t-sm hover:bg-secondary/40 transition-all h-[80%]"></div>
+</div>
+<div class="mt-md pt-md border-t border-outline-variant flex justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span class="">08:00 AM</span>
+<span class="">LAST 12 MINUTES</span>
+<span class="">REAL-TIME AGGREGATE</span>
+</div>
+</div>
+</section>
+<!-- Performance Sidebar -->
+<aside class="col-span-12 xl:col-span-4 space-y-gutter">
+<!-- System Health Badge -->
+<div class="bg-white rounded-xl p-lg border border-outline-variant">
+<div class="flex justify-between items-start mb-md">
+<div>
+<h3 class="text-primary font-bold font-label-md text-label-md uppercase tracking-wider">System Health</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Node: US-EAST-04</p>
+</div>
+<span class="px-sm py-xs bg-emerald-100 text-emerald-800 rounded font-label-sm text-label-sm font-bold flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">check_circle</span> OPERATIONAL
+                            </span>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-surface-container-low rounded-lg p-md border border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">UPTIME</span>
+<span class="block font-label-md text-label-md font-bold mt-xs text-primary">142:12:08</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-md border border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface-variant">TEMP</span>
+<span class="block font-label-md text-label-md font-bold mt-xs text-primary">42.4°C</span>
+</div>
+</div>
+</div>
+<!-- Performance Sidebar: Loads -->
+<div class="bg-white rounded-xl p-lg border border-outline-variant">
+<h3 class="text-primary font-bold font-label-md text-label-md mb-lg">Hardware Utilization</h3>
+<div class="space-y-lg">
+<!-- NPU Load -->
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-on-surface-variant">NPU Load (OptiVue Core)</span>
+<span class="font-bold text-primary">82%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden border border-outline-variant">
+<div class="performance-bar h-full bg-secondary w-[82%]"></div>
+</div>
+</div>
+<!-- CPU Load -->
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-on-surface-variant">System CPU Load</span>
+<span class="font-bold text-primary">34%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden border border-outline-variant">
+<div class="performance-bar h-full bg-primary w-[34%]"></div>
+</div>
+</div>
+<!-- Memory -->
+<div>
+<div class="flex justify-between font-label-sm text-label-sm mb-xs">
+<span class="text-on-surface-variant">VRAM Consumption</span>
+<span class="font-bold text-primary">6.4GB / 8GB</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden border border-outline-variant">
+<div class="performance-bar h-full bg-secondary w-[78%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Calibration Summary Badge -->
+<div class="bg-secondary/10 rounded-xl p-lg border border-secondary flex gap-md items-center">
+<div class="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center p-xs">
+<img alt="OptiVue Icon" class="w-full h-full object-contain brightness-0 invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhCLxv08glYEmgBvPj7W1UQRUw2CCFUeYdl1EDWHyN-74rHrw8KGmiSx4G7tDaL490BtHKTA7Ptr_GKl4bWtlP3ObSweyH8sTfMFd48soiKCz4DQh9heykP8py_l8jmbgtgY20UpBF9NdjHioUe2RlcjgD79f8ONzECZ9w9zOufb8tyRfhE0Uzgmfgl2wIX5fV6OKoUE1KfAmNUzJQ7zFWr-VtvOrlhXaq8d3UmmuOEDfXOKkbFGXFqmd9a_-Pwv3Taw"/>
+</div>
+<div class="flex-1">
+<h3 class="text-primary font-bold font-label-md text-label-md">Calibration Summary</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Last calibrated: <span class="font-label-sm">2h 4m ago</span></p>
+</div>
+<div class="text-right">
+<span class="block font-label-sm text-label-sm text-on-surface-variant">DEVIATION</span>
+<span class="font-label-md text-label-md font-bold text-secondary">0.002mm</span>
+</div>
+</div>
+<!-- Recent Alerts -->
+<div class="bg-white rounded-xl p-lg border border-outline-variant">
+<h3 class="text-primary font-bold font-label-md text-label-md mb-md">System Events</h3>
+<div class="space-y-sm">
+<div class="flex items-start gap-sm p-sm bg-surface-container-low rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-amber-600 text-sm mt-xs">warning</span>
+<div>
+<p class="font-label-sm text-label-sm text-primary font-bold">Confidence dip detected</p>
+<span class="text-[10px] text-on-surface-variant font-label-sm">08:42:15 AM - Camera 01</span>
+</div>
+</div>
+<div class="flex items-start gap-sm p-sm bg-surface-container-low rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-secondary text-sm mt-xs">sync</span>
+<div>
+<p class="font-label-sm text-label-sm text-primary font-bold">Auto-Calibration complete</p>
+<span class="text-[10px] text-on-surface-variant font-label-sm">06:12:01 AM - System</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-auto flex justify-between items-center px-margin py-md w-full">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<img alt="OptiVue Footer Logo" class="h-4 w-auto opacity-60 grayscale brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChUtnsnMLc_YopaPRP_vyV5kAMX9hAXKrrxRmWtlP2_-Ra9_6WCfodXShzRCl4ltBBS0Lkh_8MwcmxZUNoAbAB5tGvBrDP0hB7yOw7U71Ul_w9vTSxGEHnlN3s6bhClViZ5vuYx-2KKzzCVW7kPuDrJPySqwhLBgn_axjPv61UF9Tpkw9nIMj5unBrJxdTFhsLGDVPiOM-VXsNhRRcWcOhhkF_dUAOK3BZpzjuaJUNPVKRNlrb0uX5mvcpyn9WVq9FXg"/>
+<span class="font-code-md text-primary text-label-sm">OptiVue // SYSTEM_STATUS_OK</span>
+</div>
+<span class="text-on-surface-variant font-label-sm text-label-sm ml-md">© 2024 Industrial Vision Systems. All rights reserved.</span>
+</div>
+<div class="flex gap-lg">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Documentation</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">API Reference</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Report Bug</a>
+</div>
+</footer>
+<script>
+        // Simple interactive simulation
+        setInterval(() => {
+            const confidence = (98 + Math.random() * 1).toFixed(1);
+            const fps = (59 + Math.random() * 2).toFixed(1);
+            const distance = Math.floor(1240 + Math.random() * 10);
+            
+            // Updating DOM elements
+            const confidenceEls = document.querySelectorAll('.text-secondary-fixed');
+            if (confidenceEls[0]) confidenceEls[0].innerText = confidence + '%';
+        }, 2000);
+    </script>
+</body></html>

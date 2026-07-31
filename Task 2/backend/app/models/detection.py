@@ -1,5 +1,5 @@
 """Face Detection Schemas"""
-from typing import Optional
+from typing import Any, Optional
 from pydantic import BaseModel, Field
 
 class BoundingBox(BaseModel):
@@ -35,3 +35,6 @@ class DetectionResult(BaseModel):
     detected: bool = Field(..., description="True if a face was found")
     detection: Optional[FaceDetection] = Field(default=None, description="Detection details if found")
     processing_time_ms: float = Field(..., description="Inference time in milliseconds")
+    # Raw MediaPipe NormalizedLandmarkList — NOT serialised to JSON, used by ML pipeline only.
+    raw_landmarks: Optional[Any] = Field(default=None, exclude=True, description="Raw MediaPipe landmarks (not serialised)")
+    raw_pose_landmarks: Optional[Any] = Field(default=None, exclude=True, description="Raw MediaPipe pose landmarks (not serialised)")

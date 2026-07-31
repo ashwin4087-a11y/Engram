@@ -1,0 +1,43 @@
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.button-primary {
+  background: var(--primary-700);
+  color: var(--on-primary, #ffffff);
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: var(--type-button);
+  font-weight: 600;
+}
+
+.button-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  background: var(--status-success-bg, rgba(63,114,175,0.08));
+  color: var(--status-success-text, var(--text-primary));
+}
+
+.button-secondary {
+  background: var(--surface);
+  border: 1px solid var(--primary-200);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: var(--type-button);
+  font-weight: 600;
+}

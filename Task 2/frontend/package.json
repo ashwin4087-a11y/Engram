@@ -1,0 +1,17 @@
+{
+  "name": "optivue-frontend",
+  "version": "1.0.0",
+  "description": "OptiVue dashboard frontend for the FastAPI-backed monocular distance estimator.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,css,md,json}\""
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.30.0",
+    "prettier": "^3.0.0"
+  }
+}

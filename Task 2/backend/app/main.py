@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import health, estimate, calibration, preview, metrics, frontend, static
+from app.api import health, estimate, calibration, preview, metrics, frontend, static, posture, capture
 from app.services.camera import camera_service
 from app.services.detector import detector_service
 from app.api.dependencies import tracker_service
@@ -17,9 +17,9 @@ async def lifespan(app: FastAPI):
     and cleanly stops them on shutdown.
     """
     # -- Startup --
-    camera_service.start()
-    detector_service.start()
-    tracker_service.start()
+    # In headless or dev environments we avoid auto-starting hardware-backed services
+    # to ensure the HTTP server comes up and serves static frontend assets.
+    print("[Startup Notice] Skipping auto-start of camera/detector/tracker services in dev mode.")
     yield
     # -- Shutdown --
     tracker_service.stop()
@@ -51,7 +51,9 @@ def create_app() -> FastAPI:
     api_router.include_router(estimate.router)
     api_router.include_router(calibration.router)
     api_router.include_router(preview.router)
+    api_router.include_router(capture.router)
     api_router.include_router(metrics.router)
+    api_router.include_router(posture.router)
 
     app.include_router(api_router)
     return app

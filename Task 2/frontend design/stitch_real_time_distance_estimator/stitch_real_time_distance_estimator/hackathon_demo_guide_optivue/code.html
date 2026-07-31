@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptiVue AI | Demo Guide</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-arrow::after {
+            content: '';
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; 
+            height: 0; 
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #DBE2EF;
+        }
+        /* Filter for #F9F7F7 (Off-white/Light blue tint) */
+        .brand-logo-tint {
+            filter: invert(100%) sepia(4%) saturate(225%) hue-rotate(180deg) brightness(105%) contrast(95%);
+        }
+        @media (max-width: 768px) {
+            .step-arrow::after { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-[#F9F7F7] text-[#112D4E] font-body-md min-h-screen flex flex-col">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#112D4E",
+                        "secondary": "#3F72AF",
+                        "background": "#F9F7F7",
+                        "surface-container": "#DBE2EF",
+                        "on-surface": "#112D4E",
+                        "on-surface-variant": "#3F72AF",
+                        "outline-variant": "#DBE2EF"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "margin": "32px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- TopNavBar -->
+<header class="bg-[#112D4E] text-white flex justify-between items-center w-full px-margin h-16 border-b border-[#3F72AF]/20 fixed top-0 z-50">
+<div class="flex items-center gap-md">
+<img alt="OptiVue Logo" class="h-8 w-auto brand-logo-tint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnYnuhMQRizQRWVI-5N1Y4EF1_efhvSdyiGf6VEY2KhqaNJYg7d_Pm_-KdmW7Rrw6QjSFvcZeNXRMeF1tZ2HkjTlbYrrDV0ARCXLIrWKYmiU8AIHUjuoROlLbBWQaLFu4eZVKtMBzzJ0p6Pvi0H-dS6cFcOjmzqVYD0cSmB248s-9V7G2GjQIFMtIV5ZnCTeKAVfd67hfNX1HOR0oCMYDbhbSl8z3TM3RNe_1QuKkiJL3mMiL-OJceOC4ytpc_XmaVvA"/>
+<span class="font-headline-md text-headline-md font-bold text-white">OptiVue AI</span>
+</div>
+<nav class="hidden md:flex gap-xl h-full items-center">
+<a class="text-[#DBE2EF] hover:text-white transition-colors font-body-md" href="#">Dashboard</a>
+<a class="text-[#DBE2EF] hover:text-white transition-colors font-body-md" href="#">Calibration</a>
+<a class="text-white font-bold border-b-2 border-[#3F72AF] pb-1 font-body-md" href="#">About</a>
+<a class="text-[#DBE2EF] hover:text-white transition-colors font-body-md" href="#">Architecture</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined p-base hover:bg-white/10 rounded-full transition-colors text-white" data-icon="settings">settings</button>
+<button class="material-symbols-outlined p-base hover:bg-white/10 rounded-full transition-colors text-white" data-icon="account_circle">account_circle</button>
+</div>
+</header>
+<main class="flex-grow pt-24 pb-xl px-margin max-w-7xl mx-auto w-full">
+<!-- Hero Section -->
+<section class="mb-xl text-center md:text-left">
+<div class="inline-flex items-center gap-xs px-sm py-xs bg-[#DBE2EF] rounded-lg mb-md">
+<span class="material-symbols-outlined text-sm text-[#112D4E]" data-icon="terminal">terminal</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-[#112D4E]">System Onboarding v1.2.4</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-[#112D4E] mb-sm">Demo Operational Guide</h1>
+<p class="font-body-lg text-body-lg text-[#3F72AF] max-w-2xl">Follow the five-step industrial protocol to validate real-time computer vision distance estimation accuracy.</p>
+</section>
+<!-- Visual Roadmap -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-gutter items-stretch mb-xl">
+<!-- Step 1: Calibrate -->
+<div class="relative group">
+<div class="bg-white border border-[#DBE2EF] rounded-xl p-md h-full flex flex-col items-center text-center transition-all hover:bg-[#F9F7F7] step-arrow">
+<div class="w-16 h-16 rounded-full bg-[#112D4E] flex items-center justify-center mb-md shadow-sm">
+<span class="material-symbols-outlined text-3xl text-white" data-icon="settings_suggest">settings_suggest</span>
+</div>
+<div class="font-label-sm text-label-sm text-[#3F72AF] font-bold uppercase mb-xs">Step 01</div>
+<h3 class="font-headline-md text-headline-md text-[#112D4E] mb-sm">Calibrate</h3>
+<p class="font-body-sm text-body-sm text-[#3F72AF]">Initialize neural optics by aligning the sensor to a 90° horizon. Ensure lenses are clean.</p>
+</div>
+</div>
+<!-- Step 2: Position -->
+<div class="relative group">
+<div class="bg-white border border-[#DBE2EF] rounded-xl p-md h-full flex flex-col items-center text-center transition-all hover:bg-[#F9F7F7] step-arrow">
+<div class="w-16 h-16 rounded-full bg-[#3F72AF] flex items-center justify-center mb-md shadow-sm">
+<span class="material-symbols-outlined text-3xl text-white" data-icon="accessibility_new">accessibility_new</span>
+</div>
+<div class="font-label-sm text-label-sm text-[#3F72AF] font-bold uppercase mb-xs">Step 02</div>
+<h3 class="font-headline-md text-headline-md text-[#112D4E] mb-sm">Position</h3>
+<p class="font-body-sm text-body-sm text-[#3F72AF]">Stand precisely in the center of the detection cone, approximately 2 meters away.</p>
+</div>
+</div>
+<!-- Step 3: Interaction -->
+<div class="relative group">
+<div class="bg-white border border-[#DBE2EF] rounded-xl p-md h-full flex flex-col items-center text-center transition-all hover:bg-[#F9F7F7] step-arrow">
+<div class="w-16 h-16 rounded-full bg-[#112D4E] flex items-center justify-center mb-md shadow-sm">
+<span class="material-symbols-outlined text-3xl text-white" data-icon="unfold_more">unfold_more</span>
+</div>
+<div class="font-label-sm text-label-sm text-[#3F72AF] font-bold uppercase mb-xs">Step 03</div>
+<h3 class="font-headline-md text-headline-md text-[#112D4E] mb-sm">Interaction</h3>
+<p class="font-body-sm text-body-sm text-[#3F72AF]">Perform slow movements toward and away from the lens to test depth interpolation.</p>
+</div>
+</div>
+<!-- Step 4: Observation -->
+<div class="relative group">
+<div class="bg-white border border-[#DBE2EF] rounded-xl p-md h-full flex flex-col items-center text-center transition-all hover:bg-[#F9F7F7] step-arrow">
+<div class="w-16 h-16 rounded-full bg-[#3F72AF] flex items-center justify-center mb-md shadow-sm">
+<span class="material-symbols-outlined text-3xl text-white" data-icon="monitoring">monitoring</span>
+</div>
+<div class="font-label-sm text-label-sm text-[#3F72AF] font-bold uppercase mb-xs">Step 04</div>
+<h3 class="font-headline-md text-headline-md text-[#112D4E] mb-sm">Observation</h3>
+<p class="font-body-sm text-body-sm text-[#3F72AF]">Watch real-time bounding boxes and distance heatmaps flicker on the console screen.</p>
+</div>
+</div>
+<!-- Step 5: Evaluation -->
+<div class="relative group">
+<div class="bg-white border border-[#DBE2EF] rounded-xl p-md h-full flex flex-col items-center text-center transition-all hover:bg-[#F9F7F7]">
+<div class="w-16 h-16 rounded-full bg-[#112D4E] flex items-center justify-center mb-md shadow-sm">
+<span class="material-symbols-outlined text-3xl text-white" data-icon="biotech">biotech</span>
+</div>
+<div class="font-label-sm text-label-sm text-[#3F72AF] font-bold uppercase mb-xs">Step 05</div>
+<h3 class="font-headline-md text-headline-md text-[#112D4E] mb-sm">Evaluation</h3>
+<p class="font-body-sm text-body-sm text-[#3F72AF]">Review the generated log for millisecond latency and deviation benchmarks.</p>
+</div>
+</div>
+</div>
+<!-- Technical Deep Dive (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Sensor Feed Placeholder -->
+<div class="md:col-span-8 bg-white border border-[#DBE2EF] rounded-2xl overflow-hidden relative min-h-[400px]">
+<div class="absolute inset-0 z-0 overflow-hidden">
+<div class="w-full h-full bg-cover bg-center opacity-80 mix-blend-multiply" data-alt="A high-tech laboratory environment with a robotic arm and advanced camera sensors." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBNdTABmdsDll8J7N7nWV_Vw0oZYLsz1CcpNADAKVZtMUbG0dCSBL-n_R5gjcnC8Fd1H_7pKjisQKwgtSZEr6upBMascifWw0FffbxSGycMcrd2J7l_ug0RtH5yP2F8epkQGsK7XG-rxSmKu5ka7Kzl_KAfwm77zpqXvymcZU9FtK4b_AUXCpioF1Y1DZpV_aMeixg2wD6z_VHdSxj1jpNh5x1GefoVDF17iyWkEJsUI2FcMdroXIna')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
+</div>
+<!-- UI Overlays -->
+<div class="absolute top-md left-md z-10 flex gap-sm">
+<div class="bg-[#112D4E]/80 backdrop-blur px-sm py-xs rounded flex items-center gap-xs border border-[#3F72AF]/50">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-white">LIVE_FEED_01</span>
+</div>
+<div class="bg-[#112D4E]/80 backdrop-blur px-sm py-xs rounded flex items-center gap-xs border border-[#3F72AF]/50">
+<span class="font-label-sm text-label-sm text-white">FPS: 60.0</span>
+</div>
+</div>
+<div class="absolute bottom-md left-md right-md z-10">
+<div class="bg-white/90 backdrop-blur p-md rounded-xl border border-[#DBE2EF] flex justify-between items-center">
+<div>
+<div class="font-label-sm text-label-sm text-[#3F72AF]">CURRENT DISTANCE</div>
+<div class="font-headline-md text-headline-md text-[#112D4E] font-mono">1.842m</div>
+</div>
+<div class="text-right">
+<div class="font-label-sm text-label-sm text-[#3F72AF]">ACCURACY</div>
+<div class="font-headline-md text-headline-md text-[#3F72AF] font-mono">99.8%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Controls -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<div class="bg-white border border-[#DBE2EF] rounded-2xl p-lg flex-1">
+<h4 class="font-label-md text-label-md uppercase mb-md border-b border-[#DBE2EF] pb-xs text-[#112D4E]">Diagnostics</h4>
+<ul class="space-y-md">
+<li class="flex items-center justify-between">
+<span class="font-body-sm text-[#3F72AF]">Optic Alignment</span>
+<span class="material-symbols-outlined text-green-600" data-icon="check_circle">check_circle</span>
+</li>
+<li class="flex items-center justify-between">
+<span class="font-body-sm text-[#3F72AF]">Lidar Sync</span>
+<span class="material-symbols-outlined text-green-600" data-icon="check_circle">check_circle</span>
+</li>
+<li class="flex items-center justify-between">
+<span class="font-body-sm text-[#3F72AF]">Network Latency</span>
+<span class="font-code-md text-code-md text-[#112D4E]">12ms</span>
+</li>
+</ul>
+<button class="w-full mt-xl py-sm bg-[#3F72AF] text-white font-label-md rounded hover:opacity-90 transition-all active:scale-[0.98]">
+                        Run Global Sync
+                    </button>
+</div>
+<div class="bg-[#112D4E] text-white rounded-2xl p-lg flex-1">
+<h4 class="font-label-md text-label-md uppercase mb-sm text-[#DBE2EF]">Session ID</h4>
+<div class="font-code-md text-code-md mb-lg text-[#F9F7F7]">OPTIVUE-HACK-2024-X99</div>
+<p class="font-body-sm opacity-70 mb-md">All interaction data is encrypted and logged for final evaluation. Press button to end session.</p>
+<button class="w-full py-sm border border-[#3F72AF] font-label-md rounded hover:bg-white/10 transition-all text-[#DBE2EF]">
+                        Finalize Report
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-[#DBE2EF] text-[#112D4E] flex justify-between items-center px-margin py-md w-full border-t border-[#3F72AF]/20 mt-auto">
+<div class="flex items-center gap-md">
+<img alt="OptiVue" class="h-6 w-auto opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC2WEqaHWxnyFrfAO2As42bEWzFYq1GaYDoXpuHr9gyW4L1kOReiXrKemofoWGIWnleXEqeVm6fRFU13NoRk8pC2vdOuzVrU6Snom0cw_8NmKw04mG7NWmUc8rkFPWYsfp6p7GNJwsTuE7dnTnazUsqL84tEg2jCw_J44rWlmN0RXQ0ypEg2FoUP9VcV2E5JSAy40ADniBc5ZlZ-v3CVzHEdS0WeFsuh4TIr9f5Tw92RLGqgIwhJXx1Ody6zLCRGe3Ag"/>
+<div class="flex flex-col">
+<span class="font-code-md text-code-md font-bold">OptiVue Engine v1.2.4</span>
+<span class="font-label-sm text-label-sm opacity-70">© 2024 Industrial Vision Systems. All rights reserved.</span>
+</div>
+</div>
+<div class="hidden md:flex gap-lg">
+<a class="font-label-sm text-label-sm hover:text-[#3F72AF] transition-colors" href="#">Documentation</a>
+<a class="font-label-sm text-label-sm hover:text-[#3F72AF] transition-colors" href="#">API Reference</a>
+<a class="font-label-sm text-label-sm hover:text-[#3F72AF] transition-colors" href="#">Report Bug</a>
+</div>
+</footer>
+<script>
+        // Micro-interaction: Update distance simulation
+        const distanceEl = document.querySelector('.font-mono');
+        if (distanceEl) {
+            setInterval(() => {
+                const base = 1.842;
+                const jitter = (Math.random() * 0.005 - 0.0025).toFixed(3);
+                distanceEl.textContent = (base + parseFloat(jitter)).toFixed(3) + 'm';
+            }, 150);
+        }
+    </script>
+</body></html>

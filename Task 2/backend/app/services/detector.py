@@ -29,7 +29,7 @@ class FaceDetectionService:
         self._face_mesh = None
 
     def start(self) -> None:
-        """Initialize the MediaPipe Face Mesh model."""
+        """Initialize the MediaPipe Face Mesh and Pose models."""
         if self._face_mesh is not None:
             return
 
@@ -41,14 +41,25 @@ class FaceDetectionService:
                 min_detection_confidence=self._min_detection_confidence,
                 min_tracking_confidence=self._min_detection_confidence,
             )
+            mp_pose = mp.solutions.pose
+            self._pose = mp_pose.Pose(
+                static_image_mode=False,
+                model_complexity=1,
+                enable_segmentation=False,
+                min_detection_confidence=self._min_detection_confidence,
+                min_tracking_confidence=self._min_detection_confidence,
+            )
         except Exception as e:
-            raise FaceDetectionError(f"Failed to initialize MediaPipe Face Mesh: {e}")
+            raise FaceDetectionError(f"Failed to initialize MediaPipe models: {e}")
 
     def stop(self) -> None:
         """Release MediaPipe resources."""
         if self._face_mesh is not None:
             self._face_mesh.close()
             self._face_mesh = None
+        if hasattr(self, '_pose') and self._pose is not None:
+            self._pose.close()
+            self._pose = None
 
     def detect(self, frame: np.ndarray) -> DetectionResult:
         """
@@ -73,6 +84,7 @@ class FaceDetectionService:
         # 3. MediaPipe Inference
         try:
             results = self._face_mesh.process(rgb_frame)
+            pose_results = self._pose.process(rgb_frame) if hasattr(self, '_pose') and self._pose else None
         except Exception as e:
             raise FaceDetectionError(f"MediaPipe processing failed: {e}")
 
@@ -142,6 +154,8 @@ class FaceDetectionService:
             detected=True,
             detection=detection,
             processing_time_ms=processing_time,
+            raw_landmarks=face_landmarks,
+            raw_pose_landmarks=pose_results.pose_landmarks if pose_results else None,
         )
 
 

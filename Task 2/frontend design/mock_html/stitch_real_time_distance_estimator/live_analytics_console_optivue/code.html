@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptiVue | Mission Control Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3F72AF;
+            border-radius: 10px;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .status-pulse {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #DBE2EF 1px, transparent 1px);
+        }
+        /* CSS filter to tint the logo to white */
+        .logo-tint {
+            filter: brightness(0) invert(1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#112D4E",
+                        "secondary": "#3F72AF",
+                        "background": "#F9F7F7",
+                        "on-background": "#112D4E",
+                        "surface": "#F9F7F7",
+                        "on-surface": "#112D4E",
+                        "on-surface-variant": "#3F72AF",
+                        "surface-container": "#DBE2EF",
+                        "surface-container-low": "#F9F7F7",
+                        "surface-container-high": "#DBE2EF",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#DBE2EF",
+                        "outline": "#3F72AF",
+                        "outline-variant": "#DBE2EF",
+                        "inverse-surface": "#112D4E",
+                        "inverse-on-surface": "#F9F7F7",
+                        "primary-container": "#3F72AF",
+                        "on-primary-container": "#ffffff",
+                        "secondary-container": "#DBE2EF",
+                        "on-secondary-container": "#112D4E",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "16px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "margin": "32px",
+                        "base": "8px",
+                        "gutter": "24px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-xl": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="bg-primary border-b border-secondary/30 flex justify-between items-center w-full px-margin h-16 z-50 sticky top-0">
+<div class="flex items-center gap-md">
+<img alt="OptiVue Logo" class="w-8 h-8 object-contain logo-tint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2n6SWrhccwlTMcexzHlPSbKtxuANumoNemK6erJ1U7MqTfLzE9kAReBc422kOr2-0djnNvNmEd0zmG5UvBYHNW4DWQ71eCIYGT8YbIcDj7mZk6DTpAjAANZqFgk-qjQbunZ8dWVLfuKFBx7_PMj2OSqX9qZb1bWRBn9lOyaLbyGDfxzd5XzYFkqXYLJ4yQ05dulKKgaZzE7UBJeNByyoIaIskms3RiLz-6p40HaizaCz1P03esNyHILUEQVxu9W2p7Q"/>
+<span class="font-headline-md text-headline-md font-bold text-white">OptiVue</span>
+</div>
+<nav class="hidden md:flex gap-lg h-full items-center">
+<a class="text-white/70 hover:text-white transition-colors font-label-md text-label-md" href="#">Dashboard</a>
+<a class="text-white/70 hover:text-white transition-colors font-label-md text-label-md" href="#">Calibration</a>
+<a class="text-white font-bold border-b-2 border-secondary pb-1 font-label-md text-label-md" href="#">Analytics</a>
+<a class="text-white/70 hover:text-white transition-colors font-label-md text-label-md" href="#">Evaluation</a>
+<a class="text-white/70 hover:text-white transition-colors font-label-md text-label-md" href="#">Architecture</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-white hover:bg-white/10 p-2 rounded-full transition-all">settings</button>
+<button class="material-symbols-outlined text-white hover:bg-white/10 p-2 rounded-full transition-all">account_circle</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col h-full w-64 bg-primary border-r border-secondary/20 py-lg px-md shrink-0">
+<div class="mb-xl">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-10 h-10 bg-secondary rounded flex items-center justify-center">
+<img alt="OptiVue" class="w-7 h-7 object-contain logo-tint opacity-90" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOI-I5muZxEDbxOTiLIGCd_HBz46Ym86Y0JxIa-cs5Yzxt3jhOsxSRsNyrxmdrWd5a9_DITbY1hJJUZGXpJ7enFAoivJ2o_hvUf5CtrX6816s7Dcz07pU8bxg3hI2RHtu5fw_WLWtuWFqYsZSqYJSY_Z2lLjXePqWqKUyHe_7T0x4seuxJB9Nvi0wuE3Y_gF7kVXrk6ej7wuXzObjOnXVGsQZRTuELhpy5JzpQXXze6N-MiGf_Dg4u9yzkCu1sgl_i3w"/>
+</div>
+<div>
+<div class="text-white font-bold font-label-md">OptiVue Console</div>
+<div class="text-white/50 font-label-sm text-[10px]">v1.2.4-stable</div>
+</div>
+</div>
+</div>
+<nav class="space-y-1 flex-1">
+<div class="flex items-center gap-md px-md py-sm hover:bg-secondary/20 transition-all cursor-pointer rounded-lg text-white/70 hover:text-white">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm hover:bg-secondary/20 transition-all cursor-pointer rounded-lg text-white/70 hover:text-white">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md">Calibration</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm bg-secondary text-white rounded-lg font-bold scale-[0.98]">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-md">Analytics</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm hover:bg-secondary/20 transition-all cursor-pointer rounded-lg text-white/70 hover:text-white">
+<span class="material-symbols-outlined">biotech</span>
+<span class="font-label-md">Evaluation</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm hover:bg-secondary/20 transition-all cursor-pointer rounded-lg text-white/70 hover:text-white">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-md">Architecture</span>
+</div>
+</nav>
+<button class="mt-xl w-full bg-secondary text-white py-sm rounded font-bold font-label-md flex items-center justify-center gap-sm hover:bg-secondary/90 transition-all">
+<span class="material-symbols-outlined text-md">play_arrow</span>
+            Run Diagnostics
+        </button>
+<div class="mt-auto pt-lg border-t border-white/10 space-y-1">
+<div class="flex items-center gap-md px-md py-sm text-white/70 hover:text-white hover:bg-secondary/20 transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md">Docs</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-white/70 hover:text-white hover:bg-secondary/20 transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md">Logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto custom-scrollbar bg-surface p-lg grid-bg">
+<!-- Dashboard Header Section -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary">OptiVue Analytics</h1>
+<p class="text-on-surface-variant font-body-md">Live operational intelligence and computer vision telemetry.</p>
+</div>
+<div class="flex gap-sm">
+<div class="flex items-center gap-xs bg-surface-container px-md py-sm rounded-lg border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-secondary status-pulse"></span>
+<span class="font-label-sm text-primary">INF: 14ms</span>
+</div>
+<div class="flex items-center gap-xs bg-surface-container px-md py-sm rounded-lg border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-secondary status-pulse"></span>
+<span class="font-label-sm text-primary">TRK: 08ms</span>
+</div>
+</div>
+</div>
+<!-- Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Large Video Preview with Heatmap -->
+<section class="col-span-12 xl:col-span-8 space-y-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative group">
+<div class="absolute top-4 left-4 z-10 flex gap-2">
+<span class="bg-primary/80 text-white px-3 py-1 rounded font-label-sm flex items-center gap-1 backdrop-blur-md">
+<span class="material-symbols-outlined text-xs text-error">videocam</span>
+                            LIVE FEED: CAM_042
+                        </span>
+<span class="bg-secondary/90 text-white px-3 py-1 rounded font-label-sm backdrop-blur-md">HEATMAP OVERLAY: ON</span>
+</div>
+<div class="aspect-video bg-primary relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-80" data-alt="A high-resolution wide-angle view of a modern industrial warehouse floor with autonomous robots moving. Overlaid on the image is a translucent, multicolored heatmap showing high-traffic zones in fiery oranges and reds, while less used areas are cool blues and greens. The visual style is crisp, technical, and high-contrast light mode with professional computer vision framing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk_JS4zMiOdOh2Wd6kUaGZVwYr-KqLuvo_wvwLMAegegYobnQlMR0Bwlbj0GOr9CwDittImb5bV7T52fa1J4dyDO9ybhaLdj5C291n4J8c5b6T-I4Hb15fQSek4J2B4FE3c0U0lWIlxgQRWpgTMH5ExKr6y0wu-4yGCFqZqPoq9MaO3Ic4Gk1i504AppW60UpLDtfBZ-D5ZTAIerpRlldjx6Qz4lgawsCiA1--9K1dQrXDWkbLK_2u"/>
+<div class="absolute inset-0 pointer-events-none opacity-40 mix-blend-overlay">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle cx="30" cy="40" fill="red" filter="blur(8px)" r="15"></circle>
+<circle cx="70" cy="60" fill="orange" filter="blur(10px)" r="20"></circle>
+<circle cx="50" cy="50" fill="yellow" filter="blur(6px)" r="10"></circle>
+</svg>
+</div>
+<div class="absolute top-1/4 left-1/3 w-32 h-48 border-2 border-secondary rounded shadow-[0_0_15px_rgba(63,114,175,0.5)]">
+<span class="absolute -top-6 left-0 bg-secondary text-white text-[10px] px-2 py-0.5 rounded font-label-md">OBJECT_01: ROBOTIC_ARM [98.2%]</span>
+</div>
+</div>
+<div class="p-md bg-surface-container-high flex items-center justify-between">
+<div class="flex gap-xl">
+<div>
+<div class="text-on-surface-variant font-label-sm">FRAME RATE</div>
+<div class="text-primary font-code-md text-headline-md">60.02 <span class="text-sm">FPS</span></div>
+</div>
+<div>
+<div class="text-on-surface-variant font-label-sm">BITRATE</div>
+<div class="text-primary font-code-md text-headline-md">8.4 <span class="text-sm">MBPS</span></div>
+</div>
+</div>
+<div class="flex gap-sm">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-secondary/10 transition-colors text-primary"><span class="material-symbols-outlined">zoom_in</span></button>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-secondary/10 transition-colors text-primary"><span class="material-symbols-outlined">capture</span></button>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-secondary/10 transition-colors text-primary"><span class="material-symbols-outlined">fullscreen</span></button>
+</div>
+</div>
+</div>
+<!-- Pipeline Latency and Throughput Graphs -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-primary text-lg">Pipeline Latency</h3>
+<span class="material-symbols-outlined text-secondary">speed</span>
+</div>
+<div class="h-48 w-full flex items-end gap-1 px-2 pb-4">
+<div class="flex-1 bg-secondary/20 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-secondary/30 rounded-t h-[55%]"></div>
+<div class="flex-1 bg-secondary/40 rounded-t h-[45%]"></div>
+<div class="flex-1 bg-secondary/50 rounded-t h-[70%]"></div>
+<div class="flex-1 bg-secondary/40 rounded-t h-[60%]"></div>
+<div class="flex-1 bg-secondary/30 rounded-t h-[45%]"></div>
+<div class="flex-1 bg-secondary/60 rounded-t h-[85%]"></div>
+<div class="flex-1 bg-secondary/40 rounded-t h-[50%]"></div>
+<div class="flex-1 bg-secondary/20 rounded-t h-[30%]"></div>
+<div class="flex-1 bg-secondary/50 rounded-t h-[65%]"></div>
+</div>
+<div class="flex justify-between font-label-sm text-on-surface-variant pt-sm border-t border-outline-variant">
+<span>-60s</span>
+<span>-30s</span>
+<span>LIVE</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-primary text-lg">Throughput</h3>
+<span class="material-symbols-outlined text-secondary">data_exploration</span>
+</div>
+<div class="h-48 w-full relative overflow-hidden">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 400 100">
+<path d="M0,80 L40,70 L80,75 L120,40 L160,50 L200,30 L240,45 L280,20 L320,35 L360,25 L400,30 V100 H0 Z" fill="rgba(63, 114, 175, 0.1)"></path>
+<path d="M0,80 L40,70 L80,75 L120,40 L160,50 L200,30 L240,45 L280,20 L320,35 L360,25 L400,30" fill="none" stroke="#3F72AF" stroke-width="2"></path>
+</svg>
+<div class="absolute bottom-4 left-4 font-code-md text-primary text-2xl">4.2 <span class="text-sm">GB/s</span></div>
+</div>
+<div class="flex justify-between font-label-sm text-on-surface-variant pt-sm border-t border-outline-variant">
+<span>CPU 12%</span>
+<span>GPU 68%</span>
+<span>MEM 4GB</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Sidebar: Logs & Status -->
+<section class="col-span-12 xl:col-span-4 space-y-gutter">
+<!-- Sub-System Status Indicators -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg">
+<h3 class="font-label-md text-on-surface-variant mb-md tracking-wider uppercase">System Status</h3>
+<div class="space-y-sm">
+<div class="flex items-center justify-between p-sm bg-surface-container rounded-lg border border-outline-variant/50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">memory</span>
+<span class="font-label-md text-primary">Inference Engine</span>
+</div>
+<span class="bg-secondary/20 text-primary px-3 py-1 rounded text-xs font-bold">OPERATIONAL</span>
+</div>
+<div class="flex items-center justify-between p-sm bg-surface-container rounded-lg border border-outline-variant/50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">location_searching</span>
+<span class="font-label-md text-primary">Object Tracker</span>
+</div>
+<span class="bg-secondary/20 text-primary px-3 py-1 rounded text-xs font-bold">ACTIVE</span>
+</div>
+<div class="flex items-center justify-between p-sm bg-surface-container rounded-lg border border-outline-variant/50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary">api</span>
+<span class="font-label-md text-primary">External API Gateway</span>
+</div>
+<span class="bg-secondary/20 text-primary px-3 py-1 rounded text-xs font-bold">SYNCED</span>
+</div>
+</div>
+</div>
+<!-- Rolling FPS Timeline -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg h-48 overflow-hidden">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-on-surface-variant tracking-wider">ROLLING FPS</h3>
+<span class="font-code-md text-secondary">60.00 Hz</span>
+</div>
+<div class="flex h-20 items-center gap-[2px]">
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-[90%]"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-error/40 h-[60%]"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-[95%]"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-[98%]"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+<div class="flex-1 bg-outline-variant h-full"></div>
+</div>
+<p class="font-label-sm text-on-surface-variant text-center mt-sm italic">Jitter variance: 0.04ms</p>
+</div>
+<!-- Recent Events Log -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col h-[400px]">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-md text-on-surface-variant tracking-wider uppercase">Recent Events</h3>
+<div class="w-2 h-2 bg-secondary rounded-full status-pulse"></div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar font-code-md text-sm p-md space-y-md">
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:04:11</span>
+<span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> New object detected at X:234 Y:891</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:04:09</span>
+<span class="text-primary"><span class="text-secondary font-bold">[WARN]</span> Buffer usage exceeded 85% on CAM_02</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:04:05</span>
+<span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> Calibration pulse sent to Inference Node-B</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:04:01</span>
+<span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> Health check: API Gateway responsive</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:03:55</span>
+<span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> Model update 'V4_Optim' deployment complete</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:03:42</span>
+<span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> Session handshake initiated with Client #A99</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:03:30</span>
+<span class="text-primary"><span class="text-error font-bold">[ERR ]</span> Handshake timeout on Peer-04</span>
+</div>
+<div class="flex gap-sm">
+<span class="text-on-surface-variant shrink-0">12:03:25</span>
+<span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> Re-routing packet stream via node internal-gw-1</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container border-t border-outline-variant mt-auto flex justify-between items-center px-margin py-md w-full shrink-0">
+<div class="flex items-center gap-sm">
+<img alt="OptiVue" class="w-5 h-5 object-contain grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYLodKi3t6EAy3Ncf1t0RGQOIUHkE2Kb9E2rdVWZcUIvfqp62D3CgildoLDQN5f64-SP1L20Ck1M3Nri6-ugSnKrCu55FxZYwvkLkl-kgM-aciAXRj-6D2fvymhlLrPkBTRzfmskjDLCuwwY8bwAGTtAvpmwjAyihSbm8kwHh8IrIMsStNXaTdoHuv0ckXwF9-E_smwHSOavILxK8t9dJKpOUGCj-fgYTDtevWfHr6zUxo7pwXmxWQuEsnjmgpi4QtUA"/>
+<div class="font-code-md text-primary text-label-sm">
+            © 2024 OptiVue Industrial Vision Systems. All rights reserved.
+        </div>
+</div>
+<div class="flex gap-lg">
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Documentation</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">API Reference</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Report Bug</a>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const logs = document.querySelector('.overflow-y-auto.custom-scrollbar');
+        setInterval(() => {
+            const now = new Date();
+            const timeStr = now.toTimeString().split(' ')[0];
+            const newLog = document.createElement('div');
+            newLog.className = 'flex gap-sm opacity-0 transform translate-y-2 transition-all duration-300';
+            newLog.innerHTML = `
+                <span class="text-on-surface-variant shrink-0">${timeStr}</span>
+                <span class="text-primary"><span class="text-secondary font-bold">[INFO]</span> OptiVue telemetry packet received (size: ${Math.floor(Math.random() * 256)}kb)</span>
+            `;
+            logs.prepend(newLog);
+            setTimeout(() => newLog.classList.remove('opacity-0', 'translate-y-2'), 100);
+            if (logs.children.length > 20) logs.lastElementChild.remove();
+        }, 3000);
+
+        const heatmap = document.querySelector('svg circle');
+        if (heatmap) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                heatmap.setAttribute('cx', x);
+                heatmap.setAttribute('cy', y);
+            });
+        }
+    });
+</script>
+</body></html>

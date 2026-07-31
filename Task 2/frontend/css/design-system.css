@@ -1,0 +1,134 @@
+/* OptiVue Design System - complete dashboard redesign
+   - Implements consistent typography scale, spacing tokens
+   - Redesigned header, sidebar, camera panel, cards, buttons
+   - Aims for a premium enterprise AI dashboard look
+*/
+
+:root{
+  /* Palette */
+  --primary-900: #112D4E;
+  --primary-700: #3F72AF;
+  --primary-200: #DBE2EF;
+  --background: #F9F7F7;
+  --surface: #FFFFFF;
+  --muted: #7A8899;
+  --border: rgba(17,45,78,0.06);
+  --glass: rgba(255,255,255,0.7);
+  --shadow-default: 0 8px 24px rgba(17,45,78,0.08);
+  --radius-lg: 12px;
+
+  /* Spacing scale */
+  --space-4: 4px; --space-8: 8px; --space-12: 12px; --space-16: 16px; --space-24: 24px; --space-32: 32px;
+
+  /* Typography scale */
+  --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-family-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  --logo-size: 44px; /* per requirement */
+  --type-card-title: 20px;
+  --type-section-title: 18px;
+  --type-body: 15px;
+  --type-label: 12px;
+  --type-metric-large: 52px;
+  --type-metric-medium: 30px;
+  --type-button: 15.5px;
+}
+
+/* Base resets and layout */
+html,body{height:100%;background:var(--background);font-family:var(--font-family-base);color: #203247;font-size:var(--type-body);margin:0}
+a{color:inherit}
+
+/* Top header (modern SaaS) */
+header{background:var(--primary-900);color:#fff;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-32);box-shadow:0 2px 8px rgba(0,0,0,0.06);position:sticky;top:0;z-index:60}
+.header-left{display:flex;align-items:center;gap:var(--space-16)}
+.brand-badge{width:44px;height:44px;border-radius:999px;background:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow-default)}
+.brand-badge img{width:24px;height:auto}
+.app-logo{font-weight:800;font-size:28px;margin-left:12px;color:#fff;letter-spacing:0.02em}
+.nav-links{display:flex;align-items:center;gap:18px;margin-left:18px}
+.nav-links .nav-link{color:rgba(255,255,255,0.95);text-decoration:none;font-weight:600;font-size:15px}
+.nav-links .nav-link.active{border-bottom:3px solid rgba(255,255,255,0.14);padding-bottom:6px}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-action{background:rgba(255,255,255,0.95);color:var(--primary-900);border-radius:8px;border:none;padding:8px 10px}
+.sys-score{background:rgba(255,255,255,0.08);color:#fff;padding:8px 12px;border-radius:999px;font-weight:700;margin-left:12px;font-size:13px;display:flex;align-items:center;gap:8px}
+
+/* Page grid */
+.dashboard-grid{display:grid;grid-template-columns:2fr 1fr;gap:var(--space-32);align-items:start;padding:var(--space-32);}
+
+/* Sidebar redesign (light surface) */
+.sidebar{background:var(--surface);color:var(--primary-900);padding:var(--space-24);height:calc(100vh - 72px);box-shadow:0 6px 20px rgba(17,45,78,0.02);border-right:1px solid var(--border)}
+.sidebar-brand{display:flex;align-items:center;gap:var(--space-12);margin-bottom:var(--space-16)}
+.sidebar .nav-link{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--primary-900);text-decoration:none;font-weight:600}
+.sidebar .nav-link:hover{background:var(--primary-200)}
+.sidebar .nav-link.active{background:var(--primary-700);color:#fff}
+.sidebar .nav-group{margin-top:var(--space-12)}
+
+/* Main content area */
+.main-content{padding:var(--space-32);min-height:calc(100vh - 72px);overflow:auto}
+
+/* Camera panel (hero) */
+.camera-hero{background:linear-gradient(180deg, rgba(17,45,78,0.02), rgba(17,45,78,0.01));border-radius:var(--radius-lg);padding:var(--space-16);box-shadow:var(--shadow-default);display:block}
+.camera-viewport{border-radius:10px;overflow:hidden;background:#f7f7f7;display:block;position:relative;min-height:420px}
+.camera-viewport img{width:100%;height:100%;object-fit:cover;display:block}
+.camera-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.live-badge{display:flex;align-items:center;gap:10px}
+.live-badge .dot{width:10px;height:10px;border-radius:99px;background:#ff4d4f}
+.metrics-inline{display:flex;gap:12px}
+.hud-card{background:transparent;color:var(--primary-900)}
+.center-overlay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center}
+.distance-value{font-family:var(--font-family-mono);font-size:56px;font-weight:800;color:var(--primary-900)}
+.metric-value{font-family:var(--font-family-mono);font-size:40px;font-weight:700;color:var(--primary-900)}
+.metric-small{font-family:var(--font-family-mono);font-size:22px;color:var(--primary-900);font-weight:600}
+.camera-controls-bottom{position:absolute;left:16px;right:16px;bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.controls{display:flex;gap:12px}
+
+/* Metric cards */
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-16);margin-top:var(--space-24)}
+.metric-card{background:var(--surface);border-radius:12px;padding:var(--space-16);box-shadow:0 6px 20px rgba(16,24,40,0.04);border:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between}
+.metric-title{font-size:var(--type-label);text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);font-weight:700}
+.metric-value{font-family:var(--font-family-mono);font-size:var(--type-metric-large);color:var(--primary-900);margin-top:8px}
+.metric-sub{font-size:var(--type-metric-medium);color:var(--muted);margin-top:6px}
+
+/* Headings and labels */
+.section-title{font-size:var(--type-section-title);font-weight:700;color:var(--primary-900);margin:0}
+.card-title{font-size:var(--type-card-title);font-weight:700;color:var(--primary-900);margin:0}
+.helper-text{font-size:13px;color:var(--muted)}
+.ui-label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+
+/* Header nav (top) */
+header nav a.nav-link{color:rgba(255,255,255,0.9);margin-right:16px;padding:6px 10px;border-radius:8px;text-decoration:none}
+header nav a.nav-link:hover{background:rgba(255,255,255,0.03)}
+header nav a.nav-link.active{background:var(--primary-700);color:#fff}
+
+/* Small health badge near logo */
+.sys-score{background:rgba(255,255,255,0.07);color:#fff;padding:6px 10px;border-radius:999px;font-weight:700;margin-left:12px;font-size:13px}
+.sys-score .pct{color:var(--primary-200);font-family:var(--font-family-mono);margin-right:8px}
+
+
+/* Buttons - redesigned */
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;padding:10px 16px;font-weight:600;font-size:var(--type-button);cursor:pointer}
+.btn-primary{background:var(--primary-700);color:#fff;border:none;box-shadow:0 6px 18px rgba(63,114,175,0.12);transition:transform .12s ease, box-shadow .12s ease}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(63,114,175,0.16)}
+.btn-primary:active{transform:translateY(0);box-shadow:0 6px 18px rgba(63,114,175,0.08)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-secondary{background:#fff;border:1px solid var(--primary-700);color:var(--primary-700)}
+
+/* Performance bars and progress */
+.progress{height:12px;background:var(--primary-200);border-radius:999px;overflow:hidden}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--primary-700),#2e5da0)}
+
+/* Session history thumbnails */
+#session-history-list{display:flex;flex-direction:column;gap:12px}
+#session-history-list .history-item{display:flex;gap:12px;align-items:center}
+#session-history-list img{width:64px;height:48px;object-fit:cover;border-radius:8px}
+
+/* Responsiveness */
+@media (max-width:1100px){.metrics-grid{grid-template-columns:repeat(2,1fr)}.page-wrap{grid-template-columns:220px 1fr}}
+@media (max-width:720px){.page-wrap{grid-template-columns:1fr}.sidebar{display:none}.app-logo{font-size:32px}.header-actions{gap:8px}}
+
+/* Accessibility helpers */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Utility overrides to disable conflicting legacy styles without changing markup */
+.bg-primary{background:var(--primary-700) !important;color:#fff !important}
+.bg-inverse-on-surface{background:transparent !important}
+.card, .bg-surface, .bg-surface-container, .bg-surface-container-high{background:var(--surface) !important;border:1px solid var(--border) !important;border-radius:12px !important;box-shadow:var(--shadow-default) !important}
+

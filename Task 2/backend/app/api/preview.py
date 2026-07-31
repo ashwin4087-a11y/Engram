@@ -7,7 +7,7 @@ verifying face detection stability, and confirming system health
 before calibration.
 """
 
-import time
+import asyncio
 import cv2
 from fastapi import APIRouter, Query
 from fastapi.responses import StreamingResponse
@@ -21,7 +21,7 @@ from app.models.tracker import TrackerStatus
 router = APIRouter(tags=["Stream"])
 
 
-def generate_frames(mode: str):
+async def generate_frames(mode: str):
     """
     Generator that retrieves the latest state from the TrackerService,
     applies overlays, and yields JPEG byte chunks.
@@ -35,7 +35,7 @@ def generate_frames(mode: str):
             raw_frame = state.frame
             if raw_frame is None:
                 # If tracker hasn't captured a frame yet, just sleep
-                time.sleep(0.1)
+                await asyncio.sleep(0.1)
                 continue
 
             # 2. Check Calibration Status visually
@@ -74,7 +74,7 @@ def generate_frames(mode: str):
             )
             
             # Stream at roughly 30 FPS maximum to the client
-            time.sleep(0.033)
+            await asyncio.sleep(0.033)
 
         except Exception as e:
             print(f"[Stream Error] {e}")

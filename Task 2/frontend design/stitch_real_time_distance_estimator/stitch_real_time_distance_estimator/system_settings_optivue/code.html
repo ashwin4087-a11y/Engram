@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OptiVue | System Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-background": "#1b1c1c",
+                "surface-bright": "#fbf9f9",
+                "on-primary-fixed": "#001c3a",
+                "tertiary-fixed": "#dce3f0",
+                "primary-fixed-dim": "#afc8f1",
+                "surface-tint": "#476083",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed-variant": "#404752",
+                "on-surface-variant": "#43474e",
+                "tertiary-fixed-dim": "#c0c7d3",
+                "tertiary-container": "#262d37",
+                "on-surface": "#112D4E",
+                "secondary-container": "#3F72AF",
+                "outline-variant": "#c4c6cf",
+                "surface-container-lowest": "#ffffff",
+                "secondary-fixed-dim": "#a3c9ff",
+                "surface-container-highest": "#e4e2e2",
+                "on-primary-container": "#ffffff",
+                "on-error-container": "#93000a",
+                "error": "#ba1a1a",
+                "on-secondary-fixed-variant": "#004882",
+                "on-secondary-fixed": "#001c39",
+                "on-primary": "#ffffff",
+                "on-tertiary-fixed": "#151c25",
+                "background": "#F9F7F7",
+                "outline": "#74777f",
+                "inverse-primary": "#afc8f1",
+                "on-error": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-dim": "#dbdada",
+                "primary-container": "#112D4E",
+                "on-primary-fixed-variant": "#2f486a",
+                "inverse-surface": "#112D4E",
+                "error-container": "#ffdad6",
+                "on-tertiary-container": "#8d94a0",
+                "primary-fixed": "#d4e3ff",
+                "surface-container-low": "#F9F7F7",
+                "surface-container": "#F9F7F7",
+                "primary": "#112D4E",
+                "on-tertiary": "#ffffff",
+                "surface-container-high": "#e9e8e8",
+                "surface": "#F9F7F7",
+                "secondary": "#3F72AF",
+                "tertiary": "#111922",
+                "secondary-fixed": "#d3e3ff",
+                "on-secondary-container": "#ffffff",
+                "inverse-on-surface": "#f2f0f0"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "spacing": {
+                "container-max-width": "1440px",
+                "unit": "4px",
+                "gutter": "16px",
+                "margin-mobile": "16px",
+                "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                "label-md": ["JetBrains Mono"],
+                "body-lg": ["IBM Plex Sans"],
+                "body-md": ["IBM Plex Sans"],
+                "label-sm": ["JetBrains Mono"],
+                "headline-lg": ["IBM Plex Sans"],
+                "headline-md": ["IBM Plex Sans"],
+                "headline-xl": ["IBM Plex Sans"],
+                "code-md": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F9F7F7;
+            color: #112D4E;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: #DBE2EF;
+            height: 4px;
+            border-radius: 2px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            background-color: #3F72AF;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F9F7F7;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3F72AF;
+            border-radius: 10px;
+        }
+        .brand-logo-tint {
+            filter: brightness(0) invert(1);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-primary border-b border-white/10 flex justify-between items-center w-full px-margin-desktop h-16 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<img alt="OptiVue Logo" class="h-8 w-auto brand-logo-tint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEWiAoVzrV25jSyhzjlkAXJUomcmQo4t-depMffP4eLcrKcjy-yvvMyLmBklDJGM4oCGFFHgaALVIJw2H5N8uOa18vDX0vMM-I00r9A9n-uESQH4c1MjupX2IvpM29EOKqzwjf9glF_hCqcDjthz8SMGHTi3kIi4a5dW2b4NZ4DVzsgZncfy5UGapbqVLeBGJhbbaCnu7acw3v7nHpHK7odzIowLTI5eh8EzUpeBe1gC1jawOqNd30ErOn28P46-Ehtg"/>
+<span class="font-headline-md text-headline-md font-bold text-white">OptiVue</span>
+</div>
+<nav class="hidden md:flex items-center space-x-8">
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Dashboard</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Calibration</a>
+<a class="text-white/70 hover:text-white transition-colors font-body-md text-body-md" href="#">Analytics</a>
+<a class="text-white font-bold border-b-2 border-secondary pb-1 font-body-md text-body-md" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-white/70 hover:text-white p-2 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary overflow-hidden border border-white/20">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApydyRFp2m9UFKyyaiXkZKdYaLH5etKRQ0szk5Pqnt-TM0xHUk3dNxbCu8Z3VisPxStqkw94pavkjVnTOLryb0QR_LriMhcPsYKF787IYs3Wzl_fa36wdby2FU0Up8sl-YsnVCNgFG11vojHuwD_20a5uTWGUBtSSNfajeO9m3GE25dXgfMv83ACC7qlgAA7woLVMqXA7bwhr6-nCUSfozM-ceqQVR4ejCpGNpC9pdu8zrdfNkpbvP"/>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-64px)] w-64 border-r border-outline-variant bg-white py-8 px-4 sticky top-16">
+<div class="mb-8 px-2 flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<img alt="OptiVue Logo" class="h-6 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVWyfmf9tHskCSWKhFoAzey4N8v_gdifNvFTlEhuyHeS4PT2XtMKATQ8FIBLcWI3pEFStRRRs8THeGW7hXhbBqMWRet7ihK8T6tpFh9RURujCZdgOSRe03lbzbbo71groY12NLNcK2UHshEQEecvH0sbEvSztnTdffWIoVLJS20YR8ma5dZdEVaQHENlx5rVF8L9Ao-a-kEg1rVzS4f_BA7vsrALRxZNcl7oC-en8Yo2J1qOSXlxGGk46tgGVsGx_oiw" style="filter: brightness(0) saturate(100%) invert(13%) sepia(43%) saturate(2200%) hue-rotate(195deg) brightness(95%) contrast(101%);"/>
+<p class="text-primary font-bold font-label-md text-label-md">OptiVue Console</p>
+</div>
+<p class="text-on-surface-variant opacity-70 font-label-sm text-label-sm">v1.2.4-stable</p>
+</div>
+<nav class="space-y-1 flex-grow">
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-background rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-background rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings_suggest</span> Calibration
+            </a>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-background rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">monitoring</span> Analytics
+            </a>
+<a class="flex items-center gap-4 px-4 py-2 bg-primary text-white rounded-lg font-bold transition-all scale-[0.98] font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-background rounded-lg transition-all font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">account_tree</span> Architecture
+            </a>
+</nav>
+<button class="mt-8 w-full bg-secondary text-white py-2 rounded-lg font-bold text-label-md font-label-md hover:opacity-90 transition-opacity">
+            Run Diagnostics
+        </button>
+<div class="mt-auto pt-8 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-background rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">description</span> Docs
+            </a>
+<a class="flex items-center gap-4 px-4 py-2 text-on-surface-variant hover:bg-background rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-grow p-8 md:p-12 max-w-7xl mx-auto w-full">
+<header class="mb-8">
+<h1 class="font-headline-xl text-headline-xl text-primary tracking-tight">System Settings</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Manage global OptiVue parameters and vision engine configurations.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Column: Core Vision Config -->
+<div class="lg:col-span-7 space-y-6">
+<!-- Camera Selection & Config -->
+<article class="bg-white border border-outline-variant rounded-xl p-6">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">videocam</span>
+                            Camera Selection
+                        </h2>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary/10 px-3 py-1 rounded-full font-bold">ACTIVE NODE</span>
+</div>
+<div class="space-y-4">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-1 block">PRIMARY SOURCE</label>
+<div class="relative">
+<select class="w-full bg-background border border-outline-variant rounded-lg px-4 py-2 font-body-md text-body-md appearance-none focus:outline-none focus:border-secondary">
+<option>Basler acA2440-75uc (USB 3.0)</option>
+<option>FLIR Blackfly S BFS-U3-51S5C</option>
+<option>Cognex In-Sight 8000 (Network)</option>
+<option>Virtual Simulator Stream</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-background rounded-lg border border-outline-variant/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Latency: 12.4ms | Frame Rate: 60 FPS</p>
+</div>
+<button class="text-secondary font-label-md text-label-md font-bold hover:underline">RESCAN</button>
+</div>
+</div>
+</article>
+<!-- Algorithm Tuning -->
+<article class="bg-white border border-outline-variant rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary">analytics</span>
+                        Algorithm Tuning
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div>
+<div class="flex justify-between mb-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">EMA ALPHA (SMOOTHING)</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold">0.85</span>
+</div>
+<input class="w-full" max="1" min="0" step="0.01" type="range" value="0.85"/>
+<p class="text-[10px] text-on-surface-variant mt-1 opacity-60">High alpha increases responsiveness but adds noise.</p>
+</div>
+<div>
+<div class="flex justify-between mb-1">
+<label class="font-label-sm text-label-sm text-on-surface-variant">SENSITIVITY THRESHOLD</label>
+<span class="font-label-sm text-label-sm text-secondary font-bold">62%</span>
+</div>
+<input class="w-full" max="100" min="0" type="range" value="62"/>
+</div>
+</div>
+<div class="bg-primary rounded-lg p-4 flex items-center justify-center min-h-[140px] relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="w-full h-full border-[0.5px] border-white/20 grid grid-cols-6 grid-rows-4">
+<div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div>
+<div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div><div class="border-[0.5px] border-white/10"></div>
+</div>
+</div>
+<div class="text-center z-10">
+<p class="text-white font-label-sm text-label-sm opacity-60 uppercase tracking-widest mb-1">Real-time Feedback</p>
+<p class="text-white font-code-md text-code-md font-bold">STABLE</p>
+<div class="w-24 h-1 bg-white/20 mt-2 mx-auto rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-secondary"></div>
+</div>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Right Column: System & UI Config -->
+<div class="lg:col-span-5 space-y-6">
+<article class="bg-white border border-outline-variant rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">high_quality</span>
+                        Resolution &amp; Quality
+                    </h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-md text-body-md font-bold text-primary">HDR Processing</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Enhance dynamic range for low-light.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-background border border-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-md text-body-md font-bold text-primary">Auto-Downscale</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Optimize bandwidth on high load.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-background border border-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+</article>
+<article class="bg-white border border-outline-variant rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">dns</span>
+                        Server Config
+                    </h2>
+<div class="space-y-4">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-1 block">MASTER API URL</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg px-4 py-2 font-code-md text-code-md focus:outline-none focus:border-secondary" type="text" value="https://api.optivue-internal.io/v1/stream"/>
+</div>
+<div class="flex gap-3">
+<button class="flex-grow bg-primary text-white font-label-md text-label-md py-2 rounded-lg hover:opacity-90 transition-opacity">TEST CONNECTION</button>
+<button class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-background transition-colors">
+<span class="material-symbols-outlined">refresh</span>
+</button>
+</div>
+</div>
+</article>
+<article class="bg-white border border-outline-variant rounded-xl p-6">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">palette</span>
+                        Interface Theme
+                    </h2>
+<div class="flex p-1 bg-background rounded-lg border border-outline-variant">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded bg-white shadow-sm font-label-md text-label-md font-bold text-primary" id="theme-light">
+<span class="material-symbols-outlined text-[20px]">light_mode</span> Light
+                        </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded font-label-md text-label-md text-on-surface-variant hover:bg-white/50 transition-colors" id="theme-dark">
+<span class="material-symbols-outlined text-[20px]">dark_mode</span> Dark
+                        </button>
+</div>
+</article>
+</div>
+</div>
+<!-- Global Actions -->
+<footer class="mt-8 flex flex-col md:flex-row gap-4 justify-end border-t border-outline-variant pt-8">
+<button class="px-8 py-3 border border-outline-variant rounded-lg font-bold text-primary hover:bg-background transition-colors">DISCARD CHANGES</button>
+<button class="px-8 py-3 bg-secondary text-white rounded-lg font-bold hover:opacity-90 transition-opacity">APPLY CONFIGURATION</button>
+</footer>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white border-t border-outline-variant mt-auto flex flex-col md:flex-row justify-between items-center px-margin-desktop py-4 w-full">
+<div class="flex items-center gap-4 mb-4 md:mb-0">
+<img alt="OptiVue Logo" class="h-5 w-auto opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnAUVnd1sEsjF9DOb0SGVQe31Pb9Yp-M6__9z6uylC0VQ71cZ_N8JrFT1UlV582EQW4k4b4bSDkErv8uv29QVICbi1Ul0-NEocDBBdxjiLd51YFKEdWi-Gk9Ffn6VY228VLFDjH6omVzaEXd8S9LwElEget3ACetOX-HWrk9lfrvQmW0w3bUp18tTuNjO_HUWrlLAO7zhS9GS_3siDioxfOkJxFGxwfZy82uxWe6i312O2yL9dJrC8W97BB3nWRwPcUQ" style="filter: grayscale(1) contrast(1.2);"/>
+<div class="font-code-md text-on-surface-variant text-sm">
+            © 2024 OptiVue Industrial Vision. All rights reserved.
+        </div>
+</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">Documentation</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">API Reference</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">Report Bug</a>
+</div>
+</footer>
+<script>
+    const lightBtn = document.getElementById('theme-light');
+    const darkBtn = document.getElementById('theme-dark');
+
+    lightBtn.addEventListener('click', () => {
+        lightBtn.classList.add('bg-white', 'shadow-sm', 'font-bold', 'text-primary');
+        lightBtn.classList.remove('text-on-surface-variant');
+        darkBtn.classList.remove('bg-white', 'shadow-sm', 'font-bold', 'text-primary');
+        darkBtn.classList.add('text-on-surface-variant');
+        document.documentElement.classList.remove('dark');
+    });
+
+    darkBtn.addEventListener('click', () => {
+        darkBtn.classList.add('bg-white', 'shadow-sm', 'font-bold', 'text-primary');
+        darkBtn.classList.remove('text-on-surface-variant');
+        lightBtn.classList.remove('bg-white', 'shadow-sm', 'font-bold', 'text-primary');
+        lightBtn.classList.add('text-on-surface-variant');
+    });
+
+    const sliders = document.querySelectorAll('input[type="range"]');
+    sliders.forEach(slider => {
+        slider.addEventListener('input', (e) => {
+            const valDisplay = e.target.parentElement.querySelector('.text-secondary.font-bold');
+            if(valDisplay) {
+                if(e.target.step === '0.01') {
+                    valDisplay.textContent = e.target.value;
+                } else {
+                    valDisplay.textContent = e.target.value + '%';
+                }
+            }
+        });
+    });
+</script>
+</body></html>

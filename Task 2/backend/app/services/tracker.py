@@ -12,6 +12,7 @@ import time
 import threading
 from datetime import datetime, timezone
 import copy
+import logging
 
 from app.core.settings import settings
 from app.exceptions.camera import CameraError
@@ -26,6 +27,20 @@ from app.services.estimator import EstimatorService
 from app.utils.smoothing import ExponentialMovingAverage
 from app.utils.performance import PerformanceMonitor
 from app.models.tracker import TrackerState, TrackerStatus
+
+# ML pipeline (imported lazily-friendly — errors logged, never fatal)
+try:
+    from app.ml.preprocessing.feature_extractor import feature_extractor
+    from app.ml.inference.predict import predict_posture
+    _ML_AVAILABLE = True
+except Exception as _ml_err:
+    _ML_AVAILABLE = False
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "ML posture pipeline not available: %s", _ml_err
+    )
+
+log = logging.getLogger(__name__)
 
 
 class TrackerService:
@@ -186,7 +201,29 @@ class TrackerService:
                 # Record Success Metrics
                 self._perf_monitor.record_success(camera_ms, detection_ms, estimation_ms, total_ms)
 
-                # 4. Update Cache & FPS
+                # 4a. ML Posture Classification
+                posture_kwargs = {}
+                if _ML_AVAILABLE and det_result.raw_landmarks is not None:
+                    try:
+                        features = feature_extractor.extract(
+                            det_result.raw_landmarks,
+                            pose_landmarks=det_result.raw_pose_landmarks,
+                            frame_shape=(raw_frame.shape[0], raw_frame.shape[1]),
+                        )
+                        pred = predict_posture(features)
+                        posture_kwargs = {
+                            "posture":                 pred.posture,
+                            "posture_confidence":      round(pred.confidence, 4),
+                            "posture_recommendations": pred.recommendations,
+                            "posture_source":          pred.source,
+                            "model_type":              pred.model_type,
+                            "model_version":           pred.model_version,
+                            "latency_ms":              round(pred.latency_ms, 2),
+                        }
+                    except Exception as ml_exc:
+                        log.debug("Posture ML error (non-fatal): %s", ml_exc)
+
+                # 4b. Update Cache & FPS
                 current_time = time.perf_counter()
                 fps = 1.0 / (current_time - last_fps_time) if (current_time - last_fps_time) > 0 else 0
                 last_fps_time = current_time
@@ -197,7 +234,8 @@ class TrackerService:
                     detection=smoothed_det,
                     estimate=final_est,
                     fps=fps,
-                    error_message=None
+                    error_message=None,
+                    **posture_kwargs,
                 )
                 
                 time.sleep(0.005)

@@ -1,0 +1,43 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+.navbar {
+  background: var(--primary-900);
+  color: var(--on-primary);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.sidebar {
+  background: var(--primary-900);
+  color: var(--on-primary);
+  min-width: 280px;
+  border-right: 1px solid rgba(var(--on-primary-rgb),0.03);
+}
+
+.nav-link {
+  color: rgba(var(--on-primary-rgb),0.9);
+  padding: 10px 14px;
+  display: block;
+}
+
+.nav-link:hover{
+  background: rgba(var(--primary-700-rgb),0.12);
+}
+
+.nav-link.active {
+  color: #ffffff;
+  background: var(--primary-700);
+  font-weight: 700;
+}

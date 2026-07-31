@@ -1,0 +1,22 @@
+.page-section {
+  margin-bottom: 32px;
+}
+
+.page-section h2 {
+  margin: 0 0 16px;
+}
+
+.page-section .card + .card {
+  margin-top: 24px;
+}
+
+.live-preview {
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.live-preview img {
+  width: 100%;
+  object-fit: cover;
+}

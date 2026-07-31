@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About OptiVue | Industrial Vision Systems</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .noise-subtle {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        /* CSS filter to tint the black logo to #F9F7F7 */
+        .logo-tint {
+            filter: invert(99%) sepia(1%) saturate(543%) hue-rotate(297deg) brightness(115%) contrast(96%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#112D4E",
+                      "on-primary": "#ffffff",
+                      "secondary": "#3F72AF",
+                      "on-secondary": "#ffffff",
+                      "background": "#F9F7F7",
+                      "on-background": "#112D4E",
+                      "surface": "#F9F7F7",
+                      "on-surface": "#112D4E",
+                      "surface-variant": "#DBE2EF",
+                      "on-surface-variant": "#112D4E",
+                      "surface-container-low": "#F9F7F7",
+                      "surface-container": "#F0F0F0",
+                      "surface-container-high": "#E7E9ED",
+                      "surface-container-highest": "#DBE2EF",
+                      "surface-dim": "#D8DDE4",
+                      "outline": "#74777F",
+                      "outline-variant": "#C4C6CF",
+                      "inverse-surface": "#112D4E",
+                      "inverse-on-surface": "#F9F7F7",
+                      "primary-container": "#3F72AF",
+                      "on-primary-container": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "md": "16px",
+                      "sm": "12px",
+                      "xl": "32px",
+                      "margin": "32px",
+                      "base": "8px",
+                      "gutter": "24px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-md": ["JetBrains Mono"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "headline-xl": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "label-sm": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "code-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="bg-primary border-b border-primary/20 flex justify-between items-center w-full px-margin h-16 sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<img alt="OptiVue Logo" class="h-8 w-auto logo-tint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgquFmkdCpZtutGCGgtU-Letxz-3UAWMUGEoSn-nXpSeUhRXXROcfj27Xau9ucNP5deYSrDFEHB9EbZMpLCXgg5C0p4ApudG0WICDl_vopU4fLeEyUt35na-V1oy4Aaw8Y2ZiJXomEdoBHrN5Lo3dAMGz4fERZHns2CIRd6e9mACfglyyVSoKDsZ3Vw08HMlwmrWHO-v5Kq5RARiTW1I_eAEYClvPcGIf9IwV8uLs3z6LIz8icMy0YjjzVJ5AZW7_l4A"/>
+<span class="font-headline-md text-headline-md font-bold text-on-primary">OptiVue</span>
+</div>
+<div class="hidden md:flex gap-md ml-xl">
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-white/10 transition-colors px-sm py-xs rounded font-body-md" href="#">Dashboard</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-white/10 transition-colors px-sm py-xs rounded font-body-md" href="#">Calibration</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-white/10 transition-colors px-sm py-xs rounded font-body-md" href="#">Analytics</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-white/10 transition-colors px-sm py-xs rounded font-body-md" href="#">Evaluation</a>
+<a class="text-on-primary/70 hover:text-on-primary hover:bg-white/10 transition-colors px-sm py-xs rounded font-body-md" href="#">Architecture</a>
+<a class="text-on-primary font-bold border-b-2 border-on-primary pb-1" href="#">About</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-primary hover:bg-white/10 p-xs rounded transition-all">settings</button>
+<button class="material-symbols-outlined text-on-primary hover:bg-white/10 p-xs rounded transition-all">account_circle</button>
+</div>
+</nav>
+<main class="flex-grow w-full max-w-7xl mx-auto px-margin py-xl space-y-xl relative">
+<div class="noise-subtle fixed inset-0"></div>
+<!-- Hero: Project Vision -->
+<section class="relative space-y-md">
+<div class="flex flex-col md:flex-row md:items-end justify-between border-b border-outline-variant pb-lg">
+<div class="max-w-2xl">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-xs block">Technical Overview</span>
+<h1 class="font-headline-xl text-headline-xl text-primary">Project OptiVue</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-md">
+                    Redefining spatial awareness through sub-millimeter depth mapping and unified vision intelligence. OptiVue is the industrial response to the fragmentation of computer vision stacks.
+                </p>
+</div>
+<div class="mt-lg md:mt-0 flex gap-sm">
+<button class="bg-secondary text-on-secondary px-lg py-sm rounded-xl font-bold flex items-center gap-xs hover:opacity-90 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                    Live Demo
+                </button>
+<button class="border border-outline text-primary px-lg py-sm rounded-xl font-bold hover:bg-surface-container transition-all">
+                    Whitepaper
+                </button>
+</div>
+</div>
+</section>
+<!-- Problem & Solution: Bento Grid -->
+<section class="bento-grid">
+<!-- The Problem -->
+<div class="col-span-12 md:col-span-7 bg-surface-container-low border border-outline-variant rounded-xl p-lg flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-sm text-error mb-md">
+<span class="material-symbols-outlined">warning</span>
+<span class="font-label-md text-label-md">The Problem</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary mb-md">Inconsistent Depth Mapping</h2>
+<p class="text-on-surface-variant mb-xl">
+                    Legacy industrial systems suffer from parallax errors, light interference, and asynchronous data streams. In high-stakes manufacturing, a 2mm discrepancy in depth estimation isn't just an error—it's a production failure.
+                </p>
+</div>
+<div class="h-48 bg-surface-dim rounded-lg overflow-hidden border border-outline-variant flex items-center justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-br from-error/5 to-transparent"></div>
+<div class="grid grid-cols-8 gap-1 opacity-20 w-full h-full p-xs">
+<div class="bg-error col-span-2 row-span-2 rounded-sm"></div>
+<div class="bg-error/50 col-span-1 rounded-sm"></div>
+<div class="bg-error col-span-3 rounded-sm"></div>
+<div class="bg-error/30 col-span-2 rounded-sm"></div>
+</div>
+<span class="absolute font-label-sm text-label-sm text-error bg-surface px-sm py-xs rounded border border-error/20">ERROR: NOISE_THRESHOLD_EXCEEDED</span>
+</div>
+</div>
+<!-- The Solution -->
+<div class="col-span-12 md:col-span-5 bg-primary text-on-primary border border-primary rounded-xl p-lg flex flex-col">
+<div class="flex items-center gap-sm text-secondary mb-md">
+<span class="material-symbols-outlined">bolt</span>
+<span class="font-label-md text-label-md">The Solution</span>
+</div>
+<h2 class="font-headline-md text-headline-md mb-md">Unified Vision Console</h2>
+<p class="text-on-primary/80 mb-lg">
+                OptiVue consolidates multi-spectral inputs into a single, high-fidelity data stream. Our proprietary OptiVue algorithm resolves depth conflicts in real-time.
+            </p>
+<div class="mt-auto space-y-sm">
+<div class="flex items-center gap-md p-sm bg-white/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="font-label-sm text-label-sm text-on-primary">Sub-millimeter Precision</span>
+</div>
+<div class="flex items-center gap-md p-sm bg-white/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary">memory</span>
+<span class="font-label-sm text-label-sm text-on-primary">Neural Processing Core</span>
+</div>
+</div>
+</div>
+<!-- GitHub Code Preview Card -->
+<div class="col-span-12 md:col-span-8 bg-surface-container-highest border border-outline-variant rounded-xl overflow-hidden flex flex-col">
+<div class="bg-surface-container-high px-md py-sm flex justify-between items-center border-b border-outline-variant">
+<div class="flex gap-xs">
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">code</span>
+                    vision_engine.py
+                </span>
+<div class="w-12"></div>
+</div>
+<div class="p-lg font-code-md text-code-md overflow-x-auto">
+<pre class="text-primary"><span class="text-secondary">import</span> optivue_core <span class="text-secondary">as</span> ov
+
+<span class="text-primary/70"># Initialize high-fidelity depth stream</span>
+engine = ov.VisionEngine(mode=<span class="text-secondary">'industrial'</span>)
+stream = engine.create_stream(source=<span class="text-secondary">'hw_id_0x4F'</span>)
+
+<span class="text-secondary">async def</span> calibrate_spatial():
+    <span class="text-secondary">while</span> stream.is_active:
+        frame = <span class="text-secondary">await</span> stream.capture()
+        result = engine.resolve_depth(frame, precision=<span class="text-secondary">0.001</span>)
+        <span class="text-primary">print</span>(f<span class="text-secondary">"Sync Status: {result.status}"</span>)</pre>
+</div>
+<div class="mt-auto p-md border-t border-outline-variant bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">star</span>
+<span class="font-label-sm text-label-sm">4.8k</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">fork_right</span>
+<span class="font-label-sm text-label-sm">342</span>
+</div>
+</div>
+<button class="text-primary flex items-center gap-xs font-label-sm text-label-sm hover:underline">
+                    View on GitHub
+                    <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Future Scope: Roadmap -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-high border border-outline-variant rounded-xl p-lg relative overflow-hidden">
+<img alt="" class="absolute -right-8 -top-8 h-32 w-auto opacity-10 rotate-12 pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq9FobyM8hERtupAGx89dpYqgwBHnSqGkTELSNTniTcOUCMOMlL__BR8DSpNuhqLOdLb7cMuyXDnbcgTTrhcFdXc1daaJuAfxaqSsKzdk3G6YMu-Ya-T44q2KYFcTdwASPHT999WMfPb0Ysrfna6uXGjQLZuA5B5BXguMEwIHGGUeb9oPlv82TxYmPYtwSzNifJHMaHvqJsb8_9oETZ0XVeqTdMtfngIoX_X_0bg0cRHK8llF-QGizPSZF5akLAGXEAQ"/>
+<h3 class="font-headline-md text-headline-md text-primary mb-lg">Future Scope</h3>
+<div class="space-y-lg relative">
+<div class="absolute left-[11px] top-0 bottom-0 w-0.5 bg-outline-variant"></div>
+<div class="relative pl-xl">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-secondary flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-surface"></div>
+</div>
+<p class="font-label-sm text-label-sm text-primary font-bold mb-1">Q1 2025</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lidar Integration Patch v2.0</p>
+</div>
+<div class="relative pl-xl">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-outline-variant flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-surface-container"></div>
+</div>
+<p class="font-label-sm text-label-sm text-primary font-bold mb-1">Q2 2025</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Edge Deployment via WebAssembly</p>
+</div>
+<div class="relative pl-xl opacity-60">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-outline-variant flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-surface-container"></div>
+</div>
+<p class="font-label-sm text-label-sm text-primary font-bold mb-1">Q4 2025</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Neural Link Multi-cam Sync</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Core Development Team -->
+<section class="space-y-lg">
+<div class="flex items-end justify-between border-b border-outline-variant pb-md">
+<h2 class="font-headline-md text-headline-md text-primary">Core Development Team</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Engineering excellence since 2019</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Member 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl bg-surface-container overflow-hidden mb-md border border-outline-variant relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional headshot of a technical lead in a modern industrial setting. The person has a serious but approachable expression, wearing a dark minimal work jacket. The background is a blurred high-tech lab with soft amber and grey lighting, following a clean, light-mode corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlUshnkLijQVRwWAmeS-sxqODzgMSGRPfSBuuFD-G-QB6_AyvlsZFe2ItmK3fiaDqQI0RFePgA_ii9csnRXu83xvMli36BKiEW0OlszjeA6asGceJ5cncAiYrFo9GBcpyUOpM_Tq8o5D3sO3P4sTMhy25b_H_zDR1gX7VBf_iosmeSJj80WbHR7n4JANbYN4uos9rd9cXuAWU_bZwFGYFR3HSM4e13bDMu5r2GJmcuFvr0S-nz2dz1"/>
+<div class="absolute bottom-md right-md">
+<div class="bg-primary/80 backdrop-blur px-sm py-xs rounded text-on-primary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+</div>
+</div>
+<h4 class="font-headline-md text-[18px] text-primary">Dr. Aris Varma</h4>
+<p class="font-label-sm text-label-sm text-secondary mb-xs">Principal Architect</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Specialist in spatial computer vision and neural mapping.</p>
+</div>
+<!-- Member 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl bg-surface-container overflow-hidden mb-md border border-outline-variant relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional headshot of a software engineer woman in a technical workspace. She is wearing modern eyewear and a minimal neutral-toned sweater. The lighting is clinical and soft, highlighting a background of blurred servers and monitors. The overall style is clean, corporate functionalism with earthy industrial tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQV9-B5jKxQaH0xQL5L1kGW0ZWNKOMjsCJAETMxQOugPok3vA7OlISAnyESJghGoyZA1I125TsMlwg8QZRqHUCdJ_jaW65cXcTj4WktHKH_kohg-HnsI4JWT6kCUxFMRtad9Zri3nJrbu9rz39WWbUhDIBp-NuriwT3W45qASebC-DseMojMCdx8cEc4YGRqoRLXRHgzPj1AXlLuSpxtHtOuCFqPGlkthxMS9nU4AUlToihPRNgWZS"/>
+</div>
+<h4 class="font-headline-md text-[18px] text-primary">Elena Rossi</h4>
+<p class="font-label-sm text-label-sm text-secondary mb-xs">Systems Engineering</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Focus on hardware-software integration and real-time latency.</p>
+</div>
+<!-- Member 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl bg-surface-container overflow-hidden mb-md border border-outline-variant relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A professional headshot of a senior researcher in a modern data center environment. The subject is wearing a light grey tech-style shirt. Background features organized cabling and hardware racks with soft, muted lighting. The aesthetic is professional, technical, and grounded in industrial design values." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhFCuowxELJQ_cU1kAEKLGTV5yXPuwt7DWeAfdejJjDcSM69UZla1aUhE_dzVuHLY9Bslu71P25b8cS2arLXW2-fdTfpp5PH5VSXcAl0ua8grgebQx5RUUpJXvUfLNu1fteF8lujIJ2giq8g9ZpElS-swwYUCdFgb8PwWmqfjI24-0rztIrmBaxjlmJsQzz0JdpKHKpaewQTu1iLi4eXusjVX5u7vB8IrgCYH_TpaCxqL3KvBx2kuX"/>
+</div>
+<h4 class="font-headline-md text-[18px] text-primary">Mark Chen</h4>
+<p class="font-label-sm text-label-sm text-secondary mb-xs">Data Science Lead</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Optimizing synthetic data pipelines for model training.</p>
+</div>
+<!-- Member 4 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl bg-surface-container overflow-hidden mb-md border border-outline-variant relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-quality professional portrait of a product designer in a bright, minimalist studio. The designer is wearing a clean black polo shirt. The environment is airy with industrial metal accents and warm wood textures. The lighting is natural and sophisticated, conveying a high-end corporate identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ9pvdznGSRnsuAkjFOM5HoGd4Xub0Mphpx4CldeGTfxyV5ifSzUSsbB5ChDzsQ74GK6QuRxiWBwGEP9Vg6zsEgxYV54QMyZ8OK-pbL9TlIyGvVdZG8BXJD40U-3VdFxkZV9c_5vY8XYmnJOIu0c6p9daJ538ryXaiNwYTR0ah73wU8mggKhilMUev_WIzHIqrlYUTKM68vXway_dEtV8aHloOGEKp2X3p2memk5bKyNQ2mO0TGXPD"/>
+</div>
+<h4 class="font-headline-md text-[18px] text-primary">Sarah Jenkins</h4>
+<p class="font-label-sm text-label-sm text-secondary mb-xs">Product Strategy</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Translating complex vision data into actionable UI experiences.</p>
+</div>
+</div>
+</section>
+<!-- Documentation & Support Links -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-lg pt-xl border-t border-outline-variant">
+<a class="p-lg bg-surface-container-low border border-outline-variant rounded-xl hover:bg-secondary/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-secondary mb-sm block">menu_book</span>
+<h4 class="font-headline-md text-[18px] mb-xs text-primary">Documentation</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Full API reference, installation guides, and integration tutorials.</p>
+<div class="mt-md flex items-center gap-xs text-secondary font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                Explore Docs <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<a class="p-lg bg-surface-container-low border border-outline-variant rounded-xl hover:bg-secondary/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-secondary mb-sm block">forum</span>
+<h4 class="font-headline-md text-[18px] mb-xs text-primary">Community Support</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Join our Discord and forums to discuss technical implementations.</p>
+<div class="mt-md flex items-center gap-xs text-secondary font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                Join Discussion <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+<a class="p-lg bg-surface-container-low border border-outline-variant rounded-xl hover:bg-secondary/10 transition-all group" href="#">
+<span class="material-symbols-outlined text-secondary mb-sm block">history</span>
+<h4 class="font-headline-md text-[18px] mb-xs text-primary">Changelog</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Version history, security patches, and performance optimizations.</p>
+<div class="mt-md flex items-center gap-xs text-secondary font-label-sm text-label-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                Read Updates <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</div>
+</a>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary border-t border-primary/20 mt-auto flex justify-between items-center px-margin py-md w-full">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<img alt="OptiVue Logo" class="h-6 w-auto opacity-70 logo-tint" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnAKWmdV8kw7hZXO-iHm2sU77ZX_KYb_dXMGv5EpDYXRGSgwx9lLWeZKKY811vfcgo3HBuBpCGnqthm-OYrk5tcW8zM2-8TpmQFSbgYBQD7OdxS7wP-druSHwu5Oyk-mug9HdnTsnoL7JFwYZhGPiXpQT_Wm8oQZ4RUEQPwCVwVKhPGWGy7pZjR3-A-TxGDJBsZk7qbVEEtd8B3kNlHX56hMJTqDf-9WjydwxmNyZX4A8nCShYx7DqaYgB-HfnuAaiw"/>
+<span class="font-code-md text-code-md">OptiVue_v1.2.4</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-primary/60">© 2024 Industrial Vision Systems. All rights reserved.</span>
+</div>
+<div class="hidden md:flex items-center gap-xl">
+<a class="font-label-sm text-label-sm text-on-primary/70 hover:text-secondary transition-colors" href="#">Documentation</a>
+<a class="font-label-sm text-label-sm text-on-primary/70 hover:text-secondary transition-colors" href="#">API Reference</a>
+<a class="font-label-sm text-label-sm text-on-primary/70 hover:text-secondary transition-colors" href="#">Report Bug</a>
+</div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.bento-grid > div');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    });
+</script>
+</body></html>

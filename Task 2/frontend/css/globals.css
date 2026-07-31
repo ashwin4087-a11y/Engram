@@ -1,0 +1,83 @@
+:root{
+  /* Primary Palette */
+  --primary-900:#112D4E;
+  --primary-700:#3F72AF;
+  --primary-200:#DBE2EF;
+  --background:#F9F7F7;
+
+  /* Surfaces */
+  --surface:#FFFFFF;
+  --surface-alt:#F5F7FA;
+
+  /* Typography colors */
+  --text-primary:#112D4E;
+  --text-secondary:#4A5C73;
+  --text-muted:#7A8899;
+
+  /* Borders & accents */
+  --border:#DBE2EF;
+  --info:var(--primary-700);
+
+  /* States */
+  --success:#22C55E;
+  --warning:#F59E0B;
+  --danger:#EF4444;
+
+  /* Shadows */
+  --shadow-soft: 0 10px 30px rgba(17,45,78,0.08);
+
+  /* Fonts (fallbacks preserved) */
+  --font-sans: 'Inter var', Inter, 'Geist', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+
+  /* Base sizing */
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--background);
+  accent-color: var(--primary-700);
+}
+
+/* Backwards-compatible utility color classes used in markup */
+.text-primary-fixed { color: var(--text-primary) !important; }
+.text-surface-variant { color: var(--text-secondary) !important; }
+.text-on-surface-variant { color: var(--text-muted) !important; }
+.text-inverse-on-surface { color: #ffffff !important; }
+.border-outline-variant { border-color: var(--border) !important; }
+.bg-surface-container { background: var(--surface) !important; }
+.bg-surface { background: var(--surface) !important; }
+.rounded-xl { border-radius: 16px !important; }
+.text-primary { color: var(--text-primary) !important; }
+.text-on-surface { color: var(--text-secondary) !important; }
+.text-on-surface-variant { color: var(--text-muted) !important; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--background);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* keep single background rule in :root above */
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
